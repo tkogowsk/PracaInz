@@ -1,0 +1,56 @@
+@(webJarAssets: WebJarAssets)
+
+<!DOCTYPE html>
+<html lang="en" ng-app="app" ng-controller="MainController">
+    <head>
+
+            <!-- Bootstrap 3.3.6 -->
+        <link rel='stylesheet' href='@routes.WebJarAssets.at(webJarAssets.locate("css/bootstrap.min.css"))'>
+
+            <!-- Custom CSS Links -->
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/styles.css")">
+            <!-- Plugin Javascript -->
+        <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("jquery.min.js"))'></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("js/bootstrap.min.js"))'></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular.min.js"))'></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("ui-bootstrap-tpls.min.js"))'></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-animate.min.js"))'></script>
+
+        <script src="@routes.Assets.versioned("javascripts/angular-route.min.js")" type="text/javascript"></script>
+
+            <!-- #Custom Javascripts Links -->
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/angular-ui-router.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/angular-resource.js")"></script>
+
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/app.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("modules/searchPage/controller.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("modules/singleTranscript/module.js")"></script>
+
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="top-header">
+                    <div class="col-lg-2">
+                        DNA data
+                    </div>
+
+                    <div class="col-lg-4 pull-right">
+                        <div class="row">
+                            <div class="col-lg-6 right">
+                                About
+                            </div>
+                            <div class="col-lg-6 right">
+                                FAQ
+                            </div>
+                        </div>
+                    </div>
+
+                </div></div>
+        </div>
+
+        <div ui-view></div>
+
+    </body>
+</html>
