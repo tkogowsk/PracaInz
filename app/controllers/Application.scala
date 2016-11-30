@@ -5,12 +5,14 @@ import play.api.mvc._
 import slick.driver.PostgresDriver.api._
 import javax.inject.Inject
 
+import models.TranscriptModel
 import utils.Constants
 import play.api.libs.json.JsValue
 import play.api.libs.json.Json._
 import repository.TranscriptRepository
 import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.libs.json.Json._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import utils.JsonFormat._
 
