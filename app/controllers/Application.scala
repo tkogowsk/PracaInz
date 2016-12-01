@@ -1,22 +1,18 @@
 package controllers
 
-import play.api._
 import play.api.mvc._
-import slick.driver.PostgresDriver.api._
 import javax.inject.Inject
 
-import models.TranscriptModel
 import utils.Constants
-import play.api.libs.json.JsValue
-import play.api.libs.json.Json._
-import repository.TranscriptRepository
+import repository.{TranscriptRepository, UserFilterSelectionRepository}
 import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.libs.json.Json._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import utils.JsonFormat._
 
-class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: TranscriptRepository)extends Controller {
+class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: TranscriptRepository,
+                            userFilterSelectionRepository: UserFilterSelectionRepository)extends Controller {
 
   def index = Action {
     Ok(views.html.index(webJarAssets))
@@ -31,6 +27,11 @@ class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: Tr
   def getTranscript() = Action.async{
     transcriptRepository.getAll().map { res =>
       Ok(successResponse(Json.toJson(res), "Getting Transcript list successfully"))
+    }
+  }
+  def getUserFilter() = Action.async{
+    userFilterSelectionRepository.getById(1).map { res =>
+      Ok(successResponse(Json.toJson(res), "Getting User Filter list successfully"))
     }
   }
 

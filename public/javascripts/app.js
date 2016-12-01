@@ -17,7 +17,7 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
             controller: 'SingleTranscriptController'
         });
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/transcript');
 
     $locationProvider.html5Mode({
         enabled: true,
@@ -26,6 +26,4 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 });
 
 myApp.controller('MainController', ['$scope', '$log',
-    function ($scope, $log) {
-        $log.log('MainController');
-    }]);
+    function ($scope, $log) {}]);

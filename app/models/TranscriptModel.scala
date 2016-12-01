@@ -14,6 +14,6 @@ case class TranscriptModel
   alleleCountFinnish: Double, alleleNumberFinnish: Double, homozygoteCountFinnish: Double,
   alleleCountLatino: Double, alleleNumberLatino: Double, homozygoteCountLatino: Double,
   alleleCountOther: Double, alleleNumberOther: Double, homozygoteCountOther: Double,
-  alleleCountSouthAsian: Double, alleleNumberSouthAsian: Double, homozygoteCountSouthAsian: Double
+  alleleCountSouthAsian: Double, alleleNumberSouthAsian: Double, homozygoteCountSouthAsian: Double, id :Int
 )
 

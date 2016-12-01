@@ -13,7 +13,7 @@ import slickless._
 class TranscriptRepository {
   private val db = Database.forConfig("postgresConf")
 
-  class TranscriptTableRepository(tag: Tag) extends Table[TranscriptModel](tag, "ExacCsv") {
+  class TranscriptTableRepository(tag: Tag) extends Table[TranscriptModel](tag, "Transcripts") {
     def chrom = column[Int]("Chrom")
 
     def position = column[Int]("Position")
@@ -86,6 +86,8 @@ class TranscriptRepository {
 
     def homozygoteCountSouthAsian = column[Double]("Homozygote Count South Asian")
 
+    def id = column[Int]("id", O.PrimaryKey)
+
 
     def * = (chrom :: position :: rsid ::
       reference :: alternate :: consequence ::
@@ -98,7 +100,8 @@ class TranscriptRepository {
       alleleCountFinnish :: alleleNumberFinnish :: homozygoteCountFinnish ::
       alleleCountLatino :: alleleNumberLatino :: homozygoteCountLatino ::
       alleleCountOther :: alleleNumberOther :: homozygoteCountOther ::
-      alleleCountSouthAsian :: alleleNumberSouthAsian :: homozygoteCountSouthAsian :: HNil).mappedWith(Generic[TranscriptModel])
+      alleleCountSouthAsian :: alleleNumberSouthAsian ::
+      homozygoteCountSouthAsian :: id :: HNil).mappedWith(Generic[TranscriptModel])
     /*//<> (TranscriptModel.tupled, TranscriptModel.unapply)*/
 
   }
