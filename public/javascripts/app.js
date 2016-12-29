@@ -1,4 +1,4 @@
-var myApp = angular.module('app', ['ui.router', 'search', 'singleTranscript']);
+var myApp = angular.module('app', ['ui.router', 'singleTranscript']);
 myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 
     $stateProvider
@@ -6,18 +6,13 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
             url: '/',
             templateUrl: '/assets/modules/index.html'
         })
-        .state('search', {
-            url: '/search',
-            templateUrl: '/assets/modules/searchPage/index.html',
-            controller: 'SearchController'
-        })
         .state('transcript', {
             url: '/transcript',
             templateUrl: '/assets/modules/singleTranscript/index.html',
             controller: 'SingleTranscriptController'
         });
 
-    $urlRouterProvider.otherwise('/transcript');
+    $urlRouterProvider.otherwise('/');
 
     $locationProvider.html5Mode({
         enabled: true,
@@ -26,4 +21,6 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 });
 
 myApp.controller('MainController', ['$scope', '$log',
-    function ($scope, $log) {}]);
+    function ($scope, $log) {
+        console.log('MainController')
+    }]);

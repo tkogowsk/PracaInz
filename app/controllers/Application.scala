@@ -3,8 +3,8 @@ package controllers
 import play.api.mvc._
 import javax.inject.Inject
 
-import utils.Constants
-import repository.{TranscriptRepository, UserFilterSelectionRepository}
+import utils.{Constants, UserService}
+import repository.{FieldsRepository, FormsRepository, TranscriptRepository}
 import play.api.libs.json.{JsError, JsValue, Json}
 import play.api.libs.json.Json._
 
@@ -12,7 +12,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import utils.JsonFormat._
 
 class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: TranscriptRepository,
-                            userFilterSelectionRepository: UserFilterSelectionRepository)extends Controller {
+                            fieldsRepository: FieldsRepository, formsRepository: FormsRepository,
+                            userService : UserService) extends Controller {
 
   def index = Action {
     Ok(views.html.index(webJarAssets))
@@ -25,13 +26,9 @@ class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: Tr
   }
 
   def getTranscript() = Action.async{
-    transcriptRepository.getAll().map { res =>
-      Ok(successResponse(Json.toJson(res), "Getting Transcript list successfully"))
-    }
-  }
-  def getUserFilter() = Action.async{
-    userFilterSelectionRepository.getById(1).map { res =>
-      Ok(successResponse(Json.toJson(res), "Getting User Filter list successfully"))
+    formsRepository.getAll().map { res =>
+      println(res.groupBy(_.name))
+      Ok(successResponse(Json.toJson(res.groupBy(_.name)), "Getting Transcript list successfully"))
     }
   }
 

@@ -5,7 +5,8 @@ import models._
 object JsonFormat {
 
   implicit val transcriptModelFormat = Jsonx.formatCaseClass[TranscriptModel]
-  implicit val userFilterSelectionModelFormat = Jsonx.formatCaseClass[UserFilterSelectionModel]
+  implicit val fieldsModelFormat = Jsonx.formatCaseClass[FieldsModel]
+  implicit val formsModelFormat = Jsonx.formatCaseClass[FormsModel]
 
 }
 

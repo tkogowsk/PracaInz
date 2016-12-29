@@ -112,4 +112,8 @@ class TranscriptRepository {
     transcripts.to[List].result
   }
 
+  def getOnne() : Future[Seq[(Int, Int)]] = { db.run(sql"""select "Chrom", "Position" from "Transcripts" t where t.id =1""".as[(Int, Int)])}
+
+  def getTwo() : Future[Seq[(Int, Int)]] = { db.run(sql"select 2, 2".as[(Int, Int)])}
+
 }
