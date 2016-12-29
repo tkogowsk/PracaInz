@@ -34,4 +34,10 @@ class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: Tr
     }
   }
 
+  def getByFilter(filterId: Int, userId: Int) = Action.async{
+    transcriptRepository.getByFilterId(filterId, userId).map { res =>
+      println(res)
+      Ok(successResponse(Json.toJson(res), "Getting Transcript list successfully"))
+    }
+  }
 }

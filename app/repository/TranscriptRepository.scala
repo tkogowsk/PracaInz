@@ -7,11 +7,16 @@ import slick.driver.PostgresDriver.api._
 
 import scala.concurrent._
 import shapeless._
+import slick.jdbc.GetResult
 import slickless._
 
 @Singleton
 class TranscriptRepository {
   private val db = Database.forConfig("postgresConf")
+
+  implicit val getTranscriptModelResult = GetResult(r => TranscriptModel(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<,
+    r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<,
+    r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
 
   class TranscriptTableRepository(tag: Tag) extends Table[TranscriptModel](tag, "Transcripts") {
     def chrom = column[Int]("Chrom")
@@ -112,8 +117,16 @@ class TranscriptRepository {
     transcripts.to[List].result
   }
 
-  def getOnne() : Future[Seq[(Int, Int)]] = { db.run(sql"""select "Chrom", "Position" from "Transcripts" t where t.id =1""".as[(Int, Int)])}
+  def getByFilterId(filterId: Int, userId: Int) : Future[List[TranscriptModel]] = db.run {
+    transcripts.to[List].result
+  }
 
-  def getTwo() : Future[Seq[(Int, Int)]] = { db.run(sql"select 2, 2".as[(Int, Int)])}
+  //def getOnne() : Future[Seq[TranscriptModel]] = { db.run(sql"""select * from "Transcripts" t where t.id IN (1,2,3)""".as[TranscriptModel])}
+
+  //def getOne() : Future[Seq[(Int, Int)]] = { db.run(sql"""select "Chrom", "Position" from "Transcripts" t where t.id IN (1,2,3)""".as[(Int, Int)])}
+
+  def getOne() :  Future[Seq[TranscriptModel]] = {
+    db.run(sql"""select * from "Transcripts" t where t.id IN (1,2,3)""".as[TranscriptModel])
+  }
 
 }
