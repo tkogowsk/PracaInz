@@ -1,5 +1,6 @@
-angular.module('singleTranscript', []).service('TranscriptsTableModel', function () {
-    var columnsList = [
+
+angular.module('Models', []).service('TranscriptsTableModel', function () {
+    this.columnsList = [
         {
             headerName: "Filter Name",
             fieldName: "filterName",
@@ -72,7 +73,7 @@ angular.module('singleTranscript', []).service('TranscriptsTableModel', function
             headerName: "Allele Number African",
             fieldName: "alleleNumberAfrican",
         },
-        {
+ /*       {
             headerName: "Homozygote Count African",
             fieldName: "homozygoteCountAfrican",
         },
@@ -147,6 +148,6 @@ angular.module('singleTranscript', []).service('TranscriptsTableModel', function
         {
             headerName: "Homozygote Count South Asian",
             fieldName: "homozygoteCountSouthAsian",
-        }
+        }*/
     ];
 });

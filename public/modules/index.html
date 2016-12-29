@@ -1,1 +1,21 @@
-Main
+<div ng-controller="MainPageController">
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th ng-repeat="header in columnsList">{{header.headerName}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="transcript in transcriptData">
+
+                    <td ng-repeat="header in columnsList">
+                        {{transcript[header.fieldName.toString()]}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

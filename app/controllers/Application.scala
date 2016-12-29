@@ -26,9 +26,11 @@ class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: Tr
   }
 
   def getTranscript() = Action.async{
-    formsRepository.getAll().map { res =>
+    transcriptRepository.getAll().map { res =>
+/*
       println(res.groupBy(_.name))
-      Ok(successResponse(Json.toJson(res.groupBy(_.name)), "Getting Transcript list successfully"))
+*/
+      Ok(successResponse(Json.toJson(res), "Getting Transcript list successfully"))
     }
   }
 
