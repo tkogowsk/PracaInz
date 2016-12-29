@@ -18,11 +18,11 @@ libraryDependencies ++= Seq(
   "org.webjars" %% "webjars-play" % "2.5.0",
   "org.webjars" % "jquery" % "1.11.3",
   "org.webjars" % "bootstrap" % "3.3.6" exclude("org.webjars", "jquery"),
-  "org.webjars" % "angularjs" % "1.5.5" exclude("org.webjars", "jquery"),
-  "org.webjars.bower" % "angular-route" % "1.6.1" exclude("org.webjars.bower", "angularjs"),
+  "org.webjars.bower" % "angular" % "1.5.5",
+  "org.webjars.bower" % "angular-route" % "1.5.5" exclude("org.webjars.bower", "angularjs"),
   "org.webjars.bower" % "angular-ui-router" % "0.3.2" exclude("org.webjars.bower", "angularjs"),
   "org.webjars.bower" % "angular-resource" % "1.5.5" exclude("org.webjars.bower", "angularjs"),
-  "org.webjars" % "angular-ui-bootstrap" % "1.3.2" exclude("org.webjars", "jquery")
+  "org.webjars.bower" % "angular-ui-bootstrap" % "2.3.0" exclude("org.webjars.bower", "angularjs")
 )
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )  

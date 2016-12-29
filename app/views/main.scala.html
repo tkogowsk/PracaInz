@@ -1,7 +1,7 @@
 @(webJarAssets: WebJarAssets)
 
 <!DOCTYPE html>
-<html lang="en" ng-app="app" ng-controller="MainController">
+<html lang="en">
     <head>
 
         <link rel='stylesheet' href='@routes.WebJarAssets.at(webJarAssets.locate("css/bootstrap.min.css"))'>
@@ -10,24 +10,15 @@
 
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("js/bootstrap.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular.min.js"))'></script>
-        <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("ui-bootstrap-tpls.min.js"))'></script>
-        <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-animate.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-route.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-ui-router.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-resource.js"))'></script>
             <!-- Custom Javascripts -->
-@*
-        <script type="text/javascript" src="@routes.Assets.versioned("../../public/javascripts/angular-ui-router.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.versioned("../../public/javascripts/angular-resource.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.versioned("../../public/javascripts/app.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/app.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/controller.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.versioned("modules/singleTranscript/module.js")"></script>*@
-
+        <script type="text/javascript" src="@routes.Assets.versioned("modules/singleTranscript/module.js")"></script>
     </head>
-    <body>
-        ELO2
-@*
+    <body ng-app="app">
         <div ui-view></div>
-*@
     </body>
 </html>

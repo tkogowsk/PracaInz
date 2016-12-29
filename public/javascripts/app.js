@@ -1,10 +1,11 @@
-var myApp = angular.module('app', ['ui.router', 'singleTranscript']);
+var myApp = angular.module('app', ['ui.router', 'mainPage', 'singleTranscript']);
 myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 
     $stateProvider
         .state('index', {
             url: '/',
-            templateUrl: '/assets/modules/index.html'
+            templateUrl: '/assets/modules/index.html',
+            controller: 'MainPageController'
         })
         .state('transcript', {
             url: '/transcript',
