@@ -23,11 +23,12 @@
         <script type="text/javascript" src="@routes.Assets.versioned("modules/services/form.service.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/services/fields.service.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/controller.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("modules/transcripts/controller.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/filter/controller.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/app.js")"></script>
 
     </head>
-    <body ng-app="app">
+    <body ng-app="app" ng-controller="MainPageController">
         <div ui-view></div>
     </body>
 </html>

@@ -2,7 +2,7 @@
     <div ng-controller="FilterController" class="col-lg-4">
         <div class="filter-section">
             <div ng-repeat="userForm in userForms" class="user-form">
-                <p class="user-form-name" ng-click="userFormNameClicked(userForm.name)">{{userForm.name}}</p>
+                <p class="user-form-name" ng-click="userFormNameClicked(userForm.name); $event.stopPropagation()">{{userForm.name}}</p>
                 <div ng-repeat="userField in userForm.fields" class="fields" ng-show="userForm.name == activeFormName">
                     <div ng-repeat="formField in fields">
                         <div ng-if="formField.id == userField.fieldFk">
@@ -44,7 +44,7 @@
         <input type="text" ng-model="newFilterName">
     </div>
 
-    <div ng-controller="MainPageController" class="col-lg-8">
+    <div ng-controller="TranscriptsTableController" class="col-lg-8">
         <table class="table table-striped">
             <thead>
             <tr>

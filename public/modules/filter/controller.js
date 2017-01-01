@@ -14,7 +14,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
                         fields: data[val]
                     })
                 });
-            $scope.activeFormName = $scope.userForms[0].name;
+                $scope.activeFormName = $scope.userForms[0].name;
             }
         );
 
@@ -33,10 +33,12 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
                 }));
             let newObject = {name: name, fields: fields};
             $scope.userForms.push(newObject);
-        }
+        };
 
         $scope.userFormNameClicked = function (name) {
-            $scope.activeFormName = name;
-
+            if ($scope.activeFormName != name) {
+                $scope.activeFormName = name;
+                $scope.$emit("ActiveFormChangedEmit", name)
+            }
         }
     }]);
