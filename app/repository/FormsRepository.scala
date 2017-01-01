@@ -43,4 +43,8 @@ class FormsRepository {
   def getUserForm(filterName: String, userId: Int): Future[List[FormsModel]] = db.run {
     forms.filter(form => form.name === filterName && form.userId === userId).to[List].result
   }
+
+  def getUserForms(userId: Int): Future[List[FormsModel]] = db.run {
+    forms.filter(form => form.userId === userId).to[List].result
+  }
 }

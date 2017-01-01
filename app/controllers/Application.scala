@@ -17,7 +17,7 @@ import scala.concurrent.duration.Duration
 
 class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: TranscriptRepository,
                             fieldsRepository: FieldsRepository, formsRepository: FormsRepository
-                            ) extends Controller {
+                           ) extends Controller {
 
   def index = Action {
     Ok(views.html.index(webJarAssets))
@@ -35,9 +35,21 @@ class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: Tr
     }
   }
 
+  def getUserForms(userId: Int) = Action.async {
+    formsRepository.getUserForms(userId).map { res =>
+      Ok(successResponse(Json.toJson(res.groupBy(_.name)), "Getting User Forms list successfully"))
+    }
+  }
+
+  def getFields() = Action.async {
+    fieldsRepository.getAll().map { res =>
+      Ok(successResponse(Json.toJson(res), "Getting Fields list successfully"))
+    }
+  }
+
   def getByFilter(filterName: String, userId: Int) = Action.async {
     var fields: List[FieldsModel] = List[FieldsModel]()
-    var userForm : List[FormsModel] = List[FormsModel]()
+    var userForm: List[FormsModel] = List[FormsModel]()
 
     Await.result(
       fieldsRepository.getAll().map {
@@ -52,7 +64,7 @@ class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: Tr
       }, Duration.Inf)
 
     transcriptRepository.getByFilter(fields, userForm).map { res =>
-      Ok(successResponse(Json.toJson(res), "Getting Transcript list successfully"))
+      Ok(successResponse(Json.toJson(res), "Getting Transcript by Filter successfully"))
     }
   }
 }
