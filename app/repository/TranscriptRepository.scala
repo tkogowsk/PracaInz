@@ -2,13 +2,16 @@ package repository
 
 import javax.inject.{Inject, Singleton}
 
-import models.TranscriptModel
+import models._
+import utils.Relation
 import slick.driver.PostgresDriver.api._
 
 import scala.concurrent._
 import shapeless._
 import slick.jdbc.GetResult
 import slickless._
+
+import scala.collection.mutable.ArrayBuffer
 
 @Singleton
 class TranscriptRepository {
@@ -107,25 +110,47 @@ class TranscriptRepository {
       alleleCountOther :: alleleNumberOther :: homozygoteCountOther ::
       alleleCountSouthAsian :: alleleNumberSouthAsian ::
       homozygoteCountSouthAsian :: id :: HNil).mappedWith(Generic[TranscriptModel])
+
     /*//<> (TranscriptModel.tupled, TranscriptModel.unapply)*/
 
   }
 
   var transcripts = TableQuery[TranscriptTableRepository]
+  /*
+    var forms = TableQuery[FormsRepository]
+    var fields = TableQuery[FieldsRepository]
+  */
 
   def getAll(): Future[List[TranscriptModel]] = db.run {
     transcripts.to[List].result
   }
 
-  def getByFilterId(filterId: Int, userId: Int) : Future[List[TranscriptModel]] = db.run {
-    transcripts.to[List].result
+  def getByFilter(fields: List[FieldsModel], userForms: List[FormsModel]): Future[Seq[TranscriptModel]] = db.run {
+    var query: String = ("""select * from "Transcripts" t where """)
+    var userField: FormsModel = null
+    fields.foreach(field => {
+      userField = userForms.filter(formField => formField.fieldFk == field.id).head
+      field.relation.toString match {
+        case Relation.Contains => {
+          var values = userField.value.split(",", -1)
+          var array = ArrayBuffer[String]()
+          values.foreach(elem => array += ("'" + elem + "'"))
+          query = query.concat("\"" + field.columnName.toString + "\"" + " IN(" + array.mkString(",") + ") AND ")
+        }
+
+        case Relation.Greater => query = query.concat("\"" + field.columnName.toString + "\"" + " > " + userField.value + " AND ")
+        case Relation.GreaterThan => query = query.concat("\"" + field.columnName.toString + "\"" + " >= " + userField.value + " AND ")
+        case Relation.Equals => query = query.concat("\"" + field.columnName.toString + "\"" + " = " + userField.value + " AND ")
+        case Relation.Less => query = query.concat("\"" + field.columnName.toString + "\"" + " < " + userField.value + " AND ")
+        case Relation.LessThan => query = query.concat("\"" + field.columnName.toString + "\"" + " <= " + userField.value + " AND ")
+      }
+    }
+    )
+    query = query.slice(0, query.length - 5)
+    sql"#$query".as[TranscriptModel]
   }
 
-  //def getOnne() : Future[Seq[TranscriptModel]] = { db.run(sql"""select * from "Transcripts" t where t.id IN (1,2,3)""".as[TranscriptModel])}
-
-  //def getOne() : Future[Seq[(Int, Int)]] = { db.run(sql"""select "Chrom", "Position" from "Transcripts" t where t.id IN (1,2,3)""".as[(Int, Int)])}
-
-  def getOne() :  Future[Seq[TranscriptModel]] = {
+  def getOne(): Future[Seq[TranscriptModel]] = {
     db.run(sql"""select * from "Transcripts" t where t.id IN (1,2,3)""".as[TranscriptModel])
   }
 
