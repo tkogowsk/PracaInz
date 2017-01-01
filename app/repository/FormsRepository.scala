@@ -8,10 +8,11 @@ import slick.driver.PostgresDriver.api._
 import scala.concurrent._
 import shapeless._
 import slickless._
+import utils.{FormEditDTO, FormSaveDTO, NewFormModel}
 
 @Singleton
 class FormsRepository {
- private val db = Database.forConfig("postgresConf")
+  private val db = Database.forConfig("postgresConf")
 
   var forms = TableQuery[FieldsTableRepository]
   var fields = TableQuery[FieldsTableRepository]
@@ -47,4 +48,18 @@ class FormsRepository {
   def getUserForms(userId: Int): Future[List[FormsModel]] = db.run {
     forms.filter(form => form.userId === userId).to[List].result
   }
+
+  def save(fields: List[NewFormModel]): Future[List[FormsModel]] = db.run {
+    fields.foreach(elem => println(elem))
+    forms.to[List].result
+  }
+
+  def edit(formsList: List[FormsModel]): Future[List[FormsModel]] = {
+    formsList.foreach(elem => {
+      val updateAction = forms.insertOrUpdate(elem)
+      db.run(updateAction)
+    })
+    db.run(forms.to[List].result)
+  }
+
 }

@@ -41,4 +41,12 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
                 $scope.$emit("ActiveFormChangedEmit", name)
             }
         }
+
+        $scope.saveForm = function(name){
+            var form = $scope.userForms.find((elem) => {return elem.name == name })
+            console.log(form)
+            Form.editForm(form, (response) =>{
+                console.log(response)
+            })
+        }
     }]);
