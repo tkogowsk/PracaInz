@@ -116,10 +116,6 @@ class TranscriptRepository {
   }
 
   var transcripts = TableQuery[TranscriptTableRepository]
-  /*
-    var forms = TableQuery[FormsRepository]
-    var fields = TableQuery[FieldsRepository]
-  */
 
   def getAll(): Future[List[TranscriptModel]] = db.run {
     transcripts.to[List].result

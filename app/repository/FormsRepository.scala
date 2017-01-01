@@ -49,9 +49,11 @@ class FormsRepository {
     forms.filter(form => form.userId === userId).to[List].result
   }
 
-  def save(fields: List[NewFormModel]): Future[List[FormsModel]] = db.run {
-    fields.foreach(elem => println(elem))
-    forms.to[List].result
+  def save(fields: List[NewFormModel]): Future[List[FormsModel]] =  {
+    fields.foreach(elem => {
+      db.run(sqlu"""insert into "FORMS"("NAME","VALUE","USER_ID","FIELD_FK") VALUES (${elem.name}, ${elem.value}, ${elem.userId}, ${elem.fieldFk})""")
+    })
+    db.run(forms.to[List].result)
   }
 
   def edit(formsList: List[FormsModel]): Future[List[FormsModel]] = {

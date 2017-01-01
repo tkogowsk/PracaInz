@@ -5,6 +5,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
         $log.log('FilterController');
         $scope.fields = [];
         $scope.userForms = [];
+        $scope.userId = null;
         $scope.activeFormName = null;
         Form.getUserForms((response) => {
                 let data = response.data;
@@ -15,6 +16,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
                     })
                 });
                 $scope.activeFormName = $scope.userForms[0].name;
+                $scope.userId = $scope.userForms[0].fields[0].userId;
             }
         );
 
@@ -25,12 +27,14 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
 
         $scope.addNewFilter = function (name) {
             let fields = [];
-            $scope.fields.forEach((elem) =>
+            $scope.fields.forEach((elem) => {
                 fields.push({
                     value: '',
                     fieldFk: elem.id,
+                    userId: $scope.userId,
                     name: name
-                }));
+                })
+            });
             let newObject = {name: name, fields: fields};
             $scope.userForms.push(newObject);
         };
@@ -42,11 +46,20 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
             }
         }
 
-        $scope.saveForm = function(name){
-            var form = $scope.userForms.find((elem) => {return elem.name == name })
-            console.log(form)
-            Form.editForm(form, (response) =>{
-                console.log(response)
+        $scope.saveForm = function (name) {
+            var form = $scope.userForms.find((elem) => {
+                return elem.name == name
+            })
+            Form.saveForm(form, (response) => {
+
+            })
+        };
+
+        $scope.editForm = function (name) {
+            var form = $scope.userForms.find((elem) => {
+                return elem.name == name
+            });
+            Form.editForm(form, (response) => {
             })
         }
     }]);

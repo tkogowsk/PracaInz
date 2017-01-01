@@ -36,8 +36,10 @@
 
                         </div>
                     </div>
-                </div>
-                <button type="button" class="btn btn-primary" ng-click="saveForm(userForm.name)">Edit</button>
+                </div>{{userForm}}
+                <button type="button" class="btn btn-primary" ng-show="userForm.fields[0].id" ng-click="editForm(userForm.name)">Edit</button>
+                <button type="button" class="btn btn-primary" ng-show="!userForm.fields[0].id" ng-click="saveForm(userForm.name)">Save</button>
+
             </div>
         </div>
 
