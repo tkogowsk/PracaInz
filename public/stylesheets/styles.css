@@ -1,10 +1,47 @@
+.transcript-table .table-wrapper {
+  overflow: auto; }
+
+.transcript-table-pagination {
+  position: fixed;
+  bottom: 1vh; }
+
+.filter-section {
+  padding: 5px;
+  background: #333129;
+  position: fixed;
+  height: 100%;
+  color: #ece8d7;
+  width: 25vw;
+  z-index: 1; }
+  .filter-section .user-form {
+    background: #888888;
+    margin-bottom: 10px;
+    padding: 0 5px 5px;
+    border-radius: 3px; }
+    .filter-section .user-form .user-form-name {
+      color: black;
+      font-weight: bold;
+      font-size: 20px;
+      text-align: center; }
+      .filter-section .user-form .user-form-name:hover {
+        cursor: pointer; }
+    .filter-section .user-form .wrapper {
+      transition: all linear 0.2s;
+      opacity: 1; }
+    .filter-section .user-form .fields {
+      margin-bottom: 10px; }
+    .filter-section .user-form .wrapper.ng-hide {
+      opacity: 0; }
+
 .spinner-background {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   background: #b3d0b8;
-  height: 100%; }
+  height: 100%;
+  z-index: 2;
+  opacity: 0.7; }
 
 .sk-cube-grid {
   width: 100px;
@@ -14,7 +51,7 @@
 .sk-cube-grid .sk-cube {
   width: 33%;
   height: 33%;
-  background-color: #204021;
+  background-color: black;
   float: left;
   -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
   animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out; }
@@ -70,25 +107,8 @@
     -webkit-transform: scale3D(0, 0, 1);
     transform: scale3D(0, 0, 1); } }
 body {
-  margin: 5px; }
-  body .filter-section {
-    margin-left: 10px;
-    padding: 5px;
-    background: #69fae3; }
-    body .filter-section .user-form {
-      background: #40beff;
-      margin-bottom: 10px; }
-      body .filter-section .user-form .user-form-name {
-        color: black;
-        font-weight: bold;
-        font-size: 20px;
-        text-align: center; }
-        body .filter-section .user-form .user-form-name:hover {
-          cursor: pointer; }
-      body .filter-section .user-form .fields {
-        transition: all linear 0.5s;
-        opacity: 1; }
-      body .filter-section .user-form .fields.ng-hide {
-        opacity: 0; }
+  background: #f9f9f5; }
+  body input {
+    color: black; }
 
 /*# sourceMappingURL=styles.css.map */

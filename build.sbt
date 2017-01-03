@@ -23,7 +23,7 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "angular-animate" % "1.5.5" exclude("org.webjars.bower", "angularjs"),
   "org.webjars.bower" % "angular-ui-router" % "0.3.2" exclude("org.webjars.bower", "angularjs"),
   "org.webjars.bower" % "angular-resource" % "1.5.5" exclude("org.webjars.bower", "angularjs"),
-  "org.webjars.bower" % "angular-ui-bootstrap" % "2.3.0" exclude("org.webjars.bower", "angularjs")
+  "org.webjars" % "angular-ui-bootstrap" % "2.2.0" exclude("org.webjars", "angularjs")
 )
 
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )  

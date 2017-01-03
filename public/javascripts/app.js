@@ -1,4 +1,4 @@
-var myApp = angular.module('app', ['ui.router', 'mainPage', 'filter', 'Repositories', 'Models', 'ngAnimate', 'transcripts']);
+var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'mainPage', 'filter', 'Repositories', 'Models', 'ngAnimate', 'transcripts']);
 myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 
     $stateProvider
@@ -14,4 +14,5 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
         requireBase: false
     });
 });
+
 

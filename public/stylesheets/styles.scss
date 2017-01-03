@@ -1,30 +1,8 @@
 @import "modules/transcripts-table";
-body {
-  margin: 5px;
-  .filter-section {
-    margin-left: 10px;
-    padding: 5px;
-    background: #69fae3;
-    .user-form {
-      background: #40beff;
-      margin-bottom: 10px;
-      .user-form-name {
-        color: black;
-        font-weight: bold;
-        font-size: 20px;
-        text-align: center;
-        &:hover {
-          cursor: pointer;
-        }
-      }
-      .fields {
-        transition: all linear 0.5s;
-        opacity: 1;
-      }
-      .fields.ng-hide {
-        opacity: 0;
-      }
 
-    }
+body {
+  background: #f9f9f5;
+  input {
+    color: black;
   }
 }
