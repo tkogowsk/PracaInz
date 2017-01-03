@@ -2,8 +2,8 @@ angular.module('mainPage', []);
 
 angular.module('mainPage').controller('MainPageController', ['$scope', '$log',
     function ($scope, $log) {
-        $scope.$on('ActiveFormChangedEmit', function (event, name) {
+        $scope.$on(filterByNameEvent + 'Emit', function (event, name) {
            event.stopPropagation();
-            $scope.$broadcast("ActiveFormChangedBroadcast", name)
+            $scope.$broadcast(filterByNameEvent + 'Broadcast', name)
         })
     }]);

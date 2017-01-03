@@ -2,11 +2,12 @@ angular.module('filter', []);
 
 angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form', 'Fields',
     function ($scope, $log, Form, Fields) {
-        $log.log('FilterController');
+
         $scope.fields = [];
         $scope.userForms = [];
         $scope.userId = null;
         $scope.activeFormName = null;
+
         Form.getUserForms((response) => {
                 let data = response.data;
                 Object.getOwnPropertyNames(data).forEach(function (val, idx, array) {
@@ -15,7 +16,6 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
                         fields: data[val]
                     })
                 });
-                $scope.activeFormName = $scope.userForms[0].name;
                 $scope.userId = $scope.userForms[0].fields[0].userId;
             }
         );
@@ -25,8 +25,22 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
             }
         );
 
+        function setActiveFormName(newName, eventName) {
+            if ($scope.activeFormName != newName) {
+                $scope.activeFormName = newName;
+                setActiveFormName(newName);
+                if(eventName){
+                    $scope.$emit(eventName + "Emit", newName)
+                }
+            }
+        }
+
         $scope.addNewFilter = function (name) {
             let fields = [];
+            if($scope.userForms.findIndex(form => form.name == name)){
+                return
+            }
+
             $scope.fields.forEach((elem) => {
                 fields.push({
                     value: '',
@@ -37,29 +51,30 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
             });
             let newObject = {name: name, fields: fields};
             $scope.userForms.push(newObject);
+            setActiveFormName(name);
         };
 
         $scope.userFormNameClicked = function (name) {
-            if ($scope.activeFormName != name) {
-                $scope.activeFormName = name;
-                $scope.$emit("ActiveFormChangedEmit", name)
-            }
-        }
+            setActiveFormName(name, filterByNameEvent);
+        };
 
         $scope.saveForm = function (name) {
-            var form = $scope.userForms.find((elem) => {
-                return elem.name == name
-            })
+            let form = getFormByName(name);
             Form.saveForm(form, (response) => {
-
+                $scope.$emit(filterByNameEvent + "Emit", name)
             })
         };
 
         $scope.editForm = function (name) {
-            var form = $scope.userForms.find((elem) => {
+            let form = getFormByName(name);
+            Form.editForm(form, (response) => {
+                $scope.$emit(filterByNameEvent + "Emit", name)
+            })
+        };
+
+        function getFormByName(name) {
+            return $scope.userForms.find((elem) => {
                 return elem.name == name
             });
-            Form.editForm(form, (response) => {
-            })
         }
     }]);
