@@ -10,10 +10,7 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         $scope.tableBegin = 0;
         $scope.currentPage = 1;
 
-        Transcript.getAll(function (response) {
-            $scope.transcriptData = response.data;
-            changeSpinner(false);
-        });
+        getAll();
 
         $scope.$on(filterByNameEvent + 'Broadcast', function (event, name) {
             changeSpinner(true);
@@ -23,12 +20,22 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
             });
         });
 
+        $scope.$on(getAllTranscriptsEvent + 'Broadcast', function (event, name) {
+            getAll();
+        });
+
         function changeSpinner(spinnerIndicator) {
             $scope.showSpinner = spinnerIndicator;
         }
 
         $scope.pageChanged = function () {
             $scope.tableBegin = $scope.tableLimit * ($scope.currentPage - 1);
-        }
+        };
 
+        function getAll() {
+            Transcript.getAll(function (response) {
+                $scope.transcriptData = response.data;
+                changeSpinner(false);
+            });
+        }
     }]);

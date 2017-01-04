@@ -9,6 +9,7 @@ import slick.driver.PostgresDriver.api._
 import scala.concurrent._
 import shapeless._
 import slick.jdbc.GetResult
+import slick.lifted.TableQuery
 import slickless._
 
 import scala.collection.mutable.ArrayBuffer
@@ -111,18 +112,16 @@ class TranscriptRepository {
       alleleCountSouthAsian :: alleleNumberSouthAsian ::
       homozygoteCountSouthAsian :: id :: HNil).mappedWith(Generic[TranscriptModel])
 
-    /*//<> (TranscriptModel.tupled, TranscriptModel.unapply)*/
-
   }
 
-  var transcripts = TableQuery[TranscriptTableRepository]
+  var transcripts: TableQuery[TranscriptTableRepository] = TableQuery[TranscriptTableRepository]
 
   def getAll(): Future[List[TranscriptModel]] = db.run {
     transcripts.to[List].result
   }
 
   def getByFilter(fields: List[FieldsModel], userForms: List[FormsModel]): Future[Seq[TranscriptModel]] = db.run {
-    var query: String = ("""select * from "Transcripts" t where """)
+    var query: String = """select * from "Transcripts" t where """
     var userField: FormsModel = null
     fields.foreach(field => {
       userField = userForms.filter(formField => formField.fieldFk == field.id).head
@@ -142,12 +141,10 @@ class TranscriptRepository {
       }
     }
     )
-    query = query.slice(0, query.length - 5)
-    sql"#$query".as[TranscriptModel]
-  }
 
-  def getOne(): Future[Seq[TranscriptModel]] = {
-    db.run(sql"""select * from "Transcripts" t where t.id IN (1,2,3)""".as[TranscriptModel])
+    query = query.slice(0, query.length - 5)
+    println(query)
+    sql"#$query".as[TranscriptModel]
   }
 
 }

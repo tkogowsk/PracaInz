@@ -14,11 +14,9 @@ import utils.{FormEditDTO, FormSaveDTO, NewFormModel}
 class FormsRepository {
   private val db = Database.forConfig("postgresConf")
 
-  var forms = TableQuery[FieldsTableRepository]
-  var fields = TableQuery[FieldsTableRepository]
+  var forms = TableQuery[FormsTableRepository]
 
-
-  class FieldsTableRepository(tag: Tag) extends Table[FormsModel](tag, "FORMS") {
+  class FormsTableRepository(tag: Tag) extends Table[FormsModel](tag, "FORMS") {
 
     def id = column[Int]("ID", O.PrimaryKey)
 
@@ -29,8 +27,6 @@ class FormsRepository {
     def userId = column[Int]("USER_ID")
 
     def fieldFk = column[Int]("FIELD_FK")
-
-    def field = foreignKey("FIELD_FK", fieldFk, fields)(_.id)
 
     def * = (id, value, name, userId, fieldFk) <> (FormsModel.tupled, FormsModel.unapply)
 

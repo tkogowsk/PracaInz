@@ -3,7 +3,6 @@ package controllers
 import play.api.mvc._
 import javax.inject.Inject
 
-import ai.x.play.json.Jsonx
 import models.{FieldsModel, FormsModel}
 import utils.{Constants, FormEditDTO, FormSaveDTO}
 import repository.{FieldsRepository, FormsRepository, TranscriptRepository}
@@ -15,6 +14,8 @@ import utils.JsonFormat._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
+
+
 class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: TranscriptRepository,
                             fieldsRepository: FieldsRepository, formsRepository: FormsRepository
                            ) extends Controller {
@@ -41,7 +42,7 @@ class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: Tr
     }
   }
 
-  def getFields() = Action.async {
+  def getFields: Action[AnyContent] = Action.async {
     fieldsRepository.getAll().map { res =>
       Ok(successResponse(Json.toJson(res), "Getting Fields list successfully"))
     }

@@ -8,6 +8,8 @@ import slick.driver.PostgresDriver.api._
 import scala.concurrent._
 import shapeless._
 import slickless._
+import utils.FieldSaveDTO
+import scala.collection.mutable.ArrayBuffer
 
 @Singleton
 class FieldsRepository {
@@ -32,4 +34,14 @@ class FieldsRepository {
     fields.to[List].result
   }
 
+  def save(fields: ArrayBuffer[FieldSaveDTO]) =  {
+
+    db.run(sqlu"""TRUNCATE TABLE "FORMS"""")
+    db.run(sqlu"""TRUNCATE TABLE "FIELDS CASCADE"""")
+    fields.foreach(elem => {
+      db.run(
+        sqlu"""insert into "FIELDS"("COLUMN_NAME","FE_NAME","RELATION")
+              VALUES (${elem.columnName}, ${elem.feName}, ${elem.relation})""")
+    })
+  }
 }

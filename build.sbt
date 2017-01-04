@@ -14,7 +14,10 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "com.h2database" % "h2" % "1.4.187",
   "org.postgresql" % "postgresql" % "9.4-1206-jdbc4",
-  // WebJars (i.e. client-side) dependencies
+  "org.apache.poi" % "poi" % "3.10-FINAL",
+  "org.apache.poi" % "poi-scratchpad" % "3.10-FINAL",
+  "org.apache.poi" % "poi-ooxml" % "3.10-FINAL",
+// WebJars (i.e. client-side) dependencies
   "org.webjars" %% "webjars-play" % "2.5.0",
   "org.webjars" % "jquery" % "1.11.3",
   "org.webjars" % "bootstrap" % "3.3.6" exclude("org.webjars", "jquery"),

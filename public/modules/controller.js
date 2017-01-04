@@ -6,4 +6,8 @@ angular.module('mainPage').controller('MainPageController', ['$scope', '$log',
            event.stopPropagation();
             $scope.$broadcast(filterByNameEvent + 'Broadcast', name)
         })
+        $scope.$on(getAllTranscriptsEvent + 'Emit', function (event, name) {
+            event.stopPropagation();
+            $scope.$broadcast(getAllTranscriptsEvent + 'Broadcast', name)
+        })
     }]);

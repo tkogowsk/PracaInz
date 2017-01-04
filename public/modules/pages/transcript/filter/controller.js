@@ -5,7 +5,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
 
         $scope.fields = [];
         $scope.userForms = [];
-        $scope.userId = null;
+        $scope.userId = 1;
         $scope.activeFormName = null;
 
         Form.getUserForms((response) => {
@@ -16,7 +16,6 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
                         fields: data[val]
                     })
                 });
-                $scope.userId = $scope.userForms[0].fields[0].userId;
             }
         );
 
@@ -35,9 +34,16 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
             }
         }
 
+        $scope.getAll = function () {
+            $scope.$emit(getAllTranscriptsEvent + "Emit", name);
+            $scope.activeFormName = null;
+        };
+
         $scope.addNewFilter = function (name) {
             let fields = [];
-            if($scope.userForms.findIndex(form => form.name == name)){
+            console.log($scope.userForms.findIndex(form => form.name == name))
+            if($scope.userForms.findIndex(form => form.name == name) >= 0){
+                console.log('ret');
                 return
             }
 
@@ -52,6 +58,8 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
             let newObject = {name: name, fields: fields};
             $scope.userForms.push(newObject);
             setActiveFormName(name);
+            console.log(newObject);
+
         };
 
         $scope.userFormNameClicked = function (name) {

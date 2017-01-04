@@ -17,7 +17,7 @@
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/ui-bootstrap-tpls-2.4.0.min.js")"></script>
 
 
-        <!-- Custom Javascripts -->
+            <!-- Custom Javascripts -->
         <script type="text/javascript" src="@routes.Assets.versioned("modules/utils/events.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/utils/models.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/utils/table.model.js")"></script>
@@ -33,5 +33,16 @@
     </head>
     <body ng-app="app" ng-controller="MainPageController">
         <div ui-view></div>
+
+
+        @helper.form(action = routes.Upload.upload, 'enctype -> "multipart/form-data") {
+
+            <input type="file" name="file" style="float: right;">
+
+            <p>
+                <input type="submit" style="float: right;">
+            </p>
+
+        }
     </body>
 </html>

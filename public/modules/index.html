@@ -1,6 +1,7 @@
 <div class="row">
     <div ng-controller="FilterController" class="col-lg-4">
         <div class="filter-section">
+            <button type="button" class="btn btn-primary btn-sm" ng-click="getAll()">Get all</button>
             <h3>Filters</h3>
             <div ng-repeat="userForm in userForms" class="user-form">
                 <p class="user-form-name" ng-click="userFormNameClicked(userForm.name); $event.stopPropagation()">
@@ -96,3 +97,4 @@
         </div>
     </div>
 </div>
+
