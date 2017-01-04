@@ -123,6 +123,7 @@ class TranscriptRepository {
   def getByFilter(fields: List[FieldsModel], userForms: List[FormsModel]): Future[Seq[TranscriptModel]] = db.run {
     var query: String = """select * from "Transcripts" t where """
     var userField: FormsModel = null
+    println(fields);
     fields.foreach(field => {
       userField = userForms.filter(formField => formField.fieldFk == field.id).head
       field.relation.toString match {
@@ -133,17 +134,16 @@ class TranscriptRepository {
           query = query.concat("\"" + field.columnName.toString + "\"" + " IN(" + array.mkString(",") + ") AND ")
         }
 
-        case Relation.Greater => query = query.concat("\"" + field.columnName.toString + "\"" + " > " + userField.value + " AND ")
-        case Relation.GreaterThan => query = query.concat("\"" + field.columnName.toString + "\"" + " >= " + userField.value + " AND ")
-        case Relation.Equals => query = query.concat("\"" + field.columnName.toString + "\"" + " = " + userField.value + " AND ")
-        case Relation.Less => query = query.concat("\"" + field.columnName.toString + "\"" + " < " + userField.value + " AND ")
-        case Relation.LessThan => query = query.concat("\"" + field.columnName.toString + "\"" + " <= " + userField.value + " AND ")
+        case Relation.Greater => query = query.concat("\"" + field.columnName.toString + "\"" + " > \'" + userField.value + "\' AND ")
+        case Relation.GreaterThan => query = query.concat("\"" + field.columnName.toString + "\"" + " >= \'" + userField.value + "\' AND ")
+        case Relation.Equals => query = query.concat("\"" + field.columnName.toString + "\"" + " = \'" + userField.value + "\' AND ")
+        case Relation.Less => query = query.concat("\"" + field.columnName.toString + "\"" + " < \'" + userField.value + "\' AND ")
+        case Relation.LessThan => query = query.concat("\"" + field.columnName.toString + "\"" + " <= " + userField.value + "\' AND ")
       }
     }
     )
 
     query = query.slice(0, query.length - 5)
-    println(query)
     sql"#$query".as[TranscriptModel]
   }
 

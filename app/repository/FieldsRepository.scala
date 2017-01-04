@@ -37,7 +37,7 @@ class FieldsRepository {
   def save(fields: ArrayBuffer[FieldSaveDTO]) =  {
 
     db.run(sqlu"""TRUNCATE TABLE "FORMS"""")
-    db.run(sqlu"""TRUNCATE TABLE "FIELDS CASCADE"""")
+    db.run(sqlu"""TRUNCATE TABLE "FIELDS" RESTART IDENTITY CASCADE""")
     fields.foreach(elem => {
       db.run(
         sqlu"""insert into "FIELDS"("COLUMN_NAME","FE_NAME","RELATION")

@@ -20,8 +20,8 @@ class Upload @Inject()(fieldsRepository: FieldsRepository) extends Controller {
   def upload = Action(parse.multipartFormData) { request =>
     try {
       request.body.file("file").map { picture =>
-
-        val file = picture.ref.moveTo(new File("/tmp/file"))
+        var tmpFile = new File("/tmp/2")
+        val file = picture.ref.moveTo(tmpFile)
         val wb = WorkbookFactory.create(file)
         val sheet = wb.getSheetAt(0)
         val fields = ArrayBuffer[FieldSaveDTO]()
@@ -42,26 +42,30 @@ class Upload @Inject()(fieldsRepository: FieldsRepository) extends Controller {
         //ommiting first row
         val rowIterator = sheet.rowIterator()
         rowIterator.next()
+        for (row <- rowIterator) {
 
-        val text = rowIterator.map(row => {
-          val field = new FieldSaveDTO(
-            columnName = row.getCell(0).toString,
-            feName = row.getCell(1).toString,
-            relation = row.getCell(2).toString)
+          var columnName = row.getCell(0).toString
+          var feName = row.getCell(1).toString
+          var relation = row.getCell(2).toString
+          if (columnName.length > 0 && feName.length > 0 && relation.length > 0) {
+            val field = new FieldSaveDTO(
+              columnName = columnName,
+              feName = feName,
+              relation = relation)
+            fields += field
+          }
+        }
 
-          fields += field
-          row.cellIterator.map(getCellString).mkString("\t")
-        }).mkString("\n")
-        if (fields.size > 0) {
+        if (fields.nonEmpty) {
           fieldsRepository.save(fields)
         }
+        tmpFile.delete()
       }
       Ok("File uploaded")
     }
     catch {
       case e: Exception => {
-        println(e)
-        Ok("Something went wrong")
+        Ok("Something went wrong\n Error: " + e.getMessage)
       }
     }
 
