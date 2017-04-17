@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.2" last-position="0,181" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.2" last-position="11,94" last-zoom="1"
 	 default-schema="public" default-owner="postgres">
 <database name="new_database">
 </database>
@@ -14,7 +14,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="TAB">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="540" y="120"/>
+	<position x="191" y="117"/>
 	<column name="name" not-null="true">
 		<type name="text"/>
 	</column>
@@ -29,7 +29,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="FIELD">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="180" y="280"/>
+	<position x="69" y="284"/>
 	<column name="id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -51,7 +51,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="FILTER">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="520" y="580"/>
+	<position x="526" y="111"/>
 	<column name="id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -69,7 +69,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="USER">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1146" y="527"/>
+	<position x="1188" y="566"/>
 	<column name="id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -84,7 +84,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="SAMPLE">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1572" y="512"/>
+	<position x="1558" y="419"/>
 	<column name="id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -98,7 +98,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="PRIVILEGE">
 	<schema name="public"/>
-	<position x="1336" y="743"/>
+	<position x="1372" y="734"/>
 
 	<customidxs object-type="column">
 		<object name="id_SAMPLE" index="1"/>
@@ -130,7 +130,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.&quot;PRIVILEGE&quot;"
 	 src-required="true" dst-required="false"
 	 identifier="true"
-/>
+>
+	<line>
+		<position x="1778.11" y="776.6"/>
+	</line>
+</relationship>
 
 <table name="TAB_FIELD_FILTER">
 	<schema name="public"/>
@@ -163,7 +167,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.&quot;TAB_FIELD_FILTER&quot;"
 	 src-required="true" dst-required="false"
 	 identifier="true"
-/>
+>
+	<line>
+		<position x="354.138" y="284.6"/>
+	</line>
+</relationship>
 
 <relationship name="FILTER_has_many_TAB_FIELD_FILTER" type="rel1n"
 	 src-col-pattern="{sc}_{st}"
@@ -174,7 +182,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.&quot;TAB_FIELD_FILTER&quot;"
 	 src-required="true" dst-required="false"
 	 identifier="true"
-/>
+>
+	<line>
+		<position x="706.622" y="298.6"/>
+	</line>
+</relationship>
 
 <relationship name="FIELD_has_many_TAB_FIELD_FILTER" type="rel1n"
 	 src-col-pattern="{sc}_{st}"
@@ -190,7 +202,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="DATA_COLUMN">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="420" y="800"/>
+	<position x="448" y="732"/>
 	<column name="id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -205,7 +217,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="USER_VISIBLE_DATA_COLUMN">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="860" y="800"/>
+	<position x="841" y="733"/>
 </table>
 
 <relationship name="DATA_COLUMNS_has_many_USER_VISIBLE_DATA_COLUMN" type="rel1n"
@@ -228,12 +240,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.&quot;USER_VISIBLE_DATA_COLUMN&quot;"
 	 src-required="true" dst-required="false"
 	 identifier="true"
-/>
+>
+	<line>
+		<position x="1168.5" y="775.6"/>
+	</line>
+</relationship>
 
 <table name="USER_SAMPLE_TAB">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1132" y="219"/>
+	<position x="726" y="409"/>
 </table>
 
 <relationship name="USER_has_many_USER_SAMPLE_TAB" type="rel1n"
@@ -246,6 +262,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="true" dst-required="false"
 	 identifier="true"
 >
+	<line>
+		<position x="1042" y="595"/>
+	</line>
 	<label ref-type="src-label">
 		<position x="0.59" y="1.8"/>
 	</label>
