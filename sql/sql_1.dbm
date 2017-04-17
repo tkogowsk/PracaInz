@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.8.2" last-position="1,10" last-zoom="1"
+	 default-schema="public" default-owner="postgres">
+<database name="new_database">
+</database>
+
+<schema name="public" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="TAB">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="280" y="620"/>
+	<column name="name" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<constraint name="TAB_PK" type="pk-constr" table="public.&quot;TAB&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="FIELD">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="160" y="340"/>
+	<column name="columnName" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="FEName" not-null="true">
+		<type name="text"/>
+		<comment><![CDATA[front-end name - visible for user]]></comment>
+	</column>
+	<column name="id">
+		<type name="bigserial"/>
+	</column>
+	<column name="type">
+		<type name="text"/>
+	</column>
+</table>
+
+<table name="FILTER">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="420" y="340"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="type">
+		<type name="text"/>
+	</column>
+	<constraint name="FILTER_PK" type="pk-constr" table="public.&quot;FILTER&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="USER">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1160" y="720"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="login" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="USER_ID" type="pk-constr" table="public.&quot;USER&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="USER_UQ" type="uq-constr" table="public.&quot;USER&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="SAMPLE">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1060" y="540"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="data" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="SAMPLE_PK" type="pk-constr" table="public.&quot;SAMPLE&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="PRIVILEGE">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="860" y="720"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<constraint name="PRIVILEGE_PK" type="pk-constr" table="public.&quot;PRIVILEGE&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="USER_SETTINGS">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1480" y="700"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="columnsSet">
+		<type name="text"/>
+	</column>
+	<column name="user_fk">
+		<type name="bigint"/>
+	</column>
+	<constraint name="USER_SETTINGS_PK" type="pk-constr" table="public.&quot;USER_SETTINGS&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="USER_UQ" type="uq-constr" table="public.&quot;USER_SETTINGS&quot;">
+		<columns names="user_fk" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="many_FILTER_has_many_FIELD">
+	<schema name="public"/>
+	<position x="240" y="460"/>
+
+	<customidxs object-type="column">
+		<object name="id_FIELD" index="1"/>
+		<object name="id_FILTER" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="FIELD_fk" index="2"/>
+		<object name="FILTER_fk" index="1"/>
+		<object name="many_FILTER_has_many_FIELD_pk" index="0"/>
+	</customidxs>
+</table>
+
+<relationship name="FILTER_has_many_many_FILTER_has_many_FIELD" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="public.&quot;FILTER&quot;"
+	 dst-table="public.&quot;many_FILTER_has_many_FIELD&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<constraint name="USER_FK" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.&quot;USER&quot;" table="public.&quot;PRIVILEGE&quot;">
+	<columns names="id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="SAMPLE_FK" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.&quot;SAMPLE&quot;" table="public.&quot;PRIVILEGE&quot;">
+	<columns names="id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="USER_FK" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.&quot;USER&quot;" table="public.&quot;USER_SETTINGS&quot;">
+	<columns names="user_fk" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_PRIVILEGE_USER" type="relfk"
+	 src-table="public.&quot;PRIVILEGE&quot;"
+	 dst-table="public.&quot;USER&quot;"
+	 src-required="false" dst-required="false">
+	<label ref-type="src-label">
+		<position x="0.14" y="-0.2"/>
+	</label>
+</relationship>
+
+<relationship name="&quot;rel_PRIVILEGE_SAMPLE&quot;" type="relfk"
+	 src-table="public.&quot;PRIVILEGE&quot;"
+	 dst-table="public.&quot;SAMPLE&quot;"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_USER_SETTINGS_USER" type="relfk"
+	 src-table="public.&quot;USER_SETTINGS&quot;"
+	 dst-table="public.&quot;USER&quot;"
+	 src-required="false" dst-required="false">
+	<label ref-type="src-label">
+		<position x="0.14" y="-8.2"/>
+	</label>
+</relationship>
+
+</dbmodel>

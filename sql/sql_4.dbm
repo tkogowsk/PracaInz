@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.8.2" last-position="61,0" last-zoom="1"
+	 default-schema="public" default-owner="postgres">
+<database name="new_database">
+</database>
+
+<schema name="public" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="TAB">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="580" y="0"/>
+	<column name="name" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<constraint name="TAB_pk" type="pk-constr" table="public.&quot;TAB&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="FIELD">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="220" y="160"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="column_name" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="fe_name" not-null="true">
+		<type name="text"/>
+		<comment><![CDATA[front end name]]></comment>
+	</column>
+	<column name="type">
+		<type name="text"/>
+	</column>
+	<constraint name="FIELD_pk" type="pk-constr" table="public.&quot;FIELD&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="FILTER">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="560" y="460"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="name">
+		<type name="text"/>
+	</column>
+	<column name="is_global">
+		<type name="bool"/>
+	</column>
+	<constraint name="FILTER_pk" type="pk-constr" table="public.&quot;FILTER&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="USER">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1180" y="400"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="USER_pk" type="pk-constr" table="public.&quot;USER&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="SAMPLE">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1520" y="400"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="transcript_data" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="SAMPLE_pk" type="pk-constr" table="public.&quot;SAMPLE&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="PRIVILEGE">
+	<schema name="public"/>
+	<position x="1360" y="640"/>
+
+	<customidxs object-type="column">
+		<object name="id_SAMPLE" index="1"/>
+		<object name="id_USER" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="PRIVILEGE_pk" index="0"/>
+		<object name="SAMPLE_fk" index="2"/>
+		<object name="USER_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="USER_has_many_many_USER_has_many_SAMPLE" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="public.&quot;USER&quot;"
+	 dst-table="public.&quot;PRIVILEGE&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="SAMPLE_has_many_many_USER_has_many_SAMPLE" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="public.&quot;SAMPLE&quot;"
+	 dst-table="public.&quot;PRIVILEGE&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<table name="TAB_FIELD_FILTER">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="520" y="120"/>
+	<column name="default_value">
+		<type name="text"/>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="id_FIELD" index="3"/>
+		<object name="id_FILTER" index="2"/>
+		<object name="id_TAB" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="FIELD_fk" index="3"/>
+		<object name="FILTER_fk" index="1"/>
+		<object name="TAB_FIELD_FILTER_pk" index="0"/>
+		<object name="TAB_fk" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="TAB_has_many_TAB_FIELD_FILTER" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#634172"
+	 src-table="public.&quot;TAB&quot;"
+	 dst-table="public.&quot;TAB_FIELD_FILTER&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="FILTER_has_many_TAB_FIELD_FILTER" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#24caa1"
+	 src-table="public.&quot;FILTER&quot;"
+	 dst-table="public.&quot;TAB_FIELD_FILTER&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="FIELD_has_many_TAB_FIELD_FILTER" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#6b4860"
+	 src-table="public.&quot;FIELD&quot;"
+	 dst-table="public.&quot;TAB_FIELD_FILTER&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<table name="DATA_COLUMN">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="460" y="680"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="column_name" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="DATA_COLUMNS_pk" type="pk-constr" table="public.&quot;DATA_COLUMN&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="USER_VISIBLE_DATA_COLUMN">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="900" y="680"/>
+</table>
+
+<relationship name="DATA_COLUMNS_has_many_USER_VISIBLE_DATA_COLUMN" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#4c6025"
+	 src-table="public.&quot;DATA_COLUMN&quot;"
+	 dst-table="public.&quot;USER_VISIBLE_DATA_COLUMN&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="USER_has_many_USER_VISIBLE_DATA_COLUMN" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#229bd4"
+	 src-table="public.&quot;USER&quot;"
+	 dst-table="public.&quot;USER_VISIBLE_DATA_COLUMN&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<table name="USER_SAMPLE_TAB">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1180" y="80"/>
+</table>
+
+<relationship name="USER_has_many_USER_SAMPLE_TAB" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#44a9dd"
+	 src-table="public.&quot;USER&quot;"
+	 dst-table="public.&quot;USER_SAMPLE_TAB&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="SAMPLE_has_many_USER_SAMPLE_TAB" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#901d06"
+	 src-table="public.&quot;SAMPLE&quot;"
+	 dst-table="public.&quot;USER_SAMPLE_TAB&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="TAB_FIELD_FILTER_has_many_USER_SAMPLE_TAB" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#f539e5"
+	 src-table="public.&quot;TAB_FIELD_FILTER&quot;"
+	 dst-table="public.&quot;USER_SAMPLE_TAB&quot;"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+</dbmodel>
