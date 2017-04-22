@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.8.2" last-position="1,0" last-zoom="1"
+	 default-schema="public" default-owner="postgres">
+<database name="new_database">
+</database>
+
+<schema name="public" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="tab">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="191" y="117"/>
+	<column name="name" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<constraint name="TAB_pk" type="pk-constr" table="public.tab">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="field">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="69" y="284"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="options">
+		<type name="text" dimension="1"/>
+	</column>
+	<constraint name="FIELD_pk" type="pk-constr" table="public.field">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="filter">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="526" y="111"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="name">
+		<type name="text"/>
+	</column>
+	<column name="is_global">
+		<type name="bool"/>
+	</column>
+	<constraint name="FILTER_pk" type="pk-constr" table="public.filter">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="user">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1188" y="566"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="USER_pk" type="pk-constr" table="public.&quot;user&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="sample_metadata">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1560" y="429"/>
+	<column name="sample_id" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="SAMPLE_pk" type="pk-constr" table="public.sample_metadata">
+		<columns names="sample_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="privilege">
+	<schema name="public"/>
+	<position x="1372" y="734"/>
+	<column name="id_region">
+		<type name="bigint"/>
+	</column>
+	<column name="access_type" default-value="all">
+		<type name="text"/>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="id_user" index="0"/>
+		<object name="sample_id_sample_metadata" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="privilege_pk" index="0"/>
+		<object name="sample_metadata_fk" index="2"/>
+		<object name="user_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="USER_has_many_many_USER_has_many_SAMPLE" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="public.&quot;user&quot;"
+	 dst-table="public.privilege"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="163.157" y="-26.4485"/>
+	</label>
+</relationship>
+
+<relationship name="SAMPLE_has_many_many_USER_has_many_SAMPLE" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 src-table="public.sample_metadata"
+	 dst-table="public.privilege"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="1760" y="773"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="-175.131" y="-20.9485"/>
+	</label>
+</relationship>
+
+<table name="tab_field_filter">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="479" y="242"/>
+	<column name="default_value">
+		<type name="text"/>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="id_field" index="3"/>
+		<object name="id_filter" index="2"/>
+		<object name="id_tab" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="field_fk" index="3"/>
+		<object name="filter_fk" index="1"/>
+		<object name="tab_field_filter_pk" index="0"/>
+		<object name="tab_fk" index="2"/>
+	</customidxs>
+</table>
+
+<relationship name="tab_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#634172"
+	 src-table="public.tab"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="354.138" y="284.6"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="filter_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#24caa1"
+	 src-table="public.filter"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="706.622" y="298.6"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="137.748" y="-26.1607"/>
+	</label>
+</relationship>
+
+<relationship name="field_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#6b4860"
+	 src-table="public.field"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="variant_column">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="448" y="732"/>
+	<column name="id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="column_name" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="fe_name">
+		<type name="text"/>
+	</column>
+	<column name="type">
+		<type name="text"/>
+	</column>
+	<constraint name="DATA_COLUMNS_pk" type="pk-constr" table="public.variant_column">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="user_visible_variant_column">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="841" y="733"/>
+	<column name="column_order">
+		<type name="bigint"/>
+	</column>
+	<column name="visible">
+		<type name="bool"/>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="id_user" index="1"/>
+		<object name="id_variant_column" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="user_fk" index="2"/>
+		<object name="user_visible_variant_column_pk" index="0"/>
+		<object name="variant_column_fk" index="1"/>
+	</customidxs>
+</table>
+
+<relationship name="DATA_COLUMNS_has_many_USER_VISIBLE_DATA_COLUMN" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#4c6025"
+	 src-table="public.variant_column"
+	 dst-table="public.user_visible_variant_column"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="21.9884" y="13.8393"/>
+	</label>
+</relationship>
+
+<relationship name="USER_has_many_USER_VISIBLE_DATA_COLUMN" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#229bd4"
+	 src-table="public.&quot;user&quot;"
+	 dst-table="public.user_visible_variant_column"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="1168.5" y="775.6"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="-64.1303" y="-9.16066"/>
+	</label>
+</relationship>
+
+<table name="user_smp_tab">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="722" y="404"/>
+	<column name="value">
+		<type name="text"/>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="id_field_tab_field_filter" index="5"/>
+		<object name="id_filter_tab_field_filter" index="4"/>
+		<object name="id_tab_tab_field_filter" index="3"/>
+		<object name="id_user" index="1"/>
+		<object name="sample_id_sample_metadata" index="2"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="sample_metadata_fk" index="3"/>
+		<object name="tab_field_filter_fk" index="2"/>
+		<object name="user_fk" index="1"/>
+		<object name="user_smp_tab_pk" index="0"/>
+	</customidxs>
+</table>
+
+<relationship name="USER_has_many_USER_SAMPLE_TAB" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#44a9dd"
+	 src-table="public.&quot;user&quot;"
+	 dst-table="public.user_smp_tab"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="1042" y="595"/>
+	</line>
+	<label ref-type="src-label">
+		<position x="0.59" y="1.8"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="-182.88" y="-23.8607"/>
+	</label>
+</relationship>
+
+<relationship name="tab_field_filter_has_many_user_sample_metadata" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#f539e5"
+	 src-table="public.tab_field_filter"
+	 dst-table="public.user_smp_tab"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="165.434" y="-31.1607"/>
+	</label>
+</relationship>
+
+<relationship name="sample_metadata_has_many_user_smp_tab" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#713525"
+	 src-table="public.sample_metadata"
+	 dst-table="public.user_smp_tab"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="variant_column_has_many_field" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#6cb9ee"
+	 src-table="public.variant_column"
+	 dst-table="public.field"
+	 src-required="false" dst-required="false">
+	<line>
+		<position x="305" y="757"/>
+	</line>
+</relationship>
+
+</dbmodel>
