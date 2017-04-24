@@ -39,6 +39,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="FIELD_pk" type="pk-constr" table="public.field">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_variant_column" index="2"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="variant_column_fk" index="1"/>
+	</customidxs>
 </table>
 
 <table name="filter" hide-ext-attribs="true">
@@ -97,7 +105,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 
 	<customidxs object-type="column">
-		<object name="id_user" index="0"/>
+		<object name="id_user" index="3"/>
 		<object name="sample_id_sample_metadata" index="1"/>
 	</customidxs>
 
@@ -148,69 +156,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 
 	<customidxs object-type="column">
-		<object name="id_field" index="3"/>
-		<object name="id_filter" index="2"/>
-		<object name="id_tab" index="1"/>
+		<object name="field_id" index="1"/>
+		<object name="tab_id" index="2"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="field_fk" index="3"/>
-		<object name="filter_fk" index="1"/>
+		<object name="field_fk" index="1"/>
 		<object name="tab_field_filter_pk" index="0"/>
 		<object name="tab_fk" index="2"/>
 	</customidxs>
 </table>
-
-<relationship name="tab_has_many_tab_field_filter" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#634172"
-	 src-table="public.tab"
-	 dst-table="public.tab_field_filter"
-	 src-required="true" dst-required="false"
-	 identifier="true"
->
-	<line>
-		<position x="360" y="280"/>
-	</line>
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
-
-<relationship name="filter_has_many_tab_field_filter" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#24caa1"
-	 src-table="public.filter"
-	 dst-table="public.tab_field_filter"
-	 src-required="true" dst-required="false"
-	 identifier="true"
->
-	<line>
-		<position x="700" y="300"/>
-	</line>
-	<label ref-type="name-label">
-		<position x="137.748" y="-26.1607"/>
-	</label>
-</relationship>
-
-<relationship name="field_has_many_tab_field_filter" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#6b4860"
-	 src-table="public.field"
-	 dst-table="public.tab_field_filter"
-	 src-required="true" dst-required="false"
-	 identifier="true"
->
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
 
 <table name="variant_column" hide-ext-attribs="true">
 	<schema name="public"/>
@@ -245,8 +200,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 
 	<customidxs object-type="column">
-		<object name="id_user" index="1"/>
-		<object name="id_variant_column" index="0"/>
+		<object name="id_user" index="3"/>
+		<object name="id_variant_column" index="2"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -298,11 +253,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 
 	<customidxs object-type="column">
-		<object name="id_field_tab_field_filter" index="5"/>
-		<object name="id_filter_tab_field_filter" index="4"/>
-		<object name="id_tab_tab_field_filter" index="3"/>
 		<object name="id_user" index="1"/>
 		<object name="sample_id_sample_metadata" index="2"/>
+		<object name="tab_id_tab_field_filter" index="3"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
@@ -376,5 +329,38 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<position x="300" y="760"/>
 	</line>
 </relationship>
+
+<relationship name="tab_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#54349b"
+	 src-table="public.tab"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="field_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#03c1d0"
+	 src-table="public.field"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="filter_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#2324dc"
+	 src-table="public.filter"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
 
 </dbmodel>

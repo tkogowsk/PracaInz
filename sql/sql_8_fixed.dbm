@@ -4,7 +4,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
 <dbmodel pgmodeler-ver="0.9.0-beta" last-position="0,0" last-zoom="1"
-	 default-schema="public" default-owner="postgres">
+	 default-owner="postgres">
 <database name="new_database">
 </database>
 
@@ -39,6 +39,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="FIELD_pk" type="pk-constr" table="public.field">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+
+	<customidxs object-type="column">
+		<object name="variant_column_id" index="2"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="variant_column_fk" index="1"/>
+	</customidxs>
 </table>
 
 <table name="filter" hide-ext-attribs="true">
@@ -97,13 +105,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 
 	<customidxs object-type="column">
-		<object name="id_user" index="0"/>
-		<object name="sample_id_sample_metadata" index="1"/>
+		<object name="id_user" index="2"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
 		<object name="privilege_pk" index="0"/>
-		<object name="sample_metadata_fk" index="2"/>
 		<object name="user_fk" index="1"/>
 	</customidxs>
 </table>
@@ -146,71 +152,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="default_value">
 		<type name="text" length="1"/>
 	</column>
-
-	<customidxs object-type="column">
-		<object name="id_field" index="3"/>
-		<object name="id_filter" index="2"/>
-		<object name="id_tab" index="1"/>
-	</customidxs>
-
-	<customidxs object-type="constraint">
-		<object name="field_fk" index="3"/>
-		<object name="filter_fk" index="1"/>
-		<object name="tab_field_filter_pk" index="0"/>
-		<object name="tab_fk" index="2"/>
-	</customidxs>
 </table>
-
-<relationship name="tab_has_many_tab_field_filter" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#634172"
-	 src-table="public.tab"
-	 dst-table="public.tab_field_filter"
-	 src-required="true" dst-required="false"
-	 identifier="true"
->
-	<line>
-		<position x="360" y="280"/>
-	</line>
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
-
-<relationship name="filter_has_many_tab_field_filter" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#24caa1"
-	 src-table="public.filter"
-	 dst-table="public.tab_field_filter"
-	 src-required="true" dst-required="false"
-	 identifier="true"
->
-	<line>
-		<position x="700" y="300"/>
-	</line>
-	<label ref-type="name-label">
-		<position x="137.748" y="-26.1607"/>
-	</label>
-</relationship>
-
-<relationship name="field_has_many_tab_field_filter" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#6b4860"
-	 src-table="public.field"
-	 dst-table="public.tab_field_filter"
-	 src-required="true" dst-required="false"
-	 identifier="true"
->
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
 
 <table name="variant_column" hide-ext-attribs="true">
 	<schema name="public"/>
@@ -243,51 +185,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="visible">
 		<type name="bool" length="1"/>
 	</column>
+	<column name="variant_column_id" not-null="true">
+		<type name="bigint" length="0"/>
+	</column>
 
 	<customidxs object-type="column">
-		<object name="id_user" index="1"/>
-		<object name="id_variant_column" index="0"/>
+		<object name="user_id" index="2"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="user_fk" index="2"/>
+		<object name="user_fk" index="1"/>
 		<object name="user_visible_variant_column_pk" index="0"/>
-		<object name="variant_column_fk" index="1"/>
 	</customidxs>
 </table>
-
-<relationship name="DATA_COLUMNS_has_many_USER_VISIBLE_DATA_COLUMN" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#4c6025"
-	 src-table="public.variant_column"
-	 dst-table="public.user_visible_variant_column"
-	 src-required="true" dst-required="false"
-	 identifier="true"
->
-	<label ref-type="name-label">
-		<position x="21.9884" y="13.8393"/>
-	</label>
-</relationship>
-
-<relationship name="USER_has_many_USER_VISIBLE_DATA_COLUMN" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#229bd4"
-	 src-table="public.&quot;user&quot;"
-	 dst-table="public.user_visible_variant_column"
-	 src-required="true" dst-required="false"
-	 identifier="true"
->
-	<line>
-		<position x="1160" y="780"/>
-	</line>
-	<label ref-type="name-label">
-		<position x="-64.1303" y="-9.16066"/>
-	</label>
-</relationship>
 
 <table name="user_smp_tab" hide-ext-attribs="true">
 	<schema name="public"/>
@@ -298,16 +208,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 
 	<customidxs object-type="column">
-		<object name="id_field_tab_field_filter" index="5"/>
-		<object name="id_filter_tab_field_filter" index="4"/>
-		<object name="id_tab_tab_field_filter" index="3"/>
 		<object name="id_user" index="1"/>
-		<object name="sample_id_sample_metadata" index="2"/>
 	</customidxs>
 
 	<customidxs object-type="constraint">
-		<object name="sample_metadata_fk" index="3"/>
-		<object name="tab_field_filter_fk" index="2"/>
 		<object name="user_fk" index="1"/>
 		<object name="user_smp_tab_pk" index="0"/>
 	</customidxs>
@@ -331,21 +235,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 	<label ref-type="name-label">
 		<position x="-182.88" y="-23.8607"/>
-	</label>
-</relationship>
-
-<relationship name="tab_field_filter_has_many_user_sample_metadata" type="rel1n"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 custom-color="#f539e5"
-	 src-table="public.tab_field_filter"
-	 dst-table="public.user_smp_tab"
-	 src-required="true" dst-required="false"
-	 identifier="true"
->
-	<label ref-type="name-label">
-		<position x="165.434" y="-31.1607"/>
 	</label>
 </relationship>
 
@@ -376,5 +265,75 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<position x="300" y="760"/>
 	</line>
 </relationship>
+
+<relationship name="tab_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#54349b"
+	 src-table="public.tab"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="tab_field_filter_has_many_user_sample_metadata" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#f539e5"
+	 src-table="public.tab_field_filter"
+	 dst-table="public.user_smp_tab"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="165.434" y="-31.1607"/>
+	</label>
+</relationship>
+
+<relationship name="field_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#03c1d0"
+	 src-table="public.field"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="filter_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#2324dc"
+	 src-table="public.filter"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="user_has_many_user_visible_variant_column" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#9ffc04"
+	 src-table="public.&quot;user&quot;"
+	 dst-table="public.user_visible_variant_column"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<constraint name="variant_column_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.variant_column" table="public.user_visible_variant_column">
+	<columns names="variant_column_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_user_visible_variant_column_variant_column" type="relfk"
+	 src-table="public.user_visible_variant_column"
+	 dst-table="public.variant_column"
+	 src-required="false" dst-required="false"/>
 
 </dbmodel>
