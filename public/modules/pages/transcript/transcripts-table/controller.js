@@ -10,7 +10,9 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         $scope.tableBegin = 0;
         $scope.currentPage = 1;
 
-        getAll();
+        function init() {
+            getAll();
+        }
 
         $scope.$on(filterByNameEvent + 'Broadcast', function (event, name) {
             changeSpinner(true);

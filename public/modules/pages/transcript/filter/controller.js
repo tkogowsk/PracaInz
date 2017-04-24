@@ -1,5 +1,4 @@
 angular.module('filter', []);
-
 angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form', 'Fields',
     function ($scope, $log, Form, Fields) {
 
@@ -8,21 +7,24 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
         $scope.userId = 1;
         $scope.activeFormName = null;
 
-        Form.getUserForms((response) => {
-                let data = response.data;
-                Object.getOwnPropertyNames(data).forEach(function (val, idx, array) {
-                    $scope.userForms.push({
-                        name: val,
-                        fields: data[val]
-                    })
-                });
-            }
-        );
 
-        Fields.getFields((response) => {
-                $scope.fields = response.data
-            }
-        );
+        function init(){
+            Form.getUserForms((response) => {
+                    let data = response.data;
+                    Object.getOwnPropertyNames(data).forEach(function (val, idx, array) {
+                        $scope.userForms.push({
+                            name: val,
+                            fields: data[val]
+                        })
+                    });
+                }
+            );
+
+            Fields.getFields((response) => {
+                    $scope.fields = response.data
+                }
+            );
+        }
 
         function setActiveFormName(newName, eventName) {
             if ($scope.activeFormName != newName) {
