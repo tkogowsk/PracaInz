@@ -31,7 +31,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 	<position x="0" y="260"/>
 	<column name="id" not-null="true">
-		<type name="bigint" length="1"/>
+		<type name="bigserial" length="1"/>
 	</column>
 	<column name="options">
 		<type name="text" length="1" dimension="1"/>
@@ -97,7 +97,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="privilege" hide-ext-attribs="true">
 	<schema name="public"/>
 	<position x="1380" y="740"/>
-	<column name="access_type" default-value="all">
+	<column name="access_type" default-value="'all'">
 		<type name="text" length="1"/>
 	</column>
 	<column name="region_id">
@@ -219,6 +219,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<line>
 		<position x="403.137" y="268.6"/>
 	</line>
+	<label ref-type="name-label">
+		<position x="2.80092" y="-0.36066"/>
+	</label>
 </relationship>
 
 <relationship name="field_has_many_tab_field_filter" type="rel1n"
@@ -232,7 +235,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 identifier="true"
 >
 	<line>
-		<position x="460.5" y="288.6"/>
+		<position x="460" y="280"/>
 	</line>
 	<label ref-type="src-label">
 		<position x="77.2131" y="-0.2"/>
@@ -265,7 +268,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 identifier="true"
 >
 	<line>
-		<position x="1180.5" y="728.6"/>
+		<position x="1180" y="720"/>
 	</line>
 	<label ref-type="dst-label">
 		<position x="0" y="0"/>
@@ -284,7 +287,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.field"
 	 src-required="true" dst-required="false">
 	<line>
-		<position x="253.497" y="768.6"/>
+		<position x="260" y="760"/>
 	</line>
 </relationship>
 
@@ -299,7 +302,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 identifier="true"
 >
 	<line>
-		<position x="820.5" y="768.6"/>
+		<position x="820" y="760"/>
 	</line>
 </relationship>
 
@@ -325,7 +328,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 identifier="true"
 >
 	<line>
-		<position x="999.669" y="568.6"/>
+		<position x="1000" y="560"/>
 	</line>
 </relationship>
 
@@ -355,8 +358,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 identifier="true"
 >
 	<line>
-		<position x="1748.68" y="615.6"/>
-	<position x="1596.65" y="615.6"/>
+		<position x="1740" y="620"/>
+	<position x="1600" y="620"/>
 	</line>
 </relationship>
 
@@ -369,7 +372,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.user_smp_tab"
 	 src-required="true" dst-required="false"
 	 identifier="true"
-/>
+>
+	<line>
+		<position x="1000" y="440"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
 
 <table name="Genotype_data_JDBC">
 	<schema name="public"/>
