@@ -1,31 +1,8 @@
 package utils
 
-import slick.driver.PostgresDriver
-import slick.jdbc.PostgresProfile
-
-import scala.tools.nsc.typechecker.Implicits
-
 import com.github.tminglei.slickpg._
 
-/*trait MyPostgresDriver extends PostgresDriver
-  with PgArraySupport
-  with PgHStoreSupport {
-
-  override lazy val Implicit = new ImplicitsPlus {}
-  override val simple = new SimpleQLPlus {}
-
-  trait ImplicitsPlus extends Implicits
-    with ArrayImplicits
-    with HStoreImplicits
-
-  trait SimpleQLPlus extends SimpleQL
-    with ImplicitsPlus
-}
-*/
-
-import com.github.tminglei.slickpg._
-
-trait MyPostgresDriver extends ExPostgresDriver
+trait MyPostgresDriver extends ExPostgresProfile
   with PgArraySupport
   with PgDate2Support
   with PgNetSupport

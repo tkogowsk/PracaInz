@@ -11,9 +11,10 @@ import scala.concurrent._
 class TestRepository {
   private val db = Database.forConfig("postgresConf")
 
+
 /*
-  var forms = TableQuery[FormsRepository]
-  var fields = TableQuery[FieldsRepository]
+  var fields = TableQuery[FieldRepository]
+  var filter = TableQuery[FieldsRepository]
 
   def getAllForms() = db.run {
     //forms.to[List].result && _.userId === 1
@@ -24,6 +25,7 @@ class TestRepository {
     fields.to[List].result
   }
 */
+
 
 
 }

@@ -1,6 +1,6 @@
 package utils
 
-case class TabFieldFilterDTO
+/*case class TabFieldFilterDTO
 (
   tab_id: Int,
   field_id: Int,
@@ -12,4 +12,13 @@ case class TabFieldFilterDTO
   variant_column_id: Int,
   options: List[String],
   relation: String
+)*/
+case class TabFieldFilterDTO
+(
+  tab_id: Int,
+  field_id: Int,
+  filter_id: Int,
+  default_value: Option[List[String]],
+  name: String
 )
+
