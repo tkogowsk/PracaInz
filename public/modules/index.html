@@ -3,7 +3,7 @@
         <div class="filter-section">
             <button type="button" class="btn btn-primary btn-sm" ng-click="getAll()">Get all</button>
             <h3>Filters</h3>
-            <div ng-repeat="userForm in userForms" class="user-form">
+            <!--<div ng-repeat="userForm in userForms" class="user-form">
                 <p class="user-form-name" ng-click="userFormNameClicked(userForm.name); $event.stopPropagation()">
                     {{userForm.name}}</p>
                 <div class="wrapper" ng-show="userForm.name == activeFormName">
@@ -48,20 +48,20 @@
                             ng-click="saveForm(userForm.name)">Save and filter
                     </button>
                 </div>
-            </div>
-            <form name="newFilterNameForm">
+            </div>-->
+     <!--       <form name="newFilterNameForm">
                 <input type="text" ng-model="newFilterName" required>
                 <button type="button" class="btn btn-primary btn-sm" ng-click="addNewFilter(newFilterName)"
                         ng-disabled="newFilterNameForm.$invalid">New Filter
                 </button>
-            </form>
+            </form>-->
         </div>
 
 
     </div>
 
     <div ng-controller="TranscriptsTableController" class="col-lg-8">
-        <div class="table-wrapper">
+ <!--       <div class="table-wrapper">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -70,7 +70,6 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="transcript in transcriptData | limitTo : tableLimit : tableBegin track by $index">
-
                     <td ng-repeat="header in columnsList track by $index">
                         {{transcript[header.fieldName.toString()]}}
                     </td>
@@ -81,7 +80,8 @@
         <div class="transcript-table-pagination">
             <ul uib-pagination total-items="transcriptData.length" ng-model="currentPage" max-size="10" items-per-page="tableLimit"
                 class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
-        </div>
+        </div>-->
+
         <div class="spinner-background" ng-show="showSpinner">
             <div class="sk-cube-grid">
                 <div class="sk-cube sk-cube1"></div>

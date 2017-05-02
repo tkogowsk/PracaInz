@@ -22,7 +22,7 @@ class TranscriptRepository {
     r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<,
     r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
 
-  class TranscriptTableRepository(tag: Tag) extends Table[TranscriptModel](tag, "Transcripts") {
+  class TranscriptTableRepository(tag: Tag) extends Table[TranscriptModel](tag, "transcript") {
     def chrom = column[Int]("Chrom")
 
     def position = column[Int]("Position")
@@ -116,12 +116,12 @@ class TranscriptRepository {
 
   var transcripts: TableQuery[TranscriptTableRepository] = TableQuery[TranscriptTableRepository]
 
-  def getAll(): Future[List[TranscriptModel]] = db.run {
+  def getAll: Future[List[TranscriptModel]] = db.run {
     transcripts.to[List].result
   }
 
   def getByFilter(fields: List[FieldsModel], userForms: List[FormsModel]): Future[Seq[TranscriptModel]] = db.run {
-    var query: String = """select * from "Transcripts" t where """
+    var query: String = """select * from "transcript" t where """
     var userField: FormsModel = null
     println(fields);
     fields.foreach(field => {

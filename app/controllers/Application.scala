@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 import models.{FieldsModel, FormsModel}
 import utils.{Constants, FormEditDTO, FormSaveDTO}
-import repository.{FieldsRepository, FormsRepository, TranscriptRepository}
+import repository.{FieldsRepository, FormsRepository, TranscriptRepository, VariantColumnRepository}
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.json.Json._
 
@@ -16,9 +16,8 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 
-class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: TranscriptRepository,
-                            fieldsRepository: FieldsRepository, formsRepository: FormsRepository
-                           ) extends Controller {
+class Application @Inject()(webJarAssets: WebJarAssets, fieldsRepository: FieldsRepository, formsRepository: FormsRepository,
+                            variantColumnRepository: VariantColumnRepository, transcriptRepository :TranscriptRepository) extends Controller {
 
   def index = Action {
     Ok(views.html.index(webJarAssets))
@@ -30,30 +29,37 @@ class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: Tr
     obj("status" -> Constants.SUCCESS, "data" -> data, "msg" -> message)
   }
 
-  def getTranscript() = Action.async {
-    transcriptRepository.getAll().map { res =>
-      Ok(successResponse(Json.toJson(res), "Getting Transcript list successfully"))
+  def getTranscript: Action[AnyContent] = Action.async {
+    transcriptRepository.getAll.map{ res =>
+    Ok(successResponse(Json.toJson(res), "Getting Transcript list successfully"))
     }
   }
 
-  def getUserForms(userId: Int) = Action.async {
+
+  def getUserForms(userId: Int): Action[AnyContent] = Action.async {
     formsRepository.getUserForms(userId).map { res =>
       Ok(successResponse(Json.toJson(res.groupBy(_.name)), "Getting User Forms list successfully"))
     }
   }
 
   def getFields: Action[AnyContent] = Action.async {
-    fieldsRepository.getAll().map { res =>
+    fieldsRepository.getAll.map { res =>
       Ok(successResponse(Json.toJson(res), "Getting Fields list successfully"))
     }
   }
 
-  def getByFilter(filterName: String, userId: Int) = Action.async {
+  def getVariantColumn: Action[AnyContent] = Action.async {
+    variantColumnRepository.getAll.map{ res =>
+      Ok(successResponse(Json.toJson(res), "Getting Variant column list successfully"))
+    }
+  }
+
+  def getByFilter(filterName: String, userId: Int) = Action {
     var fields: List[FieldsModel] = List[FieldsModel]()
     var userForm: List[FormsModel] = List[FormsModel]()
 
     Await.result(
-      fieldsRepository.getAll().map {
+      fieldsRepository.getAll.map {
         res =>
           fields = res
       }, Duration.Inf)
@@ -64,9 +70,8 @@ class Application @Inject()(webJarAssets: WebJarAssets, transcriptRepository: Tr
           userForm = res
       }, Duration.Inf)
 
-    transcriptRepository.getByFilter(fields, userForm).map { res =>
-      Ok(successResponse(Json.toJson(res), "Getting Transcript by Filter successfully"))
-    }
+    Ok(successResponse(Json.toJson("null"), "Getting Fields list successfully"))
+
   }
 
   def editForm = Action { request =>

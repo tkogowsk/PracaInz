@@ -30,15 +30,14 @@ class FieldsRepository {
 
   }
 
-  def getAll(): Future[List[FieldsModel]] = db.run {
+  def getAll: Future[List[FieldsModel]] = db.run {
     fields.to[List].result
   }
 
-  def save(fields: ArrayBuffer[FieldSaveDTO]) =  {
-
+  def save(fieldsDto: ArrayBuffer[FieldSaveDTO]) =  {
     db.run(sqlu"""TRUNCATE TABLE "FORMS"""")
     db.run(sqlu"""TRUNCATE TABLE "FIELDS" RESTART IDENTITY CASCADE""")
-    fields.foreach(elem => {
+    fieldsDto.foreach(elem => {
       db.run(
         sqlu"""insert into "FIELDS"("COLUMN_NAME","FE_NAME","RELATION")
               VALUES (${elem.columnName}, ${elem.feName}, ${elem.relation})""")

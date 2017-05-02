@@ -1,4 +1,4 @@
-var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'mainPage', 'filter', 'Repositories', 'Models', 'ngAnimate', 'transcripts']);
+var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'mainPage', 'filter', 'Repositories', 'Models',  'transcripts', 'security']);
 myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 
     $stateProvider
@@ -6,8 +6,12 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
             url: '/',
             templateUrl: '/assets/modules/index.html'
         })
+        .state('login', {
+            url: '/login',
+            templateUrl: '/assets/modules/pages/login/index.html'
+        });
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('/login');
 
     $locationProvider.html5Mode({
         enabled: true,
@@ -15,4 +19,7 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
     });
 });
 
+myApp.config(['$qProvider', function ($qProvider) {
+    $qProvider.errorOnUnhandledRejections(false);
+}]);
 

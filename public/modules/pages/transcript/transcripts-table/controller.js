@@ -1,9 +1,9 @@
 angular.module('transcripts', []);
 
-angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$log', 'Transcript', 'TranscriptsTableModel',
-    function ($scope, $log, Transcript, TranscriptsTableModel) {
+angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$log', 'Transcript', 'VariantColumn', 'TranscriptsTableModel',
+    function ($scope, $log, Transcript, VariantColumn, TranscriptsTableModel) {
         $scope.transcriptData = [];
-        $scope.columnsList = TranscriptsTableModel.columnsList;
+        $scope.columnsList = null;
         $scope.showSpinner = true;
 
         $scope.tableLimit = 10;
@@ -11,6 +11,7 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         $scope.currentPage = 1;
 
         function init() {
+            getColumnsList();
             getAll();
         }
 
@@ -40,4 +41,13 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                 changeSpinner(false);
             });
         }
+
+        function getColumnsList() {
+            VariantColumn.getVariantColumn(function (response) {
+                $scope.columnsList = response.data;
+                $log.log(response);
+            })
+        }
+        init();
+
     }]);
