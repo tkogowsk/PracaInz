@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.0-beta" last-position="0,0" last-zoom="1"
+	 default-owner="postgres">
+<database name="new_database">
+</database>
+
+<schema name="public" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="tab" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="240" y="80"/>
+	<column name="id" not-null="true">
+		<type name="bigserial" length="1"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text" length="1"/>
+	</column>
+	<constraint name="TAB_pk" type="pk-constr" table="public.tab">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="field" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="0" y="260"/>
+	<column name="id" not-null="true">
+		<type name="bigserial" length="1"/>
+	</column>
+	<column name="options">
+		<type name="text" length="1" dimension="1"/>
+	</column>
+	<column name="relation" not-null="true">
+		<type name="text" length="0"/>
+		<comment><![CDATA[Field relation - bigger, equals, contains etc.]]></comment>
+	</column>
+	<constraint name="FIELD_pk" type="pk-constr" table="public.field">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="variant_column_id" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="variant_column_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="filter" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="520" y="120"/>
+	<column name="id" not-null="true">
+		<type name="bigserial" length="1"/>
+	</column>
+	<column name="name">
+		<type name="text" length="1"/>
+	</column>
+	<column name="is_global">
+		<type name="bool" length="1"/>
+	</column>
+	<constraint name="FILTER_pk" type="pk-constr" table="public.filter">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="user" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1200" y="540"/>
+	<column name="id" not-null="true">
+		<type name="bigserial" length="1"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text" length="1"/>
+	</column>
+	<constraint name="USER_pk" type="pk-constr" table="public.&quot;user&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="sample_metadata" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1560" y="420"/>
+	<column name="sample_id" not-null="true">
+		<type name="text" length="1"/>
+	</column>
+	<constraint name="SAMPLE_pk" type="pk-constr" table="public.sample_metadata">
+		<columns names="sample_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="privilege" hide-ext-attribs="true">
+	<schema name="public"/>
+	<position x="1380" y="740"/>
+	<column name="access_type" default-value="'all'">
+		<type name="text" length="1"/>
+		<comment><![CDATA[Read/write - access indicator.]]></comment>
+	</column>
+	<column name="region_id">
+		<type name="bigint" length="1"/>
+		<comment><![CDATA[Access to specific data for region.]]></comment>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="smpl_id" index="1"/>
+		<object name="user_id" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="privilege_pk" index="0"/>
+		<object name="sample_metadata_fk" index="2"/>
+		<object name="user_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="tab_field_filter" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="480" y="240"/>
+	<column name="default_value">
+		<type name="text" length="1" dimension="1"/>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="field_id" index="1"/>
+		<object name="filter_id" index="2"/>
+		<object name="tab_id" index="0"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="field_fk" index="2"/>
+		<object name="filter_fk" index="3"/>
+		<object name="tab_field_filter_pk" index="0"/>
+		<object name="tab_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="variant_column" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="440" y="740"/>
+	<column name="id" not-null="true">
+		<type name="bigserial" length="1"/>
+	</column>
+	<column name="column_name" not-null="true">
+		<type name="text" length="1"/>
+	</column>
+	<column name="fe_name">
+		<type name="text" length="1"/>
+	</column>
+	<column name="type">
+		<type name="text" length="1"/>
+	</column>
+	<constraint name="DATA_COLUMNS_pk" type="pk-constr" table="public.variant_column">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="user_visible_variant_column" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="840" y="700"/>
+	<column name="column_order">
+		<type name="bigint" length="1"/>
+		<comment><![CDATA[Column order in application table.]]></comment>
+	</column>
+	<column name="visible">
+		<type name="bool" length="1"/>
+		<comment><![CDATA[Is column visible for user.]]></comment>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="user_id" index="0"/>
+		<object name="variant_column_id" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="user_fk" index="1"/>
+		<object name="user_visible_variant_column_pk" index="0"/>
+		<object name="variant_column_fk" index="2"/>
+	</customidxs>
+</table>
+
+<table name="user_smp_tab" hide-ext-attribs="true">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="720" y="420"/>
+	<column name="value">
+		<type name="text" length="1"/>
+	</column>
+
+	<customidxs object-type="column">
+		<object name="smpl_id" index="0"/>
+		<object name="tab_field_filter_field_id" index="3"/>
+		<object name="tab_field_filter_filter_id" index="4"/>
+		<object name="tab_field_filter_tab_id" index="2"/>
+		<object name="user_id" index="1"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="sample_metadata_fk" index="3"/>
+		<object name="tab_field_filter_fk" index="1"/>
+		<object name="user_fk" index="2"/>
+		<object name="user_smp_tab_pk" index="0"/>
+	</customidxs>
+</table>
+
+<relationship name="tab_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#54349b"
+	 src-table="public.tab"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="400" y="260"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="2.80092" y="-0.36066"/>
+	</label>
+</relationship>
+
+<relationship name="field_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#03c1d0"
+	 src-table="public.field"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="460" y="280"/>
+	</line>
+	<label ref-type="src-label">
+		<position x="77.2131" y="-0.2"/>
+	</label>
+</relationship>
+
+<relationship name="filter_has_many_tab_field_filter" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#2324dc"
+	 src-table="public.filter"
+	 dst-table="public.tab_field_filter"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="125.873" y="-25.6607"/>
+	</label>
+</relationship>
+
+<relationship name="user_has_many_user_visible_variant_column" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#9ffc04"
+	 src-table="public.&quot;user&quot;"
+	 dst-table="public.user_visible_variant_column"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="1180" y="720"/>
+	</line>
+	<label ref-type="dst-label">
+		<position x="0" y="0"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="125.12" y="19.6393"/>
+	</label>
+</relationship>
+
+<relationship name="variant_column_has_many_field" type="rel1n"
+	 src-col-pattern="variant_column_id"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#dffc26"
+	 src-table="public.variant_column"
+	 dst-table="public.field"
+	 src-required="true" dst-required="false">
+	<line>
+		<position x="260" y="760"/>
+	</line>
+</relationship>
+
+<relationship name="variant_column_has_many_user_visible_variant_column" type="rel1n"
+	 src-col-pattern="variant_column_id"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#1bdb10"
+	 src-table="public.variant_column"
+	 dst-table="public.user_visible_variant_column"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="820" y="760"/>
+	</line>
+</relationship>
+
+<relationship name="user_has_many_privilege" type="rel1n"
+	 src-col-pattern="user_id"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#70a765"
+	 src-table="public.&quot;user&quot;"
+	 dst-table="public.privilege"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+/>
+
+<relationship name="user_has_many_user_smp_tab" type="rel1n"
+	 src-col-pattern="user_id"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#6c85e0"
+	 src-table="public.&quot;user&quot;"
+	 dst-table="public.user_smp_tab"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="1000" y="560"/>
+	</line>
+</relationship>
+
+<relationship name="tab_field_filter_has_many_user_smp_tab" type="rel1n"
+	 src-col-pattern="{st}_{sc}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#4d4307"
+	 src-table="public.tab_field_filter"
+	 dst-table="public.user_smp_tab"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<label ref-type="name-label">
+		<position x="-129.566" y="-14.3273"/>
+	</label>
+</relationship>
+
+<relationship name="sample_metadata_has_many_privilege" type="rel1n"
+	 src-col-pattern="smpl_id"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#5317be"
+	 src-table="public.sample_metadata"
+	 dst-table="public.privilege"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="1740" y="620"/>
+	<position x="1600" y="620"/>
+	</line>
+</relationship>
+
+<relationship name="sample_metadata_has_many_user_smp_tab" type="rel1n"
+	 src-col-pattern="smpl_id"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#b7a98b"
+	 src-table="public.sample_metadata"
+	 dst-table="public.user_smp_tab"
+	 src-required="true" dst-required="false"
+	 identifier="true"
+>
+	<line>
+		<position x="1000" y="440"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="Genotype_data_JDBC">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1580" y="180"/>
+</table>
+
+</dbmodel>
