@@ -12,11 +12,8 @@ import play.api.libs.json.Json._
 import scala.concurrent.ExecutionContext.Implicits.global
 import utils.JsonFormat._
 
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
 
-
-class Application @Inject()(webJarAssets: WebJarAssets, fieldRepository: FieldRepository, formsRepository: FormsRepository,
+class Application @Inject()(webJarAssets: WebJarAssets, formsRepository: FormsRepository,
                             variantColumnRepository: VariantColumnRepository, transcriptRepository :TranscriptRepository,
                             tabFieldFilterRepository: TabFieldFilterRepository) extends Controller {
 
@@ -44,8 +41,8 @@ class Application @Inject()(webJarAssets: WebJarAssets, fieldRepository: FieldRe
   }
 
   def getFields = Action.async {
-    tabFieldFilterRepository.getJoin.map{ res =>
-      val list = res.map(item => TabFieldFilterDTO(item._1, item._2,item._3,item._4,item._5))
+    tabFieldFilterRepository.getFilter.map{ res =>
+      val list = res.map(item => TabFieldFilterDTO(item._1, item._2,item._3,item._4,item._5, item._6, item._7, item._8, item._9, item._10))
       Ok(successResponse(Json.toJson(list), "Getting Variant column list successfully"))
     }
   }

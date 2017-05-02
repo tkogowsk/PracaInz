@@ -8,9 +8,7 @@ import utils.MyPostgresDriver.api._
 
 import scala.concurrent._
 
-
-@Singleton
-class FieldRepository {
+object FieldRepository {
 
   private val db = Database.forConfig("postgresConf")
 
@@ -27,7 +25,6 @@ class FieldRepository {
     def relation = column[String]("relation")
 
     def * = (id, variant_column_id, options, relation) <> (FieldModel.tupled, FieldModel.unapply)
-
 
   }
 

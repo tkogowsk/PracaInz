@@ -15,7 +15,9 @@ class TabFieldFilterRepository {
 
   var tabFieldFilter = TableQuery[TabFieldFilterTableRepository]
 
-  var tabRepo = TabRepository.tab
+  var tab = TabRepository.tab
+  var field = FieldRepository.field
+  var filter = FilterRepository.filter
 
   class TabFieldFilterTableRepository(tag: Tag) extends Table[TabFieldFilterModel](tag, "tab_field_filter") {
 
@@ -36,10 +38,10 @@ class TabFieldFilterRepository {
     tabFieldFilter.to[List].result
   }
 
-  def getJoin: Future[Seq[(Int,Int,Int,Option[List[String]],String)]] = {
+  def getFilter: Future[Seq[(Int,Int,Int,Option[List[String]],String, Int, Option[List[String]], String, Option[String], Option[Boolean])]] = {
     val query = for {
-      (a,b) <-  tabFieldFilter join tabRepo on (_.tab_id === _.id)
-    } yield (a.tab_id, a.field_id, a.filter_id, a.default_value, b.name)
+      (((a,b),c),d) <-  tabFieldFilter join tab on (_.tab_id === _.id) join field on (_._1.filter_id === _.id) join filter on (_._1._1.filter_id === _.id)
+    } yield (a.tab_id, a.field_id, a.filter_id, a.default_value, b.name, c.variant_column_id, c.options, c.relation, d.name, d.is_global)
     val a = query.result
     db.run(a)
   }
