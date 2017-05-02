@@ -6,11 +6,10 @@ import models.FormsModel
 import slick.driver.PostgresDriver.api._
 
 import scala.concurrent._
-import shapeless._
-import slickless._
-import utils.{FormEditDTO, FormSaveDTO, NewFormModel}
+import utils.NewFormModel
 
 @Singleton
+@Deprecated
 class FormsRepository {
   private val db = Database.forConfig("postgresConf")
 

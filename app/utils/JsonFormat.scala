@@ -9,6 +9,7 @@ object JsonFormat {
   implicit val formsModelFormat = Jsonx.formatCaseClass[FormsModel]
   implicit val newFormsModelFormat = Jsonx.formatCaseClass[NewFormModel]
   implicit val variantColumnModelFormat = Jsonx.formatCaseClass[VariantColumnModel]
+  implicit val fieldModelFormat = Jsonx.formatCaseClass[FieldModel]
   implicit lazy val formSaveDTOFormat = Jsonx.formatCaseClassUseDefaults[FormSaveDTO]
   implicit lazy val formEditDTOFormat = Jsonx.formatCaseClassUseDefaults[FormEditDTO]
   implicit lazy val tabFieldFilterDTOFormat = Jsonx.formatCaseClassUseDefaults[TabFieldFilterDTO]

@@ -1,6 +1,7 @@
 package utils
 
 
+@Deprecated
 case class NewFormModel
 (
   value: String,
@@ -9,6 +10,7 @@ case class NewFormModel
   fieldFk: Int
 )
 
+@Deprecated
 case class FormSaveDTO
 (
   name: String,

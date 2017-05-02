@@ -1,5 +1,6 @@
 package models
 
+@Deprecated
 case class FieldsModel
 (
   id: Int,

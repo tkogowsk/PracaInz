@@ -1,5 +1,6 @@
 package utils
 
+@Deprecated
 case class FieldSaveDTO
 (
   columnName: String,

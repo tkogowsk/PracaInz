@@ -17,6 +17,7 @@ libraryDependencies ++= Seq(
   "org.apache.poi" % "poi" % "3.10-FINAL",
   "org.apache.poi" % "poi-scratchpad" % "3.10-FINAL",
   "org.apache.poi" % "poi-ooxml" % "3.10-FINAL",
+  "com.github.tminglei" %% "slick-pg" % "0.15.0-RC",
 // WebJars (i.e. client-side) dependencies
   "org.webjars" %% "webjars-play" % "2.5.0",
   "org.webjars" % "jquery" % "1.11.3",

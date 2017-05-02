@@ -1,7 +1,7 @@
 angular.module('transcripts', []);
 
-angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$log', 'Transcript', 'VariantColumn', 'TranscriptsTableModel',
-    function ($scope, $log, Transcript, VariantColumn, TranscriptsTableModel) {
+angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$log', 'Transcript', 'VariantColumn', 'Fields',
+    function ($scope, $log, Transcript, VariantColumn, Fields) {
         $scope.transcriptData = [];
         $scope.columnsList = null;
         $scope.showSpinner = true;
@@ -13,6 +13,9 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         function init() {
             getColumnsList();
             getAll();
+            Fields.getFields((response) => {
+                $log.log(response);
+            })
         }
 
         $scope.$on(filterByNameEvent + 'Broadcast', function (event, name) {

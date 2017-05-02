@@ -12,6 +12,7 @@ import utils.FieldSaveDTO
 import scala.collection.mutable.ArrayBuffer
 
 @Singleton
+@Deprecated
 class FieldsRepository {
   private val db = Database.forConfig("postgresConf")
 

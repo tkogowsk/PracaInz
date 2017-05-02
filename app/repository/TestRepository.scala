@@ -10,6 +10,7 @@ import scala.concurrent._
 @Singleton
 class TestRepository {
   private val db = Database.forConfig("postgresConf")
+
 /*
   var forms = TableQuery[FormsRepository]
   var fields = TableQuery[FieldsRepository]
@@ -21,5 +22,8 @@ class TestRepository {
 
   def getAllFields(): Future[List[FieldsModel]] = db.run {
     fields.to[List].result
-  }*/
+  }
+*/
+
+
 }
