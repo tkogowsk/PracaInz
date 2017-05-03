@@ -7,41 +7,6 @@
   position: fixed;
   bottom: 1vh;
 }
-.filter-section {
-  padding: 5px;
-  background: #333129;
-  position: fixed;
-  height: 100%;
-  color: #ece8d7;
-  width: 25vw;
-  z-index: 1;
-  .user-form {
-    background: #888888;
-    margin-bottom: 10px;
-    padding: 0 5px 5px;
-    border-radius: 3px;
-    .user-form-name {
-      color: black;
-      font-weight: bold;
-      font-size: 20px;
-      text-align: center;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    .wrapper {
-      transition: all linear 0.2s;
-      opacity: 1;
-    }
-    .fields {
-      margin-bottom: 10px;
-    }
-    .wrapper.ng-hide {
-      opacity: 0;
-    }
-
-  }
-}
 
 .spinner-background{
   position: fixed;

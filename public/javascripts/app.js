@@ -1,10 +1,10 @@
-var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'mainPage', 'filter', 'Repositories', 'Models',  'transcripts', 'security']);
+var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'mainPage', 'filter', 'Repositories', 'Models', 'transcripts', 'security']);
 myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 
     $stateProvider
         .state('index', {
             url: '/',
-            templateUrl: '/assets/modules/index.html'
+            templateUrl: '/assets/modules/pages/transcript/index.html'
         })
         .state('login', {
             url: '/login',
@@ -19,7 +19,7 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
     });
 });
 
-myApp.config(['$qProvider', function ($qProvider) {
+/*myApp.config(['$qProvider', function ($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
-}]);
+}]);*/
 

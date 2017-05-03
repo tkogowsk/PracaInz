@@ -1,0 +1,46 @@
+.filter-section {
+  padding: 5px;
+  background: #333333;
+  position: fixed;
+  height: 100%;
+  color: #ece8d7;
+  width: 25vw;
+  z-index: 1;
+  .filter-tabs {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    .filter-tab {
+      background: #888888;
+      display: inline-block;
+      .filter-tab-name {
+        color: black;
+        font-weight: bold;
+        font-size: 20px;
+        text-align: center;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .wrapper {
+        transition: all linear 0.2s;
+        opacity: 1;
+      }
+      .wrapper.ng-hide {
+        opacity: 0;
+      }
+    }
+  }
+  .filter-fields{
+    margin-bottom: 10px;
+    width: 25vw;
+    overflow: auto;
+    .filter-name{
+
+    }
+
+    .filter-field{
+
+    }
+  }
+}

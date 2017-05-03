@@ -13,7 +13,8 @@
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-route.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-ui-router.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-resource.js"))'></script>
-        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/ui-bootstrap-tpls-2.4.0.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/ui-bootstrap-tpls-2.4.0.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/lodash.min.js")"></script>
 
 
             <!-- Custom Javascripts -->
@@ -34,16 +35,14 @@
     </head>
     <body ng-app="app" ng-controller="MainPageController">
         <div ui-view></div>
+        @* @helper.form(action = routes.Upload.upload, 'enctype -> "multipart/form-data") {
 
+        <input type="file" name="file" style="float: right;">
 
-        @helper.form(action = routes.Upload.upload, 'enctype -> "multipart/form-data") {
+        <p>
+        <input type="submit" style="float: right;">
+        </p>
 
-            <input type="file" name="file" style="float: right;">
-
-            <p>
-                <input type="submit" style="float: right;">
-            </p>
-
-        }
+        }*@
     </body>
 </html>

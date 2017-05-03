@@ -1,38 +1,32 @@
 angular.module('filter', []);
-angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form', 'Fields',
-    function ($scope, $log, Form, Fields) {
+angular.module('filter').controller('FilterController', ['$scope', '$rootScope', '$log', 'Form', 'Fields',
+    function ($scope, $rootScope, $log, Form, Fields) {
 
-        $scope.fields = [];
-        $scope.userForms = [];
+        $scope.groupedData = [];
         $scope.userId = 1;
-        $scope.activeFormName = null;
+        $scope.activeTabName = null;
 
-
-        function init(){
-            Form.getUserForms((response) => {
-                    let data = response.data;
-                    Object.getOwnPropertyNames(data).forEach(function (val, idx, array) {
-                        $scope.userForms.push({
-                            name: val,
-                            fields: data[val]
-                        })
-                    });
-                }
-            );
-
-            Fields.getFields((response) => {
-                    $scope.fields = response.data
-                }
-            );
+        function init() {
+            /*       Form.getUserForms((response) => {
+             let data = response.data;
+             Object.getOwnPropertyNames(data).forEach(function (val, idx, array) {
+             $scope.userForms.push({
+             name: val,
+             fields: data[val]
+             })
+             });
+             }
+             );*/
+            getFields();
         }
 
-        function setActiveFormName(newName, eventName) {
-            if ($scope.activeFormName != newName) {
-                $scope.activeFormName = newName;
-                setActiveFormName(newName);
-                if(eventName){
+        function setActiveTab(newName) {
+            if ($scope.activeTabName !== newName) {
+                $scope.activeTabName = newName;
+               /* setActiveFormName(newName);
+                if (eventName) {
                     $scope.$emit(eventName + "Emit", newName)
-                }
+                }*/
             }
         }
 
@@ -43,8 +37,8 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
 
         $scope.addNewFilter = function (name) {
             let fields = [];
-            console.log($scope.userForms.findIndex(form => form.name == name))
-            if($scope.userForms.findIndex(form => form.name == name) >= 0){
+            console.log($scope.userForms.findIndex(form => form.name === name))
+            if ($scope.userForms.findIndex(form => form.name === name) >= 0) {
                 console.log('ret');
                 return
             }
@@ -64,8 +58,8 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
 
         };
 
-        $scope.userFormNameClicked = function (name) {
-            setActiveFormName(name, filterByNameEvent);
+        $scope.filterTabNameClicked = function (name) {
+            setActiveTab(name, filterByNameEvent);
         };
 
         $scope.saveForm = function (name) {
@@ -84,7 +78,38 @@ angular.module('filter').controller('FilterController', ['$scope', '$log', 'Form
 
         function getFormByName(name) {
             return $scope.userForms.find((elem) => {
-                return elem.name == name
+                return elem.name === name
             });
         }
+
+        function getFields() {
+            Fields.getFields((response) => {
+                    $log.log(response.data);
+
+                    let groupedData = _.chain(response.data)
+                        .groupBy('tab_name')
+                        .toPairs()
+                        .map(function (currentItem) {
+                            return _.zipObject(['tabName', 'items'], currentItem)
+                        })
+                        .value();
+
+                    _.forEach(groupedData, function (item) {
+                        item.items = _.chain(item.items)
+                            .groupBy('filterName')
+                            .toPairs()
+                            .map(function (currentItem) {
+                                return _.zipObject(['filterName', 'items'], currentItem)
+                            }).value();
+
+                    });
+                    $log.log(groupedData);
+
+                    $scope.groupedData = groupedData;
+                    $rootScope.changeSpinner(false);
+                }
+            );
+        }
+
+        init();
     }]);

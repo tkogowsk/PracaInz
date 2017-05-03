@@ -1,38 +1,29 @@
 angular.module('transcripts', []);
 
-angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$log', 'Transcript', 'VariantColumn', 'Fields',
-    function ($scope, $log, Transcript, VariantColumn, Fields) {
+angular.module('transcripts').controller('TranscriptsTableController', ['$scope','$rootScope', '$log', 'Transcript', 'Fields',
+    function ($scope, $rootScope, $log, Transcript, Fields) {
         $scope.transcriptData = [];
         $scope.columnsList = null;
-        $scope.showSpinner = true;
 
         $scope.tableLimit = 10;
         $scope.tableBegin = 0;
         $scope.currentPage = 1;
 
         function init() {
-            getColumnsList();
-            getAll();
-            Fields.getFields((response) => {
-                $log.log(response);
-            })
+
         }
 
         $scope.$on(filterByNameEvent + 'Broadcast', function (event, name) {
-            changeSpinner(true);
+            $rootScope.changeSpinner(true);
             Transcript.getByFilter({formName: name}, function (response) {
                 $scope.transcriptData = response.data;
-                changeSpinner(false);
+                $rootScope.changeSpinner(false);
             });
         });
 
         $scope.$on(getAllTranscriptsEvent + 'Broadcast', function (event, name) {
             getAll();
         });
-
-        function changeSpinner(spinnerIndicator) {
-            $scope.showSpinner = spinnerIndicator;
-        }
 
         $scope.pageChanged = function () {
             $scope.tableBegin = $scope.tableLimit * ($scope.currentPage - 1);
@@ -41,16 +32,10 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         function getAll() {
             Transcript.getAll(function (response) {
                 $scope.transcriptData = response.data;
-                changeSpinner(false);
+                $rootScope.changeSpinner(false);
             });
         }
 
-        function getColumnsList() {
-            VariantColumn.getVariantColumn(function (response) {
-                $scope.columnsList = response.data;
-                $log.log(response);
-            })
-        }
         init();
 
     }]);
