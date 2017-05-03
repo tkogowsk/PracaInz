@@ -11,6 +11,7 @@ object JsonFormat {
   implicit val variantColumnModelFormat = Jsonx.formatCaseClass[VariantColumnModel]
   implicit val fieldModelFormat = Jsonx.formatCaseClass[FieldModel]
   implicit val filterModelFormat = Jsonx.formatCaseClass[FilterModel]
+  implicit val userSmpTabModelFormat = Jsonx.formatCaseClass[UserSmpTabModel]
   implicit lazy val tabFieldFilterDTOFormat = Jsonx.formatCaseClass[TabFieldFilterDTO]
   implicit lazy val formSaveDTOFormat = Jsonx.formatCaseClassUseDefaults[FormSaveDTO]
   implicit lazy val formEditDTOFormat = Jsonx.formatCaseClassUseDefaults[FormEditDTO]

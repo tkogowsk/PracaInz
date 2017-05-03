@@ -11,6 +11,8 @@ case class TabFieldFilterDTO
   options: Option[List[String]],
   relation: String,
   filterName: Option[String],
-  is_global: Option[Boolean]
+  is_global: Option[Boolean],
+  value: Option[String],
+  smpl_id: Option[String]
 )
 

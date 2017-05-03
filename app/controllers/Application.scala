@@ -42,7 +42,7 @@ class Application @Inject()(webJarAssets: WebJarAssets, formsRepository: FormsRe
 
   def getFields = Action.async {
     tabFieldFilterRepository.getFilter.map{ res =>
-      val list = res.map(item => TabFieldFilterDTO(item._1, item._2,item._3,item._4,item._5, item._6, item._7, item._8, item._9, item._10))
+      val list = res.map(item => TabFieldFilterDTO(item._1, item._2,item._3,item._4,item._5, item._6, item._7, item._8, item._9, item._10, item._11, item._12))
       Ok(successResponse(Json.toJson(list), "Getting Variant column list successfully"))
     }
   }
