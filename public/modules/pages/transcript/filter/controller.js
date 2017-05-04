@@ -1,34 +1,29 @@
 angular.module('filter', []);
-angular.module('filter').controller('FilterController', ['$scope', '$rootScope', '$log', 'Form', 'Fields',
-    function ($scope, $rootScope, $log, Form, Fields) {
+angular.module('filter').controller('FilterController', ['$scope', '$rootScope', '$log', 'Form', 'Fields', 'LocalStorage',
+    function ($scope, $rootScope, $log, Form, Fields, LocalStorage) {
 
         $scope.groupedData = [];
         $scope.userId = 1;
         $scope.activeTabName = null;
 
         function init() {
-            /*       Form.getUserForms((response) => {
-             let data = response.data;
-             Object.getOwnPropertyNames(data).forEach(function (val, idx, array) {
-             $scope.userForms.push({
-             name: val,
-             fields: data[val]
-             })
-             });
-             }
-             );*/
             getFields();
+            setColumnList()
         }
 
         function setActiveTab(newName) {
             if ($scope.activeTabName !== newName) {
                 $scope.activeTabName = newName;
-               /* setActiveFormName(newName);
-                if (eventName) {
-                    $scope.$emit(eventName + "Emit", newName)
-                }*/
             }
         }
+
+        function setColumnList() {
+            $scope.columnsList = LocalStorage.getColumnList();
+        }
+
+        $scope.$on(variantColumnsFetchedEvent + 'Broadcast', function (event, name) {
+            setColumnList();
+        });
 
         $scope.getAll = function () {
             $scope.$emit(getAllTranscriptsEvent + "Emit", name);
@@ -37,9 +32,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
 
         $scope.addNewFilter = function (name) {
             let fields = [];
-            console.log($scope.userForms.findIndex(form => form.name === name))
             if ($scope.userForms.findIndex(form => form.name === name) >= 0) {
-                console.log('ret');
                 return
             }
 
@@ -54,15 +47,13 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             let newObject = {name: name, fields: fields};
             $scope.userForms.push(newObject);
             setActiveFormName(name);
-            console.log(newObject);
-
         };
 
         $scope.filterTabNameClicked = function (name) {
-            setActiveTab(name, filterByNameEvent);
+            setActiveTab(name);
         };
 
-        $scope.saveForm = function (name) {
+        /*    $scope.saveForm = function (name) {
             let form = getFormByName(name);
             Form.saveForm(form, (response) => {
                 $scope.$emit(filterByNameEvent + "Emit", name)
@@ -80,7 +71,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             return $scope.userForms.find((elem) => {
                 return elem.name === name
             });
-        }
+         }*/
 
         function getFields() {
             Fields.getFields((response) => {
@@ -107,6 +98,20 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
                 }
             );
         }
+
+        $scope.filter = function (tab) {
+            $scope.$emit(filterTabEvent + "Emit", tab);
+        };
+
+        $scope.getColumnName = function (columnId) {
+            if ($scope.columnsList) {
+                var elem = _.find($scope.columnsList, function (elem) {
+                    return elem.id === columnId;
+                });
+                return elem.fe_name;
+            }
+            return "";
+        };
 
         init();
     }]);

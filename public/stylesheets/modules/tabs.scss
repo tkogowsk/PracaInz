@@ -54,13 +54,17 @@
         font-weight:bold;
         font-size: 18px;
       }
+      select {
+        color: black;
+        width: 80%;
+      }
+      input {
+        width: 80%;
+      }
     }
-    select{
-      color: black;
-      width: 80%;
-    }
-    input{
-      width: 80%;
+    label {
+      left: 20px;
+      position: absolute;
     }
   }
 }

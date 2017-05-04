@@ -8,7 +8,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import repository._
 import utils.JsonFormat._
-import utils.{Constants, TabFieldFilterDTO}
+import utils.{Constants, FilterDTO, TabFieldFilterDTO}
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +44,6 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
 
   def getAllJDBC: Action[AnyContent] = Action { response =>
     var columns: List[VariantColumnModel] = List[VariantColumnModel]()
-
     Await.result(
       variantColumnRepository.getAll.map {
         res =>
@@ -53,6 +52,28 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
 
     val res = jdbcRepository.getAll(columns)
     Ok(successResponse(Json.toJson(res), "data from jdbc fetched"))
+  }
+
+  def getByTab = Action { request =>
+    var columns: List[VariantColumnModel] = List[VariantColumnModel]()
+    request.body.asJson.map { json =>
+      json.asOpt[FilterDTO].map { elem =>
+        Await.result(
+          variantColumnRepository.getAll.map {
+            res =>
+              columns = res
+          }, Duration.Inf)
+
+        val res = jdbcRepository.getByFields(columns, elem)
+        Ok(successResponse(Json.toJson(res), "data from jdbc fetched"))
+
+      }.getOrElse {
+        BadRequest("Missing parameter")
+      }
+    }.getOrElse {
+      BadRequest("Expecting Json data")
+    }
+
   }
 
   /*

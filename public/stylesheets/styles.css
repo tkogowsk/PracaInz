@@ -126,11 +126,18 @@
     .filter-section .filter-fields .filter-field p {
       font-weight: bold;
       font-size: 18px; }
-    .filter-section .filter-fields select {
+
+.filter-section .filter-fields .filter-field select {
       color: black;
       width: 80%; }
-    .filter-section .filter-fields input {
+
+.filter-section .filter-fields .filter-field input {
       width: 80%; }
+
+.filter-section .filter-fields label {
+    left: 20px;
+    position: absolute;
+}
 
 body {
   background: #f9f9f5;

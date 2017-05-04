@@ -6,6 +6,6 @@ object Relation extends Enumeration {
   val Greater = ">"
   val Less = "<"
   val GreaterThan = ">="
-  val LessThan = ">"
+  val LessThan = "<="
   val Contains= "contains"
 }

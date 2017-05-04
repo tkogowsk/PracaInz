@@ -14,13 +14,44 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
             prepareHeaderColumns();
         }
 
-        $scope.$on(filterByNameEvent + 'Broadcast', function (event, name) {
+        $scope.$on(filterTabEvent + 'Broadcast', function (event, data) {
             $rootScope.changeSpinner(true);
-            Transcript.getByFilter({formName: name}, function (response) {
-                $scope.transcriptData = response.data;
-                $rootScope.changeSpinner(false);
+
+            console.log(data);
+            var payload = {};
+            var list = [];
+
+            _.forEach(data.items, function (filter) {
+                if (!filter.inactive) {
+                    _.forEach(filter.items, function (field) {
+                        if (field.value) {
+                            list.push({
+                                relation: field.relation,
+                                value: field.value,
+                                variant_column_id: field.variant_column_id
+                            })
+                        }
+                    })
+                }
             });
+
+            payload["filters"] = list;
+            console.log(payload);
+            $rootScope.changeSpinner(false);
+
+            Transcript.getByTab(payload, (response) => {
+                console.log(response);
+                $scope.transcriptData = [];
+                prepareTableData(response.data);
+                $rootScope.changeSpinner(false);
+            })
+
+            /*Transcript.getByTab({formName: name}, function (response) {
+             $scope.transcriptData = response.data;
+             $rootScope.changeSpinner(false);
+             });*/
         });
+
 
         $scope.$on(variantColumnsFetchedEvent + 'Broadcast', function (event, name) {
             prepareHeaderColumns();
@@ -36,18 +67,21 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
 
         function getAll() {
             Transcript.getAllJDBC(function (response) {
-                $scope.transcriptData = _.chain(response.data)
-                    .map(function (elem) {
-                        var object = {};
-                        _.forEach(elem.row, function (item) {
-                            object[item.column] = item.value;
-                        });
-                        return object;
-                    }).value();
+                prepareTableData(response.data);
                 $rootScope.changeSpinner(false);
             });
         }
 
+        function prepareTableData(data) {
+            $scope.transcriptData = _.chain(data)
+                .map(function (elem) {
+                    var object = {};
+                    _.forEach(elem.row, function (item) {
+                        object[item.column] = item.value;
+                    });
+                    return object;
+                }).value();
+        }
         function prepareHeaderColumns() {
             if (!$scope.userColumnsList) {
                 var columnList = LocalStorage.getColumnList();

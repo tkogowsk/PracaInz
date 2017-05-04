@@ -14,12 +14,18 @@
             <div ng-repeat="tab in groupedData" class="filter-fields">
                 <div ng-show="tab.tabName == activeTabName" style="text-align: center">
                     <div ng-repeat="filter in tab.items track by $index" class="filter">
-                        <div class="filter-name">{{filter.filterName}}</div>
+                        <div class="filter-name">
+                            {{filter.filterName}}
+                            <label>
+                                Inactive
+                                <input type="checkbox" name="inactive" ng-model="filter.inactive">
+                            </label>
+                        </div>
                         <div ng-repeat="field in filter.items track by $index">
                             <div class="filter-field">
                                 <div ng-switch="field.relation">
                                     <div ng-switch-when="=">
-                                        <p>{{field.feName}} equals</p>
+                                        <p>{{getColumnName(field.variant_column_id)}} equals</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select data-ng-model="field.value"
                                                     ng-options="o  as o for o in field.options"></select>
@@ -30,7 +36,7 @@
                                         </div>
                                     </div>
                                     <div ng-switch-when=">=">
-                                        <p>{{field.feName}} greater than</p>
+                                        <p>{{getColumnName(field.variant_column_id)}} greater than</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select data-ng-model="field.value"
                                                     ng-options="o  as o for o in field.options"></select>
@@ -40,7 +46,7 @@
                                         </div>
                                     </div>
                                     <div ng-switch-when=">">
-                                        <p>{{field.feName}} greater</p>
+                                        <p>{{getColumnName(field.variant_column_id)}} greater</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select data-ng-model="field.value"
                                                     ng-options="o  as o for o in field.options"></select>
@@ -50,7 +56,7 @@
                                         </div>
                                     </div>
                                     <div ng-switch-when="<=">
-                                        <p>{{field.feName}} less than</p>
+                                        <p>{{getColumnName(field.variant_column_id)}} less than</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select data-ng-model="field.value"
                                                     ng-options="o  as o for o in field.options"></select>
@@ -60,7 +66,7 @@
                                         </div>
                                     </div>
                                     <div ng-switch-when="<">
-                                        <p>{{field.feName}} less</p>
+                                        <p>{{getColumnName(field.variant_column_id)}} less</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select ng-model="field.value" ng-options="o  as o for o in field.options"></select>
                                         </div>
@@ -69,7 +75,8 @@
                                         </div>
                                     </div>
                                     <div ng-switch-when="contains">
-                                        <p>{{field.feName}} contains ( comma separated values) </p>
+                                        <p>{{getColumnName(field.variant_column_id)}} contains ( comma separated
+                                            values) </p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select ng-model="field.value" ng-options="o  as o for o in field.options"></select>
                                         </div>
@@ -81,11 +88,12 @@
                             </div>
                         </div>
                     </div>
+                    <button type="button" class="btn btn-primary btn-sm"
+                            ng-click="filter(tab)">Filter
+                    </button>
                 </div>
             </div>
         </div>
-
-
     </div>
 
     <div ng-controller="TranscriptsTableController" class="col-lg-9 transcript-table">

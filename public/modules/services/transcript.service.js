@@ -8,6 +8,8 @@ angular.module('Repositories').factory('Transcript', function ($resource) {
             params: {
                 formName: '@formName',
             }
-        }
+        },
+        getByTab: {method: 'POST', url: '/getByTab', isArray: false},
+
     });
 });

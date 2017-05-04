@@ -13,20 +13,18 @@ angular.module('mainPage').controller('MainPageController', ['$scope', '$rootSco
 
         function getColumnsList() {
             VariantColumn.getVariantColumn(function (response) {
-                $rootScope.columnsList = response.data;
                 LocalStorage.setColumnList(response.data);
                 $scope.$broadcast(variantColumnsFetchedEvent + 'Broadcast', name)
             })
         }
 
         $rootScope.getColumnType = function (columnId) {
-            //$log.log(_.chain($rootScope.columnsList).find((elem) => elem.id === columnId).value());
             return _.chain($rootScope.columnsList).find((elem) => elem.id === columnId).value();
         };
 
-        $scope.$on(filterByNameEvent + 'Emit', function (event, name) {
+        $scope.$on(filterTabEvent + 'Emit', function (event, data) {
             event.stopPropagation();
-            $scope.$broadcast(filterByNameEvent + 'Broadcast', name)
+            $scope.$broadcast(filterTabEvent + 'Broadcast', data)
         });
 
         $scope.$on(getAllTranscriptsEvent + 'Emit', function (event, name) {
