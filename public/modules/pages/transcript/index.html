@@ -1,9 +1,7 @@
 <div class="row">
     <div ng-controller="FilterController" class="col-lg-4">
         <div class="filter-section">
-            <button type="button" class="btn btn-primary btn-sm" ng-click="getAll()">Get all</button>
             <h3>Filters</h3>
-
             <div class="filter-tabs">
                 <div ng-repeat="tab in groupedData" class="filter-tab">
 
@@ -14,35 +12,68 @@
                 </div>
             </div>
             <div ng-repeat="tab in groupedData" class="filter-fields">
-                <div ng-show="tab.tabName == activeTabName">
-                    <div ng-repeat="filter in tab.items track by $index">
+                <div ng-show="tab.tabName == activeTabName" style="text-align: center">
+                    <div ng-repeat="filter in tab.items track by $index" class="filter">
                         <div class="filter-name">{{filter.filterName}}</div>
                         <div ng-repeat="field in filter.items track by $index">
                             <div class="filter-field">
                                 <div ng-switch="field.relation">
                                     <div ng-switch-when="=">
                                         <p>{{field.feName}} equals</p>
-                                        <input type="text" ng-model="field.value">
+                                        <div ng-if="(field.options) && field.options.length > 0">
+                                            <select ng-model="field.value"
+                                                    ng-options="o  as o for o in field.options"></select>
+                                        </div>
+
+                                        <div ng-if="!(field.options) || field.options.length === 0">
+                                            <input type="text" ng-model="field.value">
+                                        </div>
                                     </div>
                                     <div ng-switch-when=">=">
                                         <p>{{field.feName}} greater than</p>
-                                        <input type="text" ng-model="field.value">
+                                        <div ng-if="(field.options) && field.options.length > 0">
+                                            <select ng-model="field.value"
+                                                    ng-options="o  as o for o in field.options"></select>
+                                        </div>
+                                        <div ng-if="!(field.options) || field.options.length === 0">
+                                            <input type="text" ng-model="field.value">
+                                        </div>
                                     </div>
                                     <div ng-switch-when=">">
                                         <p>{{field.feName}} greater</p>
-                                        <input type="text" ng-model="field.value">
+                                        <div ng-if="(field.options) && field.options.length > 0">
+                                            <select ng-model="field.value" ng-options="o  as o for o in field.options"></select>
+                                        </div>
+                                        <div ng-if="!(field.options) || field.options.length === 0">
+                                            <input type="text" ng-model="field.value">
+                                        </div>
                                     </div>
                                     <div ng-switch-when="<=">
                                         <p>{{field.feName}} less than</p>
-                                        <input type="text" ng-model="field.value">
+                                        <div ng-if="(field.options) && field.options.length > 0">
+                                            <select ng-model="field.value" ng-options="o  as o for o in field.options"></select>
+                                        </div>
+                                        <div ng-if="!(field.options) || field.options.length === 0">
+                                            <input type="text" ng-model="field.value">
+                                        </div>
                                     </div>
                                     <div ng-switch-when="<">
                                         <p>{{field.feName}} less</p>
-                                        <input type="text" ng-model="field.value">
+                                        <div ng-if="(field.options) && field.options.length > 0">
+                                            <select ng-model="field.value" ng-options="o  as o for o in field.options"></select>
+                                        </div>
+                                        <div ng-if="!(field.options) || field.options.length === 0">
+                                            <input type="text" ng-model="field.value">
+                                        </div>
                                     </div>
                                     <div ng-switch-when="contains">
                                         <p>{{field.feName}} contains ( comma separated values) </p>
-                                        <input type="text" ng-model="field.value">
+                                        <div ng-if="(field.options) && field.options.length > 0">
+                                            <select ng-model="field.value" ng-options="o  as o for o in field.options"></select>
+                                        </div>
+                                        <div ng-if="!(field.options) || field.options.length === 0">
+                                            <input type="text" ng-model="field.value">
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -10,14 +10,18 @@
     width: 100%;
     overflow-x: auto;
     white-space: nowrap;
+    text-align: center;
     .filter-tab {
-      background: #888888;
       display: inline-block;
       .filter-tab-name {
         color: black;
         font-weight: bold;
         font-size: 20px;
         text-align: center;
+        margin-right: 12px;
+        border-radius: 9%;
+        background: #888888;
+        padding: 10px;
         &:hover {
           cursor: pointer;
         }
@@ -35,12 +39,29 @@
     margin-bottom: 10px;
     width: 25vw;
     overflow: auto;
+    .filter{
+      margin: 10px 10px 0 0;
+      background: #3bd3aa;
+      border-radius: 5px;
+      padding-bottom: 20px;
+    }
+
     .filter-name{
 
     }
 
     .filter-field{
-
+      p{
+        font-weight:bold;
+        font-size: 18px;
+      }
+    }
+    select{
+      color: black;
+      width: 80%;
+    }
+    input{
+      width: 80%;
     }
   }
 }

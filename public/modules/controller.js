@@ -17,6 +17,11 @@ angular.module('mainPage').controller('MainPageController', ['$scope', '$rootSco
             })
         }
 
+        $rootScope.getColumnType = function (columnId) {
+            console.log(_.chain($rootScope.columnsList).find((elem) => elem.id === columnId).value());
+            return _.chain($rootScope.columnsList).find((elem) => elem.id === columnId).value();
+        };
+
         $scope.$on(filterByNameEvent + 'Emit', function (event, name) {
             event.stopPropagation();
             $scope.$broadcast(filterByNameEvent + 'Broadcast', name)

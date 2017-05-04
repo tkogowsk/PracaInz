@@ -89,15 +89,19 @@
   .filter-section .filter-tabs {
     width: 100%;
     overflow-x: auto;
-    white-space: nowrap; }
+    white-space: nowrap;
+    text-align: center; }
     .filter-section .filter-tabs .filter-tab {
-      background: #888888;
       display: inline-block; }
       .filter-section .filter-tabs .filter-tab .filter-tab-name {
         color: black;
         font-weight: bold;
         font-size: 20px;
-        text-align: center; }
+        text-align: center;
+        margin-right: 12px;
+        border-radius: 9%;
+        background: #888888;
+        padding: 10px; }
         .filter-section .filter-tabs .filter-tab .filter-tab-name:hover {
           cursor: pointer; }
       .filter-section .filter-tabs .filter-tab .wrapper {
@@ -109,9 +113,23 @@
     margin-bottom: 10px;
     width: 25vw;
     overflow: auto; }
+    .filter-section .filter-fields .filter {
+      margin: 10px 10px 0 0;
+      background: #3bd3aa;
+      border-radius: 5px;
+      padding-bottom: 20px; }
+    .filter-section .filter-fields .filter-field p {
+      font-weight: bold;
+      font-size: 18px; }
+    .filter-section .filter-fields select {
+      color: black;
+      width: 80%; }
+    .filter-section .filter-fields input {
+      width: 80%; }
 
 body {
-  background: #f9f9f5; }
+  background: #f9f9f5;
+  font-family: "Comic Sans MS", cursive, sans-serif; }
   body input {
     color: black; }
 
