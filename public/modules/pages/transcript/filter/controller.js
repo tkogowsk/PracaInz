@@ -84,9 +84,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
 
         function getFields() {
             Fields.getFields((response) => {
-                    $log.log(response.data);
-
-                    let groupedData = _.chain(response.data)
+                let groupedData = _.chain(response.data)
                         .groupBy('tab_name')
                         .toPairs()
                         .map(function (currentItem) {
@@ -103,7 +101,6 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
                             }).value();
 
                     });
-                    $log.log(groupedData);
 
                     $scope.groupedData = groupedData;
                     $rootScope.changeSpinner(false);

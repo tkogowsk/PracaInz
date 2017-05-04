@@ -1,5 +1,5 @@
 <div class="row">
-    <div ng-controller="FilterController" class="col-lg-4">
+    <div ng-controller="FilterController" class="col-lg-3">
         <div class="filter-section">
             <h3>Filters</h3>
             <div class="filter-tabs">
@@ -21,7 +21,7 @@
                                     <div ng-switch-when="=">
                                         <p>{{field.feName}} equals</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
-                                            <select ng-model="field.value"
+                                            <select data-ng-model="field.value"
                                                     ng-options="o  as o for o in field.options"></select>
                                         </div>
 
@@ -32,7 +32,7 @@
                                     <div ng-switch-when=">=">
                                         <p>{{field.feName}} greater than</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
-                                            <select ng-model="field.value"
+                                            <select data-ng-model="field.value"
                                                     ng-options="o  as o for o in field.options"></select>
                                         </div>
                                         <div ng-if="!(field.options) || field.options.length === 0">
@@ -42,7 +42,8 @@
                                     <div ng-switch-when=">">
                                         <p>{{field.feName}} greater</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
-                                            <select ng-model="field.value" ng-options="o  as o for o in field.options"></select>
+                                            <select data-ng-model="field.value"
+                                                    ng-options="o  as o for o in field.options"></select>
                                         </div>
                                         <div ng-if="!(field.options) || field.options.length === 0">
                                             <input type="text" ng-model="field.value">
@@ -51,7 +52,8 @@
                                     <div ng-switch-when="<=">
                                         <p>{{field.feName}} less than</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
-                                            <select ng-model="field.value" ng-options="o  as o for o in field.options"></select>
+                                            <select data-ng-model="field.value"
+                                                    ng-options="o  as o for o in field.options"></select>
                                         </div>
                                         <div ng-if="!(field.options) || field.options.length === 0">
                                             <input type="text" ng-model="field.value">
@@ -81,39 +83,25 @@
                     </div>
                 </div>
             </div>
-
-            <!--
-                <button type="button" class="btn btn-primary btn-sm" ng-show="userForm.fields[0].id"
-                        ng-click="editForm(userForm.name)">Edit and filter
-                </button>
-                <button type="button" class="btn btn-primary btn-sm" ng-show="!userForm.fields[0].id"
-                        ng-click="saveForm(userForm.name)">Save and filter
-                </button>-->
-
-
-            <!--       <form name="newFilterNameForm">
-                       <input type="text" ng-model="newFilterName" required>
-                       <button type="button" class="btn btn-primary btn-sm" ng-click="addNewFilter(newFilterName)"
-                               ng-disabled="newFilterNameForm.$invalid">New Filter
-                       </button>
-                   </form>-->
         </div>
 
 
     </div>
 
-    <div ng-controller="TranscriptsTableController" class="col-lg-8">
-        <!--       <div class="table-wrapper">
+    <div ng-controller="TranscriptsTableController" class="col-lg-9 transcript-table">
+        <div class="table-wrapper">
                    <table class="table table-striped">
                        <thead>
                        <tr>
-                           <th ng-repeat="header in columnsList track by $index">{{header.headerName}}</th>
+                           <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
+                               {{header.fe_name}}
+                           </th>
                        </tr>
                        </thead>
                        <tbody>
                        <tr ng-repeat="transcript in transcriptData | limitTo : tableLimit : tableBegin track by $index">
-                           <td ng-repeat="header in columnsList track by $index">
-                               {{transcript[header.fieldName.toString()]}}
+                           <td ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
+                               {{transcript[header.fe_name.toString()]}}
                            </td>
                        </tr>
                        </tbody>
@@ -122,7 +110,7 @@
                <div class="transcript-table-pagination">
                    <ul uib-pagination total-items="transcriptData.length" ng-model="currentPage" max-size="10" items-per-page="tableLimit"
                        class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
-               </div>-->
+               </div>
 
         <div class="spinner-background" ng-show="showSpinner">
             <div class="sk-cube-grid">

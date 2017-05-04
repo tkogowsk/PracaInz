@@ -1,5 +1,11 @@
+.transcript-table {
+    padding-left: 40px;
+}
+
 .transcript-table .table-wrapper {
-  overflow: auto; }
+    overflow-x: auto;
+    height: 90vh;
+}
 
 .transcript-table-pagination {
   position: fixed;
@@ -84,7 +90,6 @@
   position: fixed;
   height: 100%;
   color: #ece8d7;
-  width: 25vw;
   z-index: 1; }
   .filter-section .filter-tabs {
     width: 100%;
