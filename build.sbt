@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   "ai.x" %% "play-json-extensions" % "0.8.0",
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "com.h2database" % "h2" % "1.4.187",
-  "org.postgresql" % "postgresql" % "9.4-1206-jdbc4",
+  //"org.postgresql" % "postgresql" % "9.4-1206-jdbc4",
   "org.apache.poi" % "poi" % "3.10-FINAL",
   "org.apache.poi" % "poi-scratchpad" % "3.10-FINAL",
   "org.apache.poi" % "poi-ooxml" % "3.10-FINAL",
