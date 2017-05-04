@@ -9,6 +9,8 @@ GET         /getTranscript                          controllers.Application.getT
 GET         /getUserForms/:userId                   controllers.Application.getUserForms(userId: Int)
 GET         /getFields                              controllers.Application.getFields
 GET         /getVariantColumn                       controllers.Application.getVariantColumn
+GET         /jdbcTest                               controllers.Application.jdbcTest
+
 
 POST        /editForm                               controllers.Application.editForm
 POST        /saveForm                               controllers.Application.saveForm

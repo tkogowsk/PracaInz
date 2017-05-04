@@ -7,6 +7,7 @@ lazy val `inz` = (project in file(".")).enablePlugins(PlayScala)
 scalaVersion := "2.11.7"
 
 libraryDependencies ++= Seq(
+  jdbc,
   "com.typesafe.slick" %% "slick" % "3.1.1",
   "com.chuusai" %% "shapeless" % "2.3.1",
   "io.underscore" %% "slickless" % "0.3.0",

@@ -15,7 +15,7 @@ import utils.JsonFormat._
 
 class Application @Inject()(webJarAssets: WebJarAssets, formsRepository: FormsRepository,
                             variantColumnRepository: VariantColumnRepository, transcriptRepository :TranscriptRepository,
-                            tabFieldFilterRepository: TabFieldFilterRepository) extends Controller {
+                            tabFieldFilterRepository: TabFieldFilterRepository, jdbcRepository:JDBCRepository) extends Controller {
 
   def index = Action {
     Ok(views.html.index(webJarAssets))
@@ -97,6 +97,11 @@ class Application @Inject()(webJarAssets: WebJarAssets, formsRepository: FormsRe
     }.getOrElse {
       BadRequest("Expecting Json data")
     }
+  }
+
+  def jdbcTest = Action{ response =>
+    jdbcRepository.test
+    Ok("jdbc test succeed")
   }
 }
 
