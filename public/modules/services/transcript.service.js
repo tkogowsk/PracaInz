@@ -1,6 +1,6 @@
 angular.module('Repositories').factory('Transcript', function ($resource) {
     return $resource('', null, {
-        getAll: {method: 'GET', url: '/getTranscript', isArray: false},
+        getAllJDBC: {method: 'GET', url: '/getAllJDBC', isArray: false},
         getByFilter: {
             method: 'GET',
             url: '/getByFilter/:formName/1',

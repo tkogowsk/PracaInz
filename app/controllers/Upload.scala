@@ -1,12 +1,10 @@
 package controllers
 
-import javax.inject.Inject
 import java.io.File
+import javax.inject.Inject
 
+import org.apache.poi.ss.usermodel.{Cell, DataFormatter, WorkbookFactory}
 import play.api.mvc._
-import org.apache.poi.ss.usermodel.WorkbookFactory
-import org.apache.poi.ss.usermodel.Cell
-import org.apache.poi.ss.usermodel.DataFormatter
 import repository.FieldsRepository
 import utils.FieldSaveDTO
 
@@ -57,7 +55,7 @@ class Upload @Inject()(fieldsRepository: FieldsRepository) extends Controller {
         }
 
         if (fields.nonEmpty) {
-          fieldsRepository.save(fields)
+          //   fieldsRepository.save(fields)
         }
         tmpFile.delete()
       }

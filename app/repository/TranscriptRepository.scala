@@ -1,22 +1,11 @@
 package repository
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
-import models._
-import utils.Relation
-import slick.driver.PostgresDriver.api._
-
-import scala.concurrent._
-import shapeless._
-import slick.jdbc.GetResult
-import slick.lifted.TableQuery
-import slickless._
-
-import scala.collection.mutable.ArrayBuffer
-
+@Deprecated
 @Singleton
 class TranscriptRepository {
-  private val db = Database.forConfig("postgresConf")
+  /*private val db = Database.forConfig("postgresConf")
 
   implicit val getTranscriptModelResult = GetResult(r => TranscriptModel(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<,
     r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<,
@@ -118,33 +107,33 @@ class TranscriptRepository {
 
   def getAll: Future[List[TranscriptModel]] = db.run {
     transcripts.to[List].result
-  }
+  }*/
 
-  def getByFilter(fields: List[FieldsModel], userForms: List[FormsModel]): Future[Seq[TranscriptModel]] = db.run {
-    var query: String = """select * from "transcript" t where """
-    var userField: FormsModel = null
-    println(fields);
-    fields.foreach(field => {
-      userField = userForms.filter(formField => formField.fieldFk == field.id).head
-      field.relation.toString match {
-        case Relation.Contains => {
-          var values = userField.value.split(",", -1)
-          var array = ArrayBuffer[String]()
-          values.foreach(elem => array += ("'" + elem + "'"))
-          query = query.concat("\"" + field.columnName.toString + "\"" + " IN(" + array.mkString(",") + ") AND ")
-        }
+  /* def getByFilter(fields: List[FieldsModel], userForms: List[FormsModel]): Future[Seq[TranscriptModel]] = db.run {
+     var query: String = """select * from "transcript" t where """
+     var userField: FormsModel = null
+     println(fields);
+     fields.foreach(field => {
+       userField = userForms.filter(formField => formField.fieldFk == field.id).head
+       field.relation.toString match {
+         case Relation.Contains => {
+           var values = userField.value.split(",", -1)
+           var array = ArrayBuffer[String]()
+           values.foreach(elem => array += ("'" + elem + "'"))
+           query = query.concat("\"" + field.columnName.toString + "\"" + " IN(" + array.mkString(",") + ") AND ")
+         }
 
-        case Relation.Greater => query = query.concat("\"" + field.columnName.toString + "\"" + " > \'" + userField.value + "\' AND ")
-        case Relation.GreaterThan => query = query.concat("\"" + field.columnName.toString + "\"" + " >= \'" + userField.value + "\' AND ")
-        case Relation.Equals => query = query.concat("\"" + field.columnName.toString + "\"" + " = \'" + userField.value + "\' AND ")
-        case Relation.Less => query = query.concat("\"" + field.columnName.toString + "\"" + " < \'" + userField.value + "\' AND ")
-        case Relation.LessThan => query = query.concat("\"" + field.columnName.toString + "\"" + " <= " + userField.value + "\' AND ")
-      }
-    }
-    )
+         case Relation.Greater => query = query.concat("\"" + field.columnName.toString + "\"" + " > \'" + userField.value + "\' AND ")
+         case Relation.GreaterThan => query = query.concat("\"" + field.columnName.toString + "\"" + " >= \'" + userField.value + "\' AND ")
+         case Relation.Equals => query = query.concat("\"" + field.columnName.toString + "\"" + " = \'" + userField.value + "\' AND ")
+         case Relation.Less => query = query.concat("\"" + field.columnName.toString + "\"" + " < \'" + userField.value + "\' AND ")
+         case Relation.LessThan => query = query.concat("\"" + field.columnName.toString + "\"" + " <= " + userField.value + "\' AND ")
+       }
+     }
+     )
 
-    query = query.slice(0, query.length - 5)
-    sql"#$query".as[TranscriptModel]
-  }
+     query = query.slice(0, query.length - 5)
+     sql"#$query".as[TranscriptModel]
+   }*/
 
 }

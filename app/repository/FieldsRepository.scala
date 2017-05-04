@@ -1,20 +1,11 @@
 package repository
 
-import javax.inject.{Inject, Singleton}
-
-import models.FieldsModel
-import slick.driver.PostgresDriver.api._
-
-import scala.concurrent._
-import shapeless._
-import slickless._
-import utils.FieldSaveDTO
-import scala.collection.mutable.ArrayBuffer
+import javax.inject.Singleton
 
 @Singleton
 @Deprecated
 class FieldsRepository {
-  private val db = Database.forConfig("postgresConf")
+  /*private val db = Database.forConfig("postgresConf")
 
   var fields = TableQuery[FieldsTableRepository]
 
@@ -43,5 +34,5 @@ class FieldsRepository {
         sqlu"""insert into "FIELDS"("COLUMN_NAME","FE_NAME","RELATION")
               VALUES (${elem.columnName}, ${elem.feName}, ${elem.relation})""")
     })
-  }
+  }*/
 }

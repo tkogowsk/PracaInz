@@ -3,22 +3,17 @@
 # ~~~~
 
 # Home page
-GET         /                                       controllers.Application.index
-GET         /getTranscript                          controllers.Application.getTranscript
-# GET         /getByFilter/:filterName/:userId        controllers.Application.getByFilter(filterName: String, userId: Int)
-GET         /getUserForms/:userId                   controllers.Application.getUserForms(userId: Int)
-GET         /getFields                              controllers.Application.getFields
-GET         /getVariantColumn                       controllers.Application.getVariantColumn
-GET         /jdbcTest                               controllers.Application.jdbcTest
+GET         /                        controllers.Application.index
+# GET       /getByFilter/:filterName/:userId        controllers.Application.getByFilter(filterName: String, userId: Int)
+GET         /getFields               controllers.Application.getFields
+GET         /getVariantColumn        controllers.Application.getVariantColumn
+GET         /getAllJDBC              controllers.Application.getAllJDBC
 
-
-POST        /editForm                               controllers.Application.editForm
-POST        /saveForm                               controllers.Application.saveForm
-POST        /upload                                 controllers.Upload.upload
+POST        /upload                  controllers.Upload.upload
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file            controllers.Assets.versioned(path="/public", file: Asset)
 # WebJars
-GET         /webjars/*file                          controllers.WebJarAssets.at(file)
+GET         /webjars/*file           controllers.WebJarAssets.at(file)
 
-GET         /*any                                   @controllers.Application.angular(any)
+GET         /*any                    @controllers.Application.angular(any)
