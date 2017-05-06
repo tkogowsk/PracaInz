@@ -1,11 +1,24 @@
-angular.module('security', []);
+angular.module('Security', []);
 
-angular.module('security').controller('LoginController', ['$rootScope', '$log', '$state',
-    function ($rootScope, $log, $state) {
-        if(!$rootScope.authenticated){
+angular.module('Security').controller('LoginController', ['$rootScope', '$scope', '$log', '$state', 'Authentication',
+    function ($rootScope, $scope, $log, $state, Authentication) {
+
+        $scope.userName = "";
+        $scope.password = "";
+
+        console.log($rootScope.authenticated);
+        if (!$rootScope.authenticated) {
             $rootScope.authenticated = true;
-            $log.log('successful login');
-            $state.go('index');
         }
 
+        $scope.logIn = function () {
+            Authentication.logIn({name: $scope.userName, password: $scope.password}, function (response) {
+                if (response.data) {
+                    $scope.$emit(loggedInEvent + 'Emit');
+                    $state.go('transcript-list');
+                }
+                $scope.message = "Error"
+            });
+
+        }
     }]);

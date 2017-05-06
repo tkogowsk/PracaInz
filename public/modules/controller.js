@@ -1,14 +1,19 @@
-angular.module('mainPage', []);
+angular.module('Controllers', []);
 
-angular.module('mainPage').controller('MainPageController', ['$scope', '$rootScope', '$log', 'VariantColumn', 'LocalStorage',
-    function ($scope, $rootScope, $log, VariantColumn, LocalStorage) {
+angular.module('Controllers').controller('MainPageController', ['$scope', '$rootScope', '$log', '$state', 'VariantColumn', 'LocalStorage',
+    function ($scope, $rootScope, $log, $state, VariantColumn, LocalStorage) {
         $rootScope.showSpinner = true;
+
         $rootScope.changeSpinner = function(spinnerIndicator) {
             $scope.showSpinner = spinnerIndicator;
         };
 
         function init() {
-            getColumnsList();
+            if (!$rootScope.authenticated) {
+                $state.go('login');
+            } else {
+                getColumnsList();
+            }
         }
 
         function getColumnsList() {
@@ -32,6 +37,11 @@ angular.module('mainPage').controller('MainPageController', ['$scope', '$rootSco
             $scope.$broadcast(getAllTranscriptsEvent + 'Broadcast', name)
         });
 
-        init();
+        $scope.$on(loggedInEvent + 'Emit', function (event, data) {
+            event.stopPropagation();
+            getColumnsList();
+        });
+
+        init.bind(this)();
 
     }]);

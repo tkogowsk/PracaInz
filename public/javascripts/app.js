@@ -1,14 +1,18 @@
-var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'mainPage', 'filter', 'Repositories', 'Models', 'transcripts', 'security', 'LocalStorageModule']);
+var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'Controllers', 'filter', 'Repositories', 'Models', 'transcripts', 'Security', 'LocalStorageModule']);
 myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 
     $stateProvider
         .state('index', {
-            url: '/',
-            templateUrl: '/assets/modules/pages/transcript/index.html'
+            url: '/index',
+            templateUrl: '/assets/modules/pages/transcript-table/index.html'
         })
         .state('login', {
             url: '/login',
             templateUrl: '/assets/modules/pages/login/index.html'
+        })
+        .state('transcript-list', {
+            url: '/list',
+            templateUrl: '/assets/modules/pages/transcript-list/index.html'
         });
 
     $urlRouterProvider.otherwise('/login');
@@ -19,7 +23,8 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
     });
 });
 
-/*myApp.config(['$qProvider', function ($qProvider) {
+myApp.config(['$qProvider', function ($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
-}]);*/
+
+}]);
 

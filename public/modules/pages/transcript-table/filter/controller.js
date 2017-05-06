@@ -1,14 +1,18 @@
 angular.module('filter', []);
-angular.module('filter').controller('FilterController', ['$scope', '$rootScope', '$log', 'Form', 'Fields', 'LocalStorage',
-    function ($scope, $rootScope, $log, Form, Fields, LocalStorage) {
+angular.module('filter').controller('FilterController', ['$scope', '$rootScope', '$state', '$log', 'Form', 'Fields', 'LocalStorage',
+    function ($scope, $rootScope, $state, $log, Form, Fields, LocalStorage) {
 
         $scope.groupedData = [];
         $scope.userId = 1;
         $scope.activeTabName = null;
 
         function init() {
-            getFields();
-            setColumnList()
+            if (!$rootScope.authenticated) {
+                $state.go('login');
+            } else {
+                getFields();
+                setColumnList();
+            }
         }
 
         function setActiveTab(newName) {
@@ -54,23 +58,23 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
         };
 
         /*    $scope.saveForm = function (name) {
-            let form = getFormByName(name);
-            Form.saveForm(form, (response) => {
-                $scope.$emit(filterByNameEvent + "Emit", name)
-            })
-        };
+         let form = getFormByName(name);
+         Form.saveForm(form, (response) => {
+         $scope.$emit(filterByNameEvent + "Emit", name)
+         })
+         };
 
-        $scope.editForm = function (name) {
-            let form = getFormByName(name);
-            Form.editForm(form, (response) => {
-                $scope.$emit(filterByNameEvent + "Emit", name)
-            })
-        };
+         $scope.editForm = function (name) {
+         let form = getFormByName(name);
+         Form.editForm(form, (response) => {
+         $scope.$emit(filterByNameEvent + "Emit", name)
+         })
+         };
 
-        function getFormByName(name) {
-            return $scope.userForms.find((elem) => {
-                return elem.name === name
-            });
+         function getFormByName(name) {
+         return $scope.userForms.find((elem) => {
+         return elem.name === name
+         });
          }*/
 
         function getFields() {

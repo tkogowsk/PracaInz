@@ -1,7 +1,7 @@
 angular.module('transcripts', []);
 
-angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$rootScope', '$log', 'Transcript', 'Fields', 'LocalStorage',
-    function ($scope, $rootScope, $log, Transcript, Fields, LocalStorage) {
+angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$rootScope', '$state', '$log', 'Transcript', 'Fields', 'LocalStorage',
+    function ($scope, $rootScope, $state, $log, Transcript, Fields, LocalStorage) {
         $scope.transcriptData = [];
         $scope.userColumnsList = null;
 
@@ -10,8 +10,12 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         $scope.currentPage = 1;
 
         function init() {
-            getAll();
-            prepareHeaderColumns();
+            if (!$rootScope.authenticated) {
+                $state.go('login');
+            } else {
+                getAll();
+                prepareHeaderColumns();
+            }
         }
 
         $scope.$on(filterTabEvent + 'Broadcast', function (event, data) {
@@ -82,6 +86,7 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                     return object;
                 }).value();
         }
+
         function prepareHeaderColumns() {
             if (!$scope.userColumnsList) {
                 var columnList = LocalStorage.getColumnList();

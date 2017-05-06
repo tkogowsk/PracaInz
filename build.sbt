@@ -26,7 +26,7 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "angular" % "1.6.1",
   "org.webjars.bower" % "angular-route" % "1.6.1" exclude("org.webjars.bower", "angularjs"),
   "org.webjars.bower" % "angular-animate" % "1.6.1" exclude("org.webjars.bower", "angularjs"),
-  "org.webjars.bower" % "angular-ui-router" % "0.3.2" exclude("org.webjars.bower", "angularjs"),
+  "org.webjars.bower" % "angular-ui-router" % "0.4.2" exclude("org.webjars.bower", "angularjs"),
   "org.webjars.bower" % "angular-resource" % "1.6.1" exclude("org.webjars.bower", "angularjs"),
   "org.webjars" % "angular-ui-bootstrap" % "2.2.0" exclude("org.webjars", "angularjs")
 )

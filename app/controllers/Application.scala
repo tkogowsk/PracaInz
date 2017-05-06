@@ -8,7 +8,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import repository._
 import utils.JsonFormat._
-import utils.{Constants, FilterDTO, TabFieldFilterDTO}
+import utils.{AuthenticationDTO, Constants, FilterDTO, TabFieldFilterDTO}
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -16,8 +16,8 @@ import scala.concurrent.duration.Duration
 
 
 class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository: VariantColumnRepository,
-                            transcriptRepository: TranscriptRepository,
-                            tabFieldFilterRepository: TabFieldFilterRepository, jdbcRepository:JDBCRepository) extends Controller {
+                            userRepository: UserRepository,
+                            tabFieldFilterRepository: TabFieldFilterRepository, jdbcRepository: JDBCRepository) extends Controller {
 
   def index = Action {
     Ok(views.html.index(webJarAssets))
@@ -30,14 +30,14 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
   }
 
   def getFields = Action.async {
-    tabFieldFilterRepository.getFilter.map{ res =>
-      val list = res.map(item => TabFieldFilterDTO(item._1, item._2,item._3,item._4,item._5, item._6, item._7, item._8, item._9, item._10, item._11, item._12))
+    tabFieldFilterRepository.getFilter.map { res =>
+      val list = res.map(item => TabFieldFilterDTO(item._1, item._2, item._3, item._4, item._5, item._6, item._7, item._8, item._9, item._10, item._11, item._12))
       Ok(successResponse(Json.toJson(list), "Getting Variant column list successfully"))
     }
   }
 
   def getVariantColumn: Action[AnyContent] = Action.async {
-    variantColumnRepository.getAll.map{ res =>
+    variantColumnRepository.getAll.map { res =>
       Ok(successResponse(Json.toJson(res), "Getting Variant column list successfully"))
     }
   }
@@ -76,12 +76,15 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
 
   }
 
-  /*
-  def editForm = Action { request =>
+  def logIn = Action { request =>
     request.body.asJson.map { json =>
-      json.asOpt[FormEditDTO].map { elem =>
-        formsRepository.edit(elem.fields)
-        Ok("Success")
+      json.asOpt[AuthenticationDTO].map { elem =>
+        Await.result(
+          userRepository.authenticate(elem).map {
+            res =>
+              Ok(successResponse(Json.toJson(res.isDefined), ""))
+          }, Duration.Inf)
+
       }.getOrElse {
         BadRequest("Missing parameter")
       }
@@ -90,11 +93,23 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
     }
   }
 
-  def saveForm = Action { request =>
+  def getSamplesList = Action { request =>
     request.body.asJson.map { json =>
-      json.asOpt[FormSaveDTO].map { elem =>
-        formsRepository.save(elem.fields)
-        Ok("Success")
+      json.asOpt[AuthenticationDTO].map { elem =>
+        Await.result(
+          userRepository.authenticate(elem).map {
+            res =>
+              if (res.isDefined) {
+                Await.result(
+                  userRepository.authenticate(elem).map {
+                    res =>
+                      Ok(successResponse(Json.toJson(res.isDefined), ""))
+                  }, Duration.Inf)
+              } else {
+                Ok(successResponse(Json.toJson(null), "no data"))
+              }
+          }, Duration.Inf)
+
       }.getOrElse {
         BadRequest("Missing parameter")
       }
@@ -102,6 +117,6 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
       BadRequest("Expecting Json data")
     }
   }
-  */
+
 }
 

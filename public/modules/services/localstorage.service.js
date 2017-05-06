@@ -12,6 +12,5 @@ angular.module('LocalStorageModule').factory('LocalStorage', function () {
     return {
         getColumnList: getColumnList,
         setColumnList: setColumnList
-
     }
 });
