@@ -10,6 +10,7 @@ angular.module('Security').controller('LoginController', ['$rootScope', '$scope'
             Authentication.logIn({name: $scope.userName, password: $scope.password}, function (response) {
                 if (response.data) {
                     $rootScope.authenticated = true;
+                    $rootScope.userName = $scope.userName;
                     $scope.$emit(loggedInEvent + 'Emit');
                     $state.go('transcript-list');
                 }

@@ -1,7 +1,7 @@
 angular.module('transcripts', []);
 
-angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$rootScope', '$state', '$log', 'Transcript', 'Fields', 'LocalStorage',
-    function ($scope, $rootScope, $state, $log, Transcript, Fields, LocalStorage) {
+angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$rootScope', '$state', '$log', 'Transcript', 'Fields', '$stateParams', 'LocalStorage',
+    function ($scope, $rootScope, $state, $log, Transcript, Fields, $stateParams, LocalStorage) {
         $scope.transcriptData = [];
         $scope.userColumnsList = null;
 

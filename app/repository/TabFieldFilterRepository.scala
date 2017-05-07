@@ -1,9 +1,9 @@
 package repository
 
-import utils.MyPostgresDriver.api._
 import javax.inject.Singleton
 
 import models.TabFieldFilterModel
+import utils.MyPostgresDriver.api._
 
 import scala.concurrent.Future
 
@@ -38,11 +38,11 @@ class TabFieldFilterRepository {
   }
 
   def getFilter: Future[Seq[(Int,Int,Int,Option[List[String]],String, Int, Option[List[String]], String, Option[String], Option[Boolean], Option[String], Option[String])]] = {
-    val query1 = for {
+    val query = for {
       ((((a,b),c),d),e) <-  tabFieldFilter join tab on (_.tab_id === _.id) join field on (_._1.field_id === _.id) join filter on (_._1._1.filter_id === _.id) joinLeft userSmpTab on ((j,h) => {j._1._1._1.tab_id === h.tab_field_filter_tab_id && j._1._1._1.field_id === h.tab_field_filter_field_id && j._1._1._1.filter_id === h.tab_field_filter_filter_id}) //_._1._1._1.tab_id === _.tab_field_filter_tab_id)  on (_._1._1._1.field_id === _.tab_field_filter_field_id)
     } yield (a.tab_id, a.field_id, a.filter_id, a.default_value, b.name, c.variant_column_id, c.options, c.relation, d.name, d.is_global, e.map(_.value), e.map(_.smpl_id))
 
-    val a = query1.result
+    val a = query.result
 
     db.run(a)
   }

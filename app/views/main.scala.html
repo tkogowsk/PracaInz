@@ -26,6 +26,7 @@
         <script type="text/javascript" src="@routes.Assets.versioned("modules/services/repositories.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/services/security.service.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/services/transcript.service.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("modules/services/user.service.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/services/fields.service.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/services/variant_column.service.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/controller.js")"></script>
@@ -47,6 +48,10 @@
                     <li ng-class="{ active: isActive('/list')}"><a href="/list">Transcript list</a></li>
                     <li ng-class="{ active: isActive('/login')}"><a href="/login">Login</a></li>
                 </ul>
+                <div style="float: right">
+                    {{userName}}
+                    <button ng-click="logout()">Logout</button>
+                </div>
             </div>
         </nav>
 

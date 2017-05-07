@@ -27,6 +27,12 @@ angular.module('Controllers').controller('MainPageController', ['$scope', '$root
             return _.chain($rootScope.columnsList).find((elem) => elem.id === columnId).value();
         };
 
+        $rootScope.logout = function () {
+            $rootScope.authenticated = false;
+            $rootScope.userName = "";
+            $state.go('login');
+        };
+
         $scope.$on(filterTabEvent + 'Emit', function (event, data) {
             event.stopPropagation();
             $scope.$broadcast(filterTabEvent + 'Broadcast', data)

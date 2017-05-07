@@ -2,8 +2,8 @@ var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'Controllers', '
 myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 
     $stateProvider
-        .state('index', {
-            url: '/index',
+        .state('transcript-table', {
+            url: '/index/:fakeId',
             templateUrl: '/assets/modules/pages/transcript-table/index.html'
         })
         .state('login', {

@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import models.VariantColumnModel
+import models.{SampleMetadataModel, VariantColumnModel}
 import play.api.libs.json.Json._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
@@ -16,7 +16,7 @@ import scala.concurrent.duration.Duration
 
 
 class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository: VariantColumnRepository,
-                            userRepository: UserRepository, sampleMetadataRepository: SampleMetadataRepository, privilegeRepository: PrivilegeRepository,
+                            userRepository: UserRepository, privilegeRepository: PrivilegeRepository,
                             tabFieldFilterRepository: TabFieldFilterRepository, jdbcRepository: JDBCRepository) extends Controller {
 
   def index = Action {
@@ -98,12 +98,13 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
       json.asOpt[AuthenticationDTO].map { elem =>
         Await.result(
           userRepository.authenticate(elem).map {
-            res =>
-              if (res.isDefined) {
+            user =>
+              if (user.isDefined) {
                 Await.result(
-                  userRepository.authenticate(elem).map {
-                    res =>
-                      Ok(successResponse(Json.toJson(res.isDefined), ""))
+                  privilegeRepository.getAll(user.orNull).map {
+                    list =>
+                      val response = list.map(item => SampleMetadataModel(item._1, item._2))
+                      Ok(successResponse(Json.toJson(response), "list of available samples"))
                   }, Duration.Inf)
               } else {
                 Ok(successResponse(Json.toJson("null"), "no data"))

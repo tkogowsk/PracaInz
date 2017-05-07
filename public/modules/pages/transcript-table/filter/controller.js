@@ -1,6 +1,6 @@
 angular.module('filter', []);
-angular.module('filter').controller('FilterController', ['$scope', '$rootScope', '$state', '$log', 'Fields', 'LocalStorage',
-    function ($scope, $rootScope, $state, $log, Fields, LocalStorage) {
+angular.module('filter').controller('FilterController', ['$scope', '$rootScope', '$state', '$log', 'Fields', '$stateParams', 'LocalStorage',
+    function ($scope, $rootScope, $state, $log, Fields, $stateParams, LocalStorage) {
 
         $scope.groupedData = [];
         $scope.userId = 1;

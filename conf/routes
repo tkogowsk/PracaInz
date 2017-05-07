@@ -9,7 +9,7 @@ GET         /                        controllers.Application.index
 GET         /getFields               controllers.Application.getFields
 GET         /getVariantColumn        controllers.Application.getVariantColumn
 GET         /getAllJDBC              controllers.Application.getAllJDBC
-GET         /getSamplesList          controllers.Application.getSamplesList
+POST        /getSamplesList          controllers.Application.getSamplesList
 
 POST        /upload                  controllers.Upload.upload
 POST        /getByTab                controllers.Application.getByTab
