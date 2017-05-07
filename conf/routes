@@ -6,7 +6,7 @@
 GET         /                                                   controllers.Application.index
 # GET       /getByFilter/:filterName/:userId        controllers.Application.getByFilter(filterName: String, userId: Int)
 
-GET         /getFields                                          controllers.Application.getFields
+GET         /getFields/:sample_fake_id/:userName                controllers.Application.getFields(sample_fake_id: Int, userName: String)
 GET         /getVariantColumn                                   controllers.Application.getVariantColumn
 GET         /getTranscriptData/:sample_fake_id/:userName        controllers.Application.getTranscriptData(sample_fake_id: Int, userName: String)
 POST        /getSamplesList                                     controllers.Application.getSamplesList

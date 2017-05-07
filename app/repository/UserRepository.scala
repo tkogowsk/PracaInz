@@ -32,4 +32,8 @@ class UserRepository {
     userTable.to[List].result
   }
 
+  def getByName(name: String): Future[Option[UserModel]] = db.run {
+    userTable.filter(_.name === name).result.headOption
+  }
+
 }

@@ -8,10 +8,10 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
 
         function init() {
             /*         if (!$rootScope.authenticated) {
-                $state.go('login');
+             $state.go('login');
              } else {*/
-                getFields();
-                setColumnList();
+            getFields();
+            setColumnList();
             //       }
         }
 
@@ -40,8 +40,11 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
         };
 
         function getFields() {
-            Fields.getFields((response) => {
-                let groupedData = _.chain(response.data)
+            Fields.getFields({
+                    userName: $rootScope.userName,
+                    sample_fake_id: $stateParams.fakeId
+                }, (response) => {
+                    let groupedData = _.chain(response.data)
                         .groupBy('tab_name')
                         .toPairs()
                         .map(function (currentItem) {

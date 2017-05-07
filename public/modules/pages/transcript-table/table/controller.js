@@ -21,7 +21,6 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         $scope.$on(filterTabEvent + 'Broadcast', function (event, data) {
             $rootScope.changeSpinner(true);
 
-            console.log(data);
             var payload = {};
             var list = [];
 
@@ -40,20 +39,16 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
             });
 
             payload["filters"] = list;
+            payload.sampleFakeId = parseInt($stateParams.fakeId);
+            payload.userName = $rootScope.userName;
             console.log(payload);
             $rootScope.changeSpinner(false);
 
             Transcript.getByTab(payload, (response) => {
-                console.log(response);
                 $scope.transcriptData = [];
                 prepareTableData(response.data);
                 $rootScope.changeSpinner(false);
             })
-
-            /*Transcript.getByTab({formName: name}, function (response) {
-             $scope.transcriptData = response.data;
-             $rootScope.changeSpinner(false);
-             });*/
         });
 
 

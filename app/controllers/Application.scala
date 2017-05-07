@@ -29,11 +29,32 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
     obj("status" -> Constants.SUCCESS, "data" -> data, "msg" -> message)
   }
 
-  def getFields = Action.async {
-    tabFieldFilterRepository.getFilter.map { res =>
-      val list = res.map(item => TabFieldFilterDTO(item._1, item._2, item._3, item._4, item._5, item._6, item._7, item._8, item._9, item._10, item._11, item._12))
-      Ok(successResponse(Json.toJson(list), "Getting Variant column list successfully"))
-    }
+  def getFields(sample_fake_id: Int, userName: String) = Action { request =>
+    var userId = None: Option[Int]
+    Await.result({
+      userRepository.getByName(userName).map {
+        user =>
+          if (user.isDefined) {
+            userId = Some(user.get.id)
+          } else {
+            BadRequest("User not found")
+          }
+      }
+    }, Duration.Inf)
+
+    Await.result(
+      SampleMetadataRepository.getByFakeId(sample_fake_id).map {
+        sample =>
+          if (sample.isDefined) {
+            Await.result(
+              tabFieldFilterRepository.getFilter(sample.get.sample_id, 1).map { res =>
+                val list = res.map(item => TabFieldFilterDTO(item._1, item._2, item._3, item._4, item._5, item._6, item._7, item._8, item._9, item._10, item._11, item._12))
+                Ok(successResponse(Json.toJson(list), "Getting Variant column list successfully"))
+              }, Duration.Inf)
+          } else {
+            BadRequest("Not found sample id")
+          }
+      }, Duration.Inf)
   }
 
   def getVariantColumn: Action[AnyContent] = Action.async {
@@ -65,6 +86,7 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
 
   def getByTab = Action { request =>
     var columns: List[VariantColumnModel] = List[VariantColumnModel]()
+    var sampleId = None: Option[String]
     request.body.asJson.map { json =>
       json.asOpt[FilterDTO].map { elem =>
         Await.result(
@@ -72,60 +94,75 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
             res =>
               columns = res
           }, Duration.Inf)
-
-        val res = jdbcRepository.getByFields(columns, elem)
-        Ok(successResponse(Json.toJson(res), "data from jdbc fetched"))
-
-      }.getOrElse {
-        BadRequest("Missing parameter")
-      }
-    }.getOrElse {
-      BadRequest("Expecting Json data")
-    }
-
-  }
-
-  def logIn = Action { request =>
-    request.body.asJson.map { json =>
-      json.asOpt[AuthenticationDTO].map { elem =>
         Await.result(
-          userRepository.authenticate(elem).map {
-            res =>
-              Ok(successResponse(Json.toJson(res.isDefined), ""))
-          }, Duration.Inf)
-
-      }.getOrElse {
-        BadRequest("Missing parameter")
-      }
-    }.getOrElse {
-      BadRequest("Expecting Json data")
-    }
-  }
-
-  def getSamplesList = Action { request =>
-    request.body.asJson.map { json =>
-      json.asOpt[AuthenticationDTO].map { elem =>
-        Await.result(
-          userRepository.authenticate(elem).map {
-            user =>
-              if (user.isDefined) {
-                Await.result(
-                  privilegeRepository.getAll(user.orNull).map {
-                    list =>
-                      val response = list.map(item => SampleMetadataModel(item._1, item._2))
-                      Ok(successResponse(Json.toJson(response), "list of available samples"))
-                  }, Duration.Inf)
+          SampleMetadataRepository.getByFakeId(elem.sampleFakeId).map {
+            sample =>
+              if (sample.isDefined) {
+                sampleId = Some(sample.get.sample_id)
               } else {
-                Ok(successResponse(Json.toJson("null"), "no data"))
+                BadRequest("Sample not found")
               }
-          }, Duration.Inf)
+          }, Duration.Inf
+        )
 
+        val res = jdbcRepository.getByFields(columns, elem, sampleId.get)
+        Ok(successResponse(Json.toJson(res), "data from jdbc fetched"))
       }.getOrElse {
         BadRequest("Missing parameter")
       }
     }.getOrElse {
       BadRequest("Expecting Json data")
     }
+
+  }
+
+  def logIn = Action {
+    request =>
+      request.body.asJson.map {
+        json =>
+          json.asOpt[AuthenticationDTO].map {
+            elem =>
+              Await.result(
+                userRepository.authenticate(elem).map {
+                  res =>
+                    Ok(successResponse(Json.toJson(res.isDefined), ""))
+                }, Duration.Inf)
+
+          }.getOrElse {
+            BadRequest("Missing parameter")
+          }
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
+  }
+
+  def getSamplesList = Action {
+    request =>
+      request.body.asJson.map {
+        json =>
+          json.asOpt[AuthenticationDTO].map {
+            elem =>
+              Await.result(
+                userRepository.authenticate(elem).map {
+                  user =>
+                    if (user.isDefined) {
+                      Await.result(
+                        privilegeRepository.getAll(user.orNull).map {
+                          list =>
+                            val response = list.map(item => SampleMetadataModel(item._1, item._2))
+                            Ok(successResponse(Json.toJson(response), "list of available samples"))
+                        }, Duration.Inf)
+                    } else {
+                      Ok(successResponse(Json.toJson("null"), "no data"))
+                    }
+                }, Duration.Inf)
+
+          }.getOrElse {
+            BadRequest("Missing parameter")
+          }
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
   }
 
 }

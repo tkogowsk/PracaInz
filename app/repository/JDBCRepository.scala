@@ -77,13 +77,14 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database) {
     list
   }
 
-  def getByFields(columns: List[VariantColumnModel], filter: FilterDTO): ListBuffer[DataRowDTO] = {
+  def getByFields(columns: List[VariantColumnModel], filter: FilterDTO, sampleFakeId: String): ListBuffer[DataRowDTO] = {
     val list = ListBuffer[DataRowDTO]()
     val conn = db.getConnection()
     val queryBeginning = "SELECT "
+    val transcriptTableSampleIdColumnName = ConfigService.getTranscriptTableSampleIdColumnName
     val queryEnd = "from transcript"
     val queryColumns = getColumnQueryPart(columns)
-    val queryWhere = getWhereQueryPart(columns, filter)
+    val queryWhere = addSampleIdCondition(getWhereQueryPart(columns, filter), transcriptTableSampleIdColumnName, sampleFakeId)
 
     val query = queryBeginning + queryColumns + queryEnd + queryWhere
 
@@ -141,6 +142,9 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database) {
     query
   }
 
+  def addSampleIdCondition(query: String, transcriptTableSampleIdColumnName: String, sampleFakeId: String): String = {
+    query + " AND \"" + transcriptTableSampleIdColumnName + "\" = '" + sampleFakeId + "'"
+  }
   def filterColumnName(columns: List[VariantColumnModel], columnID: Int): String = {
     columns.find(elem => elem.id == columnID).get.column_name
   }
