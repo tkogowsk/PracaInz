@@ -26,4 +26,8 @@ object SampleMetadataRepository {
     sampleMetadata.to[List].result
   }
 
+  def getByFakeId(fake_id: Int): Future[Option[SampleMetadataModel]] = db.run {
+    sampleMetadata.filter(_.fake_id === fake_id).result.headOption
+  }
+
 }

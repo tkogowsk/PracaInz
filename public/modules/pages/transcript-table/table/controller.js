@@ -70,7 +70,10 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         };
 
         function getAll() {
-            Transcript.getAllJDBC(function (response) {
+            Transcript.getTranscriptData({
+                userName: $rootScope.userName,
+                sample_fake_id: $stateParams.fakeId
+            }, function (response) {
                 prepareTableData(response.data);
                 $rootScope.changeSpinner(false);
             });

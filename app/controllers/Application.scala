@@ -8,7 +8,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import repository._
 import utils.JsonFormat._
-import utils.{AuthenticationDTO, Constants, FilterDTO, TabFieldFilterDTO}
+import utils._
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -42,7 +42,7 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
     }
   }
 
-  def getAllJDBC: Action[AnyContent] = Action { response =>
+  def getTranscriptData(sample_fake_id: Int, userName: String): Action[AnyContent] = Action { request =>
     var columns: List[VariantColumnModel] = List[VariantColumnModel]()
     Await.result(
       variantColumnRepository.getAll.map {
@@ -50,9 +50,18 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
           columns = res
       }, Duration.Inf)
 
-    val res = jdbcRepository.getAll(columns)
-    Ok(successResponse(Json.toJson(res), "data from jdbc fetched"))
+    Await.result(
+      SampleMetadataRepository.getByFakeId(sample_fake_id).map {
+        sample =>
+          if (sample.isDefined) {
+            val response = jdbcRepository.getBySampleId(columns, sample.get.sample_id)
+            Ok(successResponse(Json.toJson(response), "list of  transcripts"))
+          } else {
+            BadRequest("Not found sample id")
+          }
+      }, Duration.Inf)
   }
+
 
   def getByTab = Action { request =>
     var columns: List[VariantColumnModel] = List[VariantColumnModel]()

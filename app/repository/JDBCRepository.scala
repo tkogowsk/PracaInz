@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import models.VariantColumnModel
 import play.api.db.{Database, NamedDatabase}
-import utils.{DataCellDTO, DataRowDTO, FilterDTO, Relation}
+import utils._
 
 import scala.collection.mutable.ListBuffer
 
@@ -15,6 +15,40 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database) {
     val conn = db.getConnection()
     val queryBeginning = "SELECT "
     val queryEnd = "from transcript"
+    var queryColumns = ""
+
+    columns.foreach(elem =>
+      queryColumns += ",\"" + elem.column_name + "\" "
+    )
+    queryColumns = queryColumns.substring(1)
+
+    val query = queryBeginning + queryColumns + queryEnd
+
+    try {
+      val stmt = conn.createStatement
+      val rs = stmt.executeQuery(query)
+
+      while (rs.next()) {
+        val list2 = ListBuffer[DataCellDTO]()
+        columns.foreach(elem =>
+          list2 += DataCellDTO(elem.column_name, rs.getString(elem.column_name))
+        )
+        list += DataRowDTO(list2)
+      }
+
+    } finally {
+      conn.close()
+    }
+
+    list
+  }
+
+  def getBySampleId(columns: List[VariantColumnModel], sampleId: String): ListBuffer[DataRowDTO] = {
+    val list = ListBuffer[DataRowDTO]()
+    val conn = db.getConnection()
+    val queryBeginning = "SELECT "
+    val transcriptTableSampleIdColumnName = ConfigService.getTranscriptTableSampleIdColumnName
+    val queryEnd = "from transcript where \"" + transcriptTableSampleIdColumnName + "\" = '" + sampleId + "'"
     var queryColumns = ""
 
     columns.foreach(elem =>
