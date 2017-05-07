@@ -1,18 +1,18 @@
 angular.module('filter', []);
-angular.module('filter').controller('FilterController', ['$scope', '$rootScope', '$state', '$log', 'Form', 'Fields', 'LocalStorage',
-    function ($scope, $rootScope, $state, $log, Form, Fields, LocalStorage) {
+angular.module('filter').controller('FilterController', ['$scope', '$rootScope', '$state', '$log', 'Fields', 'LocalStorage',
+    function ($scope, $rootScope, $state, $log, Fields, LocalStorage) {
 
         $scope.groupedData = [];
         $scope.userId = 1;
         $scope.activeTabName = null;
 
         function init() {
-            if (!$rootScope.authenticated) {
+            /*         if (!$rootScope.authenticated) {
                 $state.go('login');
-            } else {
+             } else {*/
                 getFields();
                 setColumnList();
-            }
+            //       }
         }
 
         function setActiveTab(newName) {
@@ -34,48 +34,10 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             $scope.activeFormName = null;
         };
 
-        $scope.addNewFilter = function (name) {
-            let fields = [];
-            if ($scope.userForms.findIndex(form => form.name === name) >= 0) {
-                return
-            }
-
-            $scope.fields.forEach((elem) => {
-                fields.push({
-                    value: '',
-                    fieldFk: elem.id,
-                    userId: $scope.userId,
-                    name: name
-                })
-            });
-            let newObject = {name: name, fields: fields};
-            $scope.userForms.push(newObject);
-            setActiveFormName(name);
-        };
 
         $scope.filterTabNameClicked = function (name) {
             setActiveTab(name);
         };
-
-        /*    $scope.saveForm = function (name) {
-         let form = getFormByName(name);
-         Form.saveForm(form, (response) => {
-         $scope.$emit(filterByNameEvent + "Emit", name)
-         })
-         };
-
-         $scope.editForm = function (name) {
-         let form = getFormByName(name);
-         Form.editForm(form, (response) => {
-         $scope.$emit(filterByNameEvent + "Emit", name)
-         })
-         };
-
-         function getFormByName(name) {
-         return $scope.userForms.find((elem) => {
-         return elem.name === name
-         });
-         }*/
 
         function getFields() {
             Fields.getFields((response) => {
@@ -117,5 +79,9 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             return "";
         };
 
+        /* $scope.isActive = function (tabName) {
+         return viewLocation === $location.path();
+         };
+         */
         init();
     }]);

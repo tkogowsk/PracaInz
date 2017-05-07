@@ -16,7 +16,7 @@ import scala.concurrent.duration.Duration
 
 
 class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository: VariantColumnRepository,
-                            userRepository: UserRepository,
+                            userRepository: UserRepository, sampleMetadataRepository: SampleMetadataRepository, privilegeRepository: PrivilegeRepository,
                             tabFieldFilterRepository: TabFieldFilterRepository, jdbcRepository: JDBCRepository) extends Controller {
 
   def index = Action {
@@ -106,7 +106,7 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
                       Ok(successResponse(Json.toJson(res.isDefined), ""))
                   }, Duration.Inf)
               } else {
-                Ok(successResponse(Json.toJson(null), "no data"))
+                Ok(successResponse(Json.toJson("null"), "no data"))
               }
           }, Duration.Inf)
 

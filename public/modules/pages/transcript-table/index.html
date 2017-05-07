@@ -5,7 +5,8 @@
             <div class="filter-tabs">
                 <div ng-repeat="tab in groupedData" class="filter-tab">
 
-                    <div class="filter-tab-name" ng-click="filterTabNameClicked(tab.tabName); $event.stopPropagation()">
+                    <div class="filter-tab-name" ng-click="filterTabNameClicked(tab.tabName); $event.stopPropagation()"
+                         ng-class="{ active: (tab.tabName == activeTabName)}">
                         {{tab.tabName}}
                     </div>
 

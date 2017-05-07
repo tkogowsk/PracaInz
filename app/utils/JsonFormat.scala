@@ -8,6 +8,8 @@ object JsonFormat {
   implicit val variantColumnModelFormat = Jsonx.formatCaseClass[VariantColumnModel]
   implicit val fieldModelFormat = Jsonx.formatCaseClass[FieldModel]
   implicit val filterModelFormat = Jsonx.formatCaseClass[FilterModel]
+  implicit val sampleMetadataModelFormat = Jsonx.formatCaseClass[SampleMetadataModel]
+  implicit val privilegeModelFormat = Jsonx.formatCaseClass[PrivilegeModel]
   implicit val fieldDTOFormat = Jsonx.formatCaseClass[FieldDTO]
   implicit val filterDTOFormat = Jsonx.formatCaseClass[FilterDTO]
   implicit val authenticationDTOFormat = Jsonx.formatCaseClass[AuthenticationDTO]

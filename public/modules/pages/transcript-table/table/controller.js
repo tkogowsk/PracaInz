@@ -10,12 +10,12 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         $scope.currentPage = 1;
 
         function init() {
-            if (!$rootScope.authenticated) {
+            /*            if (!$rootScope.authenticated) {
                 $state.go('login');
-            } else {
+             } else {*/
                 getAll();
                 prepareHeaderColumns();
-            }
+            //          }
         }
 
         $scope.$on(filterTabEvent + 'Broadcast', function (event, data) {

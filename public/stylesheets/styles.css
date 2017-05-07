@@ -107,6 +107,10 @@
         border-radius: 9%;
         background: #888888;
         padding: 10px; }
+
+.filter-section .filter-tabs .filter-tab .filter-tab-name.active {
+    background-color: #3bd3aa;
+}
         .filter-section .filter-tabs .filter-tab .filter-tab-name:hover {
           cursor: pointer; }
       .filter-section .filter-tabs .filter-tab .wrapper {

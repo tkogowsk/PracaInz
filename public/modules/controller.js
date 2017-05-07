@@ -4,16 +4,16 @@ angular.module('Controllers').controller('MainPageController', ['$scope', '$root
     function ($scope, $rootScope, $log, $state, VariantColumn, LocalStorage) {
         $rootScope.showSpinner = true;
 
-        $rootScope.changeSpinner = function(spinnerIndicator) {
+        $rootScope.changeSpinner = function (spinnerIndicator) {
             $scope.showSpinner = spinnerIndicator;
         };
 
         function init() {
-            if (!$rootScope.authenticated) {
+            /*   if (!$rootScope.authenticated) {
                 $state.go('login');
-            } else {
+             } else {*/
                 getColumnsList();
-            }
+            // }
         }
 
         function getColumnsList() {
@@ -45,3 +45,10 @@ angular.module('Controllers').controller('MainPageController', ['$scope', '$root
         init.bind(this)();
 
     }]);
+angular.module('Controllers').controller('HeaderController', ['$scope', '$location',
+    function ($scope, $location) {
+        $scope.isActive = function (viewLocation) {
+            return viewLocation === $location.path();
+        };
+    }
+]);
