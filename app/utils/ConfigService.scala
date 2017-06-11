@@ -8,4 +8,9 @@ object ConfigService {
     val value = ConfigFactory.load().getString("utils.transcriptTableSampleIdColumnName")
     value
   }
+
+  def getTranscriptTableName: String = {
+    val value = ConfigFactory.load().getString("utils.transcriptTableName")
+    value
+  }
 }
