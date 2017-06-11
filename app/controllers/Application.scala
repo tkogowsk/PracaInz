@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import models.{SampleMetadataModel, VariantColumnModel}
+import models.SampleMetadataModel
 import play.api.libs.json.Json._
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
@@ -64,18 +64,11 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
   }
 
   def getTranscriptData(sample_fake_id: Int, userName: String): Action[AnyContent] = Action { request =>
-    var columns: List[VariantColumnModel] = List[VariantColumnModel]()
-    Await.result(
-      variantColumnRepository.getAll.map {
-        res =>
-          columns = res
-      }, Duration.Inf)
-
     Await.result(
       SampleMetadataRepository.getByFakeId(sample_fake_id).map {
         sample =>
           if (sample.isDefined) {
-            val response = jdbcRepository.getBySampleId(columns, sample.get.sample_id)
+            val response = jdbcRepository.getBySampleId(sample.get.sample_id)
             Ok(successResponse(Json.toJson(response), "list of  transcripts"))
           } else {
             BadRequest("Not found sample id")
@@ -85,15 +78,9 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
 
 
   def getByTab = Action { request =>
-    var columns: List[VariantColumnModel] = List[VariantColumnModel]()
     var sampleId = None: Option[String]
     request.body.asJson.map { json =>
       json.asOpt[FilterDTO].map { elem =>
-        Await.result(
-          variantColumnRepository.getAll.map {
-            res =>
-              columns = res
-          }, Duration.Inf)
         Await.result(
           SampleMetadataRepository.getByFakeId(elem.sampleFakeId).map {
             sample =>
@@ -102,10 +89,9 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
               } else {
                 BadRequest("Sample not found")
               }
-          }, Duration.Inf
-        )
+          }, Duration.Inf)
 
-        val res = jdbcRepository.getByFields(columns, elem, sampleId.get)
+        val res = jdbcRepository.getByFields(elem, sampleId.get)
         Ok(successResponse(Json.toJson(res), "data from jdbc fetched"))
       }.getOrElse {
         BadRequest("Missing parameter")
@@ -157,6 +143,22 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
                     }
                 }, Duration.Inf)
 
+          }.getOrElse {
+            BadRequest("Missing parameter")
+          }
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
+  }
+
+  def count = Action {
+    request =>
+      request.body.asJson.map {
+        json =>
+          json.asOpt[FilteringCountersDTO].map {
+            elem =>
+              val res = jdbcRepository.count(elem)
+              Ok(successResponse(Json.toJson(res), ""))
           }.getOrElse {
             BadRequest("Missing parameter")
           }

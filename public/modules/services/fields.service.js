@@ -6,6 +6,7 @@ angular.module('Repositories').factory('Fields', function ($resource) {
                 sample_fake_id: '@sample_fake_id',
                 userName: '@userName'
             }
-        }
+        },
+        count: {method: 'POST', url: '/count', isArray: true}
     });
 });

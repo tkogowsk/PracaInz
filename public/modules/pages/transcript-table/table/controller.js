@@ -41,7 +41,6 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
             payload["filters"] = list;
             payload.sampleFakeId = parseInt($stateParams.fakeId);
             payload.userName = $rootScope.userName;
-            console.log(payload);
             $rootScope.changeSpinner(false);
 
             Transcript.getByTab(payload, (response) => {

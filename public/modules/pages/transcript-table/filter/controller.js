@@ -72,6 +72,31 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             $scope.$emit(filterTabEvent + "Emit", tab);
         };
 
+        $scope.count = function (tab) {
+            var payload = {};
+            var list = [];
+            _.forEach(tab.items, function (filters) {
+                console.log(filters)
+                _.forEach(filters.items, function (field) {
+                    console.log(field)
+                    list.push({
+                        filterName: field.filterName,
+                        relation: field.relation,
+                        value: field.value,
+                        variant_column_id: field.variant_column_id
+                    })
+                })
+            });
+
+            payload["counters"] = list;
+            payload.tabName = tab.tabName;
+            payload.sampleFakeId = parseInt($stateParams.fakeId);
+            console.log(payload)
+            Fields.count(payload, (response) => {
+                console.log(response)
+            })
+        };
+
         $scope.getColumnName = function (columnId) {
             if ($scope.columnsList) {
                 var elem = _.find($scope.columnsList, function (elem) {
@@ -81,10 +106,5 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             }
             return "";
         };
-
-        /* $scope.isActive = function (tabName) {
-         return viewLocation === $location.path();
-         };
-         */
         init();
     }]);
