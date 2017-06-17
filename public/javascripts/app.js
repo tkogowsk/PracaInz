@@ -23,8 +23,8 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
     });
 });
 
-myApp.config(['$qProvider', function ($qProvider) {
+/*myApp.config(['$qProvider', function ($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
 
-}]);
+ }]);*/
 

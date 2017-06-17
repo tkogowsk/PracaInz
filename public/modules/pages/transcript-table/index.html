@@ -88,6 +88,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div ng-if="filter.countValue">
+                            This selection reduce list length to {{filter.countValue}}
+                        </div>
                     </div>
                     <button type="button" class="btn btn-primary btn-sm"
                             ng-click="filter(tab)">Filter

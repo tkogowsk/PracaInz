@@ -73,28 +73,41 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
         };
 
         $scope.count = function (tab) {
+            $rootScope.changeSpinner(true);
             var payload = {};
             var list = [];
             _.forEach(tab.items, function (filters) {
-                console.log(filters)
                 _.forEach(filters.items, function (field) {
-                    console.log(field)
-                    list.push({
-                        filterName: field.filterName,
-                        relation: field.relation,
-                        value: field.value,
-                        variant_column_id: field.variant_column_id
-                    })
+                    if (field.value) {
+                        list.push({
+                            filterName: field.filterName,
+                            relation: field.relation,
+                            value: field.value,
+                            variant_column_id: field.variant_column_id
+                        })
+                    }
                 })
             });
 
             payload["counters"] = list;
             payload.tabName = tab.tabName;
             payload.sampleFakeId = parseInt($stateParams.fakeId);
-            console.log(payload)
             Fields.count(payload, (response) => {
-                console.log(response)
-            })
+                for (var i = 0; i < $scope.groupedData.length; ++i) {
+                    if ($scope.groupedData[i].tabName === $scope.activeTabName) {
+                        $scope.groupedData[i].items.forEach(function (filter) {
+                            filter.countValue = null;
+                            response.data.forEach(function (elem) {
+                                if (elem.filterName === filter.filterName) {
+                                    filter.countValue = elem.value
+                                }
+                            })
+                        })
+                    }
+                }
+
+                $rootScope.changeSpinner(false);
+            });
         };
 
         $scope.getColumnName = function (columnId) {

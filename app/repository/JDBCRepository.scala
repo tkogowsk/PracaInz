@@ -8,8 +8,8 @@ import utils._
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, _}
 import scala.concurrent.duration.Duration
 
 class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantColumnRepository: VariantColumnRepository) {
@@ -172,11 +172,11 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     columns.find(elem => elem.id == columnID).get.column_name
   }
 
+
   def count(dto: FilteringCountersDTO) = {
     val columns: List[VariantColumnModel] = this.getColumns
     var response = ListBuffer[FilteringCountersDTOResponse]()
-    val map: mutable.Map[String, ListBuffer[FieldDTO]] = new mutable.HashMap
-
+    val mapOfFilters: mutable.Map[String, ListBuffer[FieldDTO]] = new mutable.LinkedHashMap
     var sampleId = None: Option[String]
     Await.result(
       SampleMetadataRepository.getByFakeId(dto.sampleFakeId).map {
@@ -190,20 +190,28 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
 
     dto.counters.foreach {
       elem => {
-        var list: Option[ListBuffer[FieldDTO]] = map.get(elem.filterName)
+        var list: Option[ListBuffer[FieldDTO]] = mapOfFilters.get(elem.filterName)
         if (list.isEmpty) {
           list = Option(new ListBuffer[FieldDTO])
-          map.put(elem.filterName, list.get)
+          mapOfFilters.put(elem.filterName, list.get)
         }
         list.get += FieldDTO(elem.relation, elem.value, elem.variant_column_id)
       }
     }
+    val setOfFilterNames = mapOfFilters.keys.toArray
+    var iterator: Int = 0
+    val filters = setOfFilterNames.slice(0, iterator)
 
-    for ((key, values) <- map) {
+    for (i <- 0 to setOfFilterNames.length) {
+      var names = setOfFilterNames.slice(0, i + 1)
+      var fields: ListBuffer[FieldDTO] = new ListBuffer
+      for (name <- names) {
+        fields ++= mapOfFilters(name)
+      }
       val queryBeginning = "SELECT COUNT(1) AS count "
       val transcriptTableSampleIdColumnName = ConfigService.getTranscriptTableSampleIdColumnName
       val queryEnd = "from " + ConfigService.getTranscriptTableName
-      val queryWhere = addSampleIdCondition(getWhereQueryPart(columns, values), transcriptTableSampleIdColumnName, sampleId.get)
+      val queryWhere = addSampleIdCondition(getWhereQueryPart(columns, fields), transcriptTableSampleIdColumnName, sampleId.get)
 
       val query = queryBeginning + queryEnd + queryWhere
       val conn = db.getConnection()
@@ -212,8 +220,8 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
         val rs = stmt.executeQuery(query)
 
         while (rs.next()) {
-          var count = rs.getInt("count");
-          response += FilteringCountersDTOResponse(key, count)
+          var count = rs.getInt("count")
+          response += FilteringCountersDTOResponse(setOfFilterNames(i), count)
         }
 
       } catch {
@@ -221,6 +229,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
       } finally {
         conn.close()
       }
+
     }
 
     response

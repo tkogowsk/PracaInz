@@ -7,6 +7,6 @@ angular.module('Repositories').factory('Fields', function ($resource) {
                 userName: '@userName'
             }
         },
-        count: {method: 'POST', url: '/count', isArray: true}
+        count: {method: 'POST', url: '/count', isArray: false}
     });
 });
