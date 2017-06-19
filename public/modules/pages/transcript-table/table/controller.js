@@ -8,6 +8,7 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         $scope.tableLimit = 10;
         $scope.tableBegin = 0;
         $scope.currentPage = 1;
+        $scope.search = {};
 
         function init() {
             /*            if (!$rootScope.authenticated) {
@@ -97,6 +98,7 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                                     variant_column_id: currentItem.id,
                                     column_order: currentItem.id,
                                     fe_name: currentItem.fe_name,
+                                    column_name: currentItem.column_name,
                                     //TODO
                                     user_id: 1
                                 })

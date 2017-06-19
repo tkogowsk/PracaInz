@@ -29,7 +29,7 @@
                                         <p>{{getColumnName(field.variant_column_id)}} equals</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select data-ng-model="field.value"
-                                                    ng-options="o  as o for o in field.options"></select>
+                                                    ng-options="o as o for o in field.options"></select>
                                         </div>
 
                                         <div ng-if="!(field.options) || field.options.length === 0">
@@ -110,11 +110,12 @@
                        <tr>
                            <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
                                {{header.fe_name}}
+                               <input ng-model="search[header.column_name]"/>
                            </th>
                        </tr>
                        </thead>
                        <tbody>
-                       <tr ng-repeat="transcript in transcriptData | limitTo : tableLimit : tableBegin track by $index">
+                       <tr ng-repeat="transcript in transcriptData | filter:search track by $index">
                            <td ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
                                {{transcript[header.fe_name.toString()]}}
                            </td>
