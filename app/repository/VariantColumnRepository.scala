@@ -5,7 +5,9 @@ import javax.inject.Singleton
 import models.VariantColumnModel
 import slick.driver.PostgresDriver.api._
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
+import scala.concurrent.duration.Duration
 
 @Singleton
 class VariantColumnRepository {
@@ -32,4 +34,18 @@ private val db = Database.forConfig("postgresConf")
     variant_columns.to[List].result
   }
 
+  def getIdByFName(feName: String): Option[Int] = {
+    var id = None: Option[Int]
+    Await.result({
+      db.run {
+        variant_columns.filter(_.fe_name === feName).result.headOption
+      }
+        .map { value =>
+          if (value.isDefined) {
+            id = Option(value.get.id)
+          }
+        }
+    }, Duration.Inf)
+    id
+  }
 }

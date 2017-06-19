@@ -4,7 +4,7 @@ case class FieldModel
 (
   id: Int,
   variant_column_id: Int,
-  options: Option[List[String]],
+  options: Option[String],
   relation: String
 )
 

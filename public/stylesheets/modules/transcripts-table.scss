@@ -1,8 +1,29 @@
 .transcript-table {
   padding-left: 40px;
+  th {
+    min-width: 85px;
+  }
   .table-wrapper {
     overflow-x: auto;
     height: 90vh;
+  }
+  .search {
+    .glyphicon-search {
+      width: 10%;
+    }
+    input {
+      /* visibility: hidden;
+       opacity: 0;
+       transition: visibility 0s, opacity 0.5s linear;*/
+      width: 70%;
+      margin-left: 10%;
+    }
+    /*    &:hover {
+          input {
+            visibility: visible;
+            opacity: 1;
+          }
+        }*/
   }
 }
 .transcript-table-pagination{

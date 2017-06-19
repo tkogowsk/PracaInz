@@ -110,12 +110,20 @@
                        <tr>
                            <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
                                {{header.fe_name}}
-                               <input ng-model="search[header.column_name]"/>
+
+                           </th>
+                       </tr>
+                       <tr>
+                           <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
+                               <div class="search">
+                                   <div class="glyphicon glyphicon-search"></div>
+                                   <input ng-model="search[header.column_name]"/>
+                               </div>
                            </th>
                        </tr>
                        </thead>
                        <tbody>
-                       <tr ng-repeat="transcript in transcriptData | filter:search track by $index">
+                       <tr ng-repeat="transcript in transcriptData | limitTo : tableLimit : tableBegin | filter : search track by $index">
                            <td ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
                                {{transcript[header.fe_name.toString()]}}
                            </td>

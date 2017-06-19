@@ -1,32 +1,64 @@
 package utils.services
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
-import repository.{FieldRepository, FilterRepository, TabRepository}
+import repository._
 import utils.MyPostgresDriver.api._
 import utils.dtos.UploadRowDTO
 
 import scala.collection.mutable.ArrayBuffer
 
 @Singleton
-class AddFilterService {
+class AddFilterService @Inject()(variantColumnRepository: VariantColumnRepository, tabFieldFilterRepository: TabFieldFilterRepository) {
   private val db = Database.forConfig("postgresConf")
 
   var tab = TabRepository.tab
   var field = FieldRepository.field
   var filter = FilterRepository.filter
 
+
   def save(rows: ArrayBuffer[UploadRowDTO]): Unit = {
     rows.foreach { row =>
-      var tabID = TabRepository.getIDByName(row.tabName)
-      if (tabID.isDefined) {
+      var tabID = addTab(row.tabName)
+      var filterID = addFilter(row.filterName)
+      var fieldID = addField(row.variantColumnName, row.options, row.relation)
+      var defaultValue: Option[String] = None
+      if (row.defaultValue.length > 0) {
+        defaultValue = Some(row.defaultValue)
       }
-      else {
-        TabRepository.save(row.tabName)
-        tabID = TabRepository.getIDByName(row.tabName)
-
-      }
+      tabFieldFilterRepository.save(tabID, fieldID, filterID, defaultValue)
     }
+  }
+
+  def addTab(tabName: String): Int = {
+    var tabID = TabRepository.getIDByName(tabName)
+    if (tabID.isEmpty) {
+      TabRepository.save(tabName)
+      tabID = TabRepository.getIDByName(tabName)
+    }
+    tabID.get
+  }
+
+  def addFilter(tabName: String): Int = {
+    var filterID = FilterRepository.getIDByName(tabName)
+    if (filterID.isEmpty) {
+      FilterRepository.save(tabName, true)
+      filterID = FilterRepository.getIDByName(tabName)
+    }
+    filterID.get
+  }
+
+  def addField(variantColumnName: String, options: String, relation: String): Int = {
+    var variantColumnId = variantColumnRepository.getIdByFName(variantColumnName)
+    if (variantColumnId.isEmpty) {
+      throw new IllegalArgumentException()
+    }
+    var fieldID = FieldRepository.getIDByFields(variantColumnId.get, options, relation)
+    if (fieldID.isEmpty) {
+      FieldRepository.save(variantColumnId.get, options, relation)
+      fieldID = FieldRepository.getIDByFields(variantColumnId.get, options, relation)
+    }
+    fieldID.get
   }
 
 }

@@ -1,12 +1,12 @@
 package repository
 
-import javax.inject.Singleton
 
 import models.FieldModel
-
 import utils.MyPostgresDriver.api._
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
+import scala.concurrent.duration.Duration
 
 object FieldRepository {
 
@@ -20,7 +20,7 @@ object FieldRepository {
 
     def variant_column_id = column[Int]("variant_column_id")
 
-    def options = column[Option[List[String]]]("options")
+    def options = column[Option[String]]("options")
 
     def relation = column[String]("relation")
 
@@ -32,4 +32,36 @@ object FieldRepository {
     field.to[List].result
   }
 
+
+  def save(variantColumnId: Int, options: String, relation: String) = {
+    Await.result({
+      db.run(
+        sqlu"""INSERT INTO "field"("variant_column_id", "options", "relation")
+              VALUES (${variantColumnId},${options},${relation})""")
+    }, Duration.Inf)
+  }
+
+  def getIDByFields(variantColumnId: Int, options: String, relation: String): Option[Int] = {
+    var id = None: Option[Int]
+    Await.result({
+      db.run {
+        field.filter(field => field.variant_column_id === variantColumnId && field.options === options && field.relation === relation).result.headOption
+      }
+        .map { value =>
+          if (value.isDefined) {
+            id = Option(value.get.id)
+          }
+        }
+    }, Duration.Inf)
+    id
+  }
+
+  /*  def transformOptionsToList(options: String) : Option[List[String]] = {
+      var optionsList: Option[List[String]] = None[List[String]]
+      if(options.length > 0 ){
+        optionsList = Option(options.split(",").map(_.trim).toList)
+      }
+      println(optionsList)
+      optionsList
+    }*/
 }

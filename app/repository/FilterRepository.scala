@@ -1,12 +1,11 @@
 package repository
 
-import scala.concurrent.Future
-import javax.inject.Singleton
-
-import models.{FieldModel, FilterModel}
+import models.FilterModel
 import utils.MyPostgresDriver.api._
 
-import scala.concurrent._
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Future, _}
 
 object FilterRepository {
 
@@ -28,6 +27,29 @@ object FilterRepository {
 
   def getAll: Future[List[FilterModel]] = db.run {
     filter.to[List].result
+  }
+
+  def getIDByName(filterName: String): Option[Int] = {
+    var id = None: Option[Int]
+    Await.result({
+      db.run {
+        filter.filter(_.name === filterName).result.headOption
+      }
+        .map { value =>
+          if (value.isDefined) {
+            id = Option(value.get.id)
+          }
+        }
+    }, Duration.Inf)
+    id
+  }
+
+  def save(filterName: String, is_global: Boolean) = {
+    Await.result({
+      db.run(
+        sqlu"""INSERT INTO "filter"("name", "is_global")
+              VALUES (${filterName}, ${is_global})""")
+    }, Duration.Inf)
   }
 
 }

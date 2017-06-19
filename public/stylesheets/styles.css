@@ -2,9 +2,34 @@
     padding-left: 40px;
 }
 
+.transcript-table th {
+    min-width: 85px;
+}
+
 .transcript-table .table-wrapper {
     overflow-x: auto;
     height: 90vh;
+}
+
+.transcript-table .search {
+    /*    &:hover {
+          input {
+            visibility: visible;
+            opacity: 1;
+          }
+        }*/
+}
+
+.transcript-table .search .glyphicon-search {
+    width: 10%;
+}
+
+.transcript-table .search input {
+    /* visibility: hidden;
+     opacity: 0;
+     transition: visibility 0s, opacity 0.5s linear;*/
+    width: 70%;
+    margin-left: 10%;
 }
 
 .transcript-table-pagination {

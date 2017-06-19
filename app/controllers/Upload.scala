@@ -49,12 +49,11 @@ class Upload @Inject()(webJarAssets: WebJarAssets, fieldsRepository: FieldsRepos
         for (row <- rowIterator) {
           var tabName = getCellString(row.getCell(0))
           var filterName = getCellString(row.getCell(1))
-          var fieldName = getCellString(row.getCell(2))
-          var variantColumnName = getCellString(row.getCell(3))
-          var relation = getCellString(row.getCell(4))
-          var defaultValue = getCellString(row.getCell(5))
-          var options = getCellString(row.getCell(6))
-          val field = new UploadRowDTO(tabName, filterName, fieldName, variantColumnName, relation, defaultValue, options)
+          var variantColumnName = getCellString(row.getCell(2))
+          var relation = getCellString(row.getCell(3))
+          var defaultValue = getCellString(row.getCell(4))
+          var options = getCellString(row.getCell(5))
+          val field = new UploadRowDTO(tabName, filterName, variantColumnName, relation, defaultValue, options)
           rows += field
         }
 
