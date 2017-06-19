@@ -9,6 +9,7 @@ import play.api.mvc._
 import repository._
 import utils.JsonFormat._
 import utils._
+import utils.dtos.{AuthenticationDTO, FilterDTO, FilteringCountersDTO, TabFieldFilterDTO}
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global

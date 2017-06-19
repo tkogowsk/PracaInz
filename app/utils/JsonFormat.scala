@@ -2,6 +2,7 @@ package utils
 
 import ai.x.play.json.Jsonx
 import models._
+import utils.dtos._
 object JsonFormat {
 
   implicit lazy val transcriptModelFormat = Jsonx.formatCaseClass[TranscriptModel]

@@ -1,4 +1,4 @@
-package utils
+package utils.dtos
 
 case class FieldDTO
 (

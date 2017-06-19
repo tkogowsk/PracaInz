@@ -3,8 +3,8 @@ package repository
 import javax.inject.Singleton
 
 import models.UserModel
-import utils.AuthenticationDTO
 import utils.MyPostgresDriver.api._
+import utils.dtos.AuthenticationDTO
 
 import scala.concurrent.Future
 

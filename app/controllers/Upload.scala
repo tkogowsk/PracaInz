@@ -6,13 +6,14 @@ import javax.inject.Inject
 import org.apache.poi.ss.usermodel.{Cell, DataFormatter}
 import play.api.mvc._
 import repository.FieldsRepository
-import utils.FieldSaveDTO
+import utils.dtos.UploadRowDTO
+import utils.services.AddFilterService
 
 import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
 
-class Upload @Inject()(webJarAssets: WebJarAssets, fieldsRepository: FieldsRepository) extends Controller {
+class Upload @Inject()(webJarAssets: WebJarAssets, fieldsRepository: FieldsRepository, addFilterService: AddFilterService) extends Controller {
 
   def index = Action {
     Ok(views.html.upload(webJarAssets))
@@ -26,17 +27,19 @@ class Upload @Inject()(webJarAssets: WebJarAssets, fieldsRepository: FieldsRepos
         import org.apache.poi.ss.usermodel.WorkbookFactory
         val wb = WorkbookFactory.create(file)
         val sheet = wb.getSheetAt(0)
-        val fields = ArrayBuffer[FieldSaveDTO]()
+        val rows = ArrayBuffer[UploadRowDTO]()
+
         def getCellString(cell: Cell) = {
-          cell.getCellType match {
-            case Cell.CELL_TYPE_NUMERIC =>
-              new DataFormatter().formatCellValue(cell)
-            case Cell.CELL_TYPE_STRING =>
-              cell.getStringCellValue
-            case Cell.CELL_TYPE_FORMULA =>
-              val evaluator = wb.getCreationHelper.createFormulaEvaluator()
-              new DataFormatter().formatCellValue(cell, evaluator)
-            case _ => " "
+          if (cell != null) {
+            cell.getCellType match {
+              case Cell.CELL_TYPE_NUMERIC =>
+                new DataFormatter().formatCellValue(cell)
+              case Cell.CELL_TYPE_STRING =>
+                cell.getStringCellValue
+              case _ => ""
+            }
+          } else {
+            ""
           }
         }
 
@@ -44,22 +47,21 @@ class Upload @Inject()(webJarAssets: WebJarAssets, fieldsRepository: FieldsRepos
         val rowIterator = sheet.rowIterator()
         rowIterator.next()
         for (row <- rowIterator) {
-
-          var columnName = row.getCell(0).toString
-          var feName = row.getCell(1).toString
-          var relation = row.getCell(2).toString
-          if (columnName.length > 0 && feName.length > 0 && relation.length > 0) {
-            val field = new FieldSaveDTO(
-              columnName = columnName,
-              feName = feName,
-              relation = relation)
-            fields += field
-          }
+          var tabName = getCellString(row.getCell(0))
+          var filterName = getCellString(row.getCell(1))
+          var fieldName = getCellString(row.getCell(2))
+          var variantColumnName = getCellString(row.getCell(3))
+          var relation = getCellString(row.getCell(4))
+          var defaultValue = getCellString(row.getCell(5))
+          var options = getCellString(row.getCell(6))
+          val field = new UploadRowDTO(tabName, filterName, fieldName, variantColumnName, relation, defaultValue, options)
+          rows += field
         }
 
-        if (fields.nonEmpty) {
-          //   fieldsRepository.save(fields)
+        if (rows.nonEmpty) {
+          addFilterService.save(rows)
         }
+
       }
       tmpFile.delete()
       Ok("File uploaded")

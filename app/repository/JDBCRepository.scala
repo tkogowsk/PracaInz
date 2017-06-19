@@ -5,6 +5,8 @@ import javax.inject.Inject
 import models.VariantColumnModel
 import play.api.db.{Database, NamedDatabase}
 import utils._
+import utils.dtos._
+import utils.services.ConfigService
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer

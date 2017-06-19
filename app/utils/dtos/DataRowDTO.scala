@@ -1,4 +1,4 @@
-package utils
+package utils.dtos
 
 import scala.collection.mutable.ListBuffer
 
