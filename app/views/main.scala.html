@@ -15,7 +15,7 @@
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-resource.js"))'></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/ui-bootstrap-tpls-2.4.0.min.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/lodash.min.js")"></script>
-
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/dirPagination.js")"></script>
 
             <!-- Custom Javascripts -->
         <script type="text/javascript" src="@routes.Assets.versioned("modules/utils/events.js")"></script>
@@ -47,6 +47,7 @@
                     <li ng-class="{ active: isActive('/index')}"><a href="/index">Home</a></li>
                     <li ng-class="{ active: isActive('/list')}"><a href="/list">Transcript list</a></li>
                     <li ng-class="{ active: isActive('/login')}"><a href="/login">Login</a></li>
+                    <li><a href="upload" target="_self">Upload</a></li>
                 </ul>
                 <div style="float: right">
                     {{userName}}
@@ -56,14 +57,5 @@
         </nav>
 
         <div ui-view></div>
-        @* @helper.form(action = routes.Upload.upload, 'enctype -> "multipart/form-data") {
-
-        <input type="file" name="file" style="float: right;">
-
-        <p>
-        <input type="submit" style="float: right;">
-        </p>
-
-        }*@
     </body>
 </html>

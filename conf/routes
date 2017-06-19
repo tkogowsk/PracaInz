@@ -4,6 +4,8 @@
 
 # Home page
 GET         /                                                   controllers.Application.index
+GET         /upload                                             controllers.Upload.index
+
 # GET       /getByFilter/:filterName/:userId        controllers.Application.getByFilter(filterName: String, userId: Int)
 
 GET         /getFields/:sample_fake_id/:userName                controllers.Application.getFields(sample_fake_id: Int, userName: String)
@@ -11,7 +13,7 @@ GET         /getVariantColumn                                   controllers.Appl
 GET         /getTranscriptData/:sample_fake_id/:userName        controllers.Application.getTranscriptData(sample_fake_id: Int, userName: String)
 POST        /getSamplesList                                     controllers.Application.getSamplesList
 
-POST        /upload                                             controllers.Upload.upload
+POST        /uploadFilters                                      controllers.Upload.uploadFilters
 POST        /getByTab                                           controllers.Application.getByTab
 POST        /logIn                                              controllers.Application.logIn
 POST        /count                                              controllers.Application.count

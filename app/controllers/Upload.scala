@@ -3,7 +3,7 @@ package controllers
 import java.io.File
 import javax.inject.Inject
 
-import org.apache.poi.ss.usermodel.{Cell, DataFormatter, WorkbookFactory}
+import org.apache.poi.ss.usermodel.{Cell, DataFormatter}
 import play.api.mvc._
 import repository.FieldsRepository
 import utils.FieldSaveDTO
@@ -12,18 +12,21 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
 
-class Upload @Inject()(fieldsRepository: FieldsRepository) extends Controller {
+class Upload @Inject()(webJarAssets: WebJarAssets, fieldsRepository: FieldsRepository) extends Controller {
 
+  def index = Action {
+    Ok(views.html.upload(webJarAssets))
+  }
 
-  def upload = Action(parse.multipartFormData) { request =>
+  def uploadFilters = Action(parse.multipartFormData) { request =>
+    var tmpFile = new File("/tmp/tmpfile")
     try {
       request.body.file("file").map { picture =>
-        var tmpFile = new File("/tmp/2")
         val file = picture.ref.moveTo(tmpFile)
+        import org.apache.poi.ss.usermodel.WorkbookFactory
         val wb = WorkbookFactory.create(file)
         val sheet = wb.getSheetAt(0)
         val fields = ArrayBuffer[FieldSaveDTO]()
-
         def getCellString(cell: Cell) = {
           cell.getCellType match {
             case Cell.CELL_TYPE_NUMERIC =>
@@ -37,7 +40,7 @@ class Upload @Inject()(fieldsRepository: FieldsRepository) extends Controller {
           }
         }
 
-        //ommiting first row
+        //omitting first row
         val rowIterator = sheet.rowIterator()
         rowIterator.next()
         for (row <- rowIterator) {
@@ -57,12 +60,13 @@ class Upload @Inject()(fieldsRepository: FieldsRepository) extends Controller {
         if (fields.nonEmpty) {
           //   fieldsRepository.save(fields)
         }
-        tmpFile.delete()
       }
+      tmpFile.delete()
       Ok("File uploaded")
     }
     catch {
       case e: Exception => {
+        tmpFile.delete()
         Ok("Something went wrong\n Error: " + e.getMessage)
       }
     }
