@@ -1,9 +1,12 @@
 package repository
 
 import models.UserSmpTabModel
-
-import scala.concurrent.Future
 import utils.MyPostgresDriver.api._
+import utils.dtos.UserSampleTabDTO
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 object UserSmpTabRepository {
   private val db = Database.forConfig("postgresConf")
@@ -12,7 +15,7 @@ object UserSmpTabRepository {
 
   class UserSmpTabTableRepository(tag: Tag) extends Table[UserSmpTabModel](tag, "user_smp_tab") {
 
-    def smpl_id = column[String]("smpl_id", O.PrimaryKey)
+    def smpl_id = column[String]("sample_metadata_id", O.PrimaryKey)
 
     def user_id = column[Int]("user_id", O.PrimaryKey)
 
@@ -31,4 +34,19 @@ object UserSmpTabRepository {
   def getAll: Future[List[UserSmpTabModel]] = db.run {
     userSmpTab.to[List].result
   }
+
+  def save(userId: Int, dtos: List[UserSampleTabDTO]): Unit = {
+
+    dtos.foreach((dto: UserSampleTabDTO) => {
+      Await.result(
+        SampleMetadataRepository.getByFakeId(dto.sample_fake_id).map {
+          sample =>
+            if (sample.isDefined) {
+              val updateAction = userSmpTab.insertOrUpdate(UserSmpTabModel(sample.get.sample_id, userId, dto.tab_id, dto.field_id, dto.filter_id, dto.value))
+              db.run(updateAction)
+            }
+        }, Duration.Inf)
+    })
+  }
+
 }

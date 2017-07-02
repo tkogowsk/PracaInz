@@ -42,9 +42,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
         function setFieldValue(currentItem) {
             if (_.isNil(currentItem.value) === true && _.isNil(currentItem.default_value) === false) {
                 currentItem.value = currentItem.default_value;
-                return true;
             }
-            return false;
         }
 
         function getFields() {
@@ -54,9 +52,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
                 }, (response) => {
                 let data = _.chain(response.data)
                     .map(function (currentItem) {
-                        if (setFieldValue(currentItem)) {
-                            //   currentItem.value = currentItem.default_value;
-                        }
+                        setFieldValue(currentItem);
                         return currentItem;
                     }).value();
 
@@ -120,6 +116,31 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
                         })
                     }
                 }
+
+                $rootScope.changeSpinner(false);
+            });
+        };
+
+        $scope.saveUserFields = function (tab) {
+            //$rootScope.changeSpinner(true);
+            var payload = [];
+            _.forEach(tab.items, function (filters) {
+                _.forEach(filters.items, function (field) {
+                    payload.push({
+                        tab_id: field.tab_id,
+                        field_id: field.field_id,
+                        filter_id: field.filter_id,
+                        value: field.value || '',
+                        sample_fake_id: parseInt($stateParams.fakeId)
+                    })
+                })
+            });
+
+            Fields.save({
+                userName: $rootScope.userName,
+            }, payload, (response) => {
+                console.log("ELLLO");
+                console.log(response);
 
                 $rootScope.changeSpinner(false);
             });

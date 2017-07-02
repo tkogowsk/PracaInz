@@ -22,8 +22,6 @@ object Relation extends Enumeration {
       LessThan
     case "CONTAINS" =>
       Contains
-    case "EQUALS" =>
-      Equals
     case _ =>
       throw new IllegalArgumentException
   }

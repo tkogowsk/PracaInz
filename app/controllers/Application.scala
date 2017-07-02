@@ -9,7 +9,7 @@ import play.api.mvc._
 import repository._
 import utils.JsonFormat._
 import utils._
-import utils.dtos.{AuthenticationDTO, FilterDTO, FilteringCountersDTO, TabFieldFilterDTO}
+import utils.dtos._
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -76,7 +76,6 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
           }
       }, Duration.Inf)
   }
-
 
   def getByTab = Action { request =>
     var sampleId = None: Option[String]
@@ -168,5 +167,30 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
       }
   }
 
+  def saveUserFields(userName: String) = Action {
+    request =>
+      request.body.asJson.map {
+        json =>
+          json.asOpt[List[UserSampleTabDTO]].map {
+            elem =>
+              var userId = None: Option[Int]
+              Await.result({
+                userRepository.getByName(userName).map {
+                  user =>
+                    if (user.isDefined) {
+                      UserSmpTabRepository.save(user.get.id, elem)
+                    } else {
+                      BadRequest("User not found")
+                    }
+                }
+              }, Duration.Inf)
+              Ok(successResponse(Json.toJson(""), "Fields saved"))
+          }.getOrElse {
+            BadRequest("Missing parameter")
+          }
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
+  }
 }
 

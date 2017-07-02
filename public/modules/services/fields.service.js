@@ -7,6 +7,12 @@ angular.module('Repositories').factory('Fields', function ($resource) {
                 userName: '@userName'
             }
         },
-        count: {method: 'POST', url: '/count', isArray: false}
+        count: {method: 'POST', url: '/count', isArray: false},
+        save: {
+            method: 'POST', url: '/saveUserFields/:userName', isArray: false,
+            params: {
+                userName: '@userName'
+            }
+        }
     });
 });
