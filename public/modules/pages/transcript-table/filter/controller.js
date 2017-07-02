@@ -39,12 +39,28 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             setActiveTab(name);
         };
 
+        function setFieldValue(currentItem) {
+            if (_.isNil(currentItem.value) === true && _.isNil(currentItem.default_value) === false) {
+                currentItem.value = currentItem.default_value;
+                return true;
+            }
+            return false;
+        }
+
         function getFields() {
             Fields.getFields({
                     userName: $rootScope.userName,
                     sample_fake_id: $stateParams.fakeId
                 }, (response) => {
-                    let groupedData = _.chain(response.data)
+                let data = _.chain(response.data)
+                    .map(function (currentItem) {
+                        if (setFieldValue(currentItem)) {
+                            //   currentItem.value = currentItem.default_value;
+                        }
+                        return currentItem;
+                    }).value();
+
+                let groupedData = _.chain(data)
                         .groupBy('tab_name')
                         .toPairs()
                         .map(function (currentItem) {
@@ -61,7 +77,6 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
                             }).value();
 
                     });
-
                     $scope.groupedData = groupedData;
                     $rootScope.changeSpinner(false);
                 }
@@ -119,5 +134,6 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             }
             return "";
         };
+
         init();
     }]);

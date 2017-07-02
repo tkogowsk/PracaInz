@@ -7,6 +7,8 @@ import utils.MyPostgresDriver.api._
 import utils.dtos.UploadRowDTO
 
 import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.Await
+import scala.concurrent.duration.Duration
 
 @Singleton
 class AddFilterService @Inject()(variantColumnRepository: VariantColumnRepository, tabFieldFilterRepository: TabFieldFilterRepository) {
@@ -17,7 +19,18 @@ class AddFilterService @Inject()(variantColumnRepository: VariantColumnRepositor
   var filter = FilterRepository.filter
 
 
+  def clearData(): Unit = {
+    Await.result({
+      db.run(sqlu"""TRUNCATE TABLE "user_smp_tab" CASCADE""")
+      db.run(sqlu"""TRUNCATE TABLE "field" CASCADE""")
+      db.run(sqlu"""TRUNCATE TABLE "filter" CASCADE""")
+      db.run(sqlu"""TRUNCATE TABLE "tab" CASCADE""")
+      db.run(sqlu"""TRUNCATE TABLE "tab_field_filter" CASCADE""")
+    }, Duration.Inf)
+  }
+
   def save(rows: ArrayBuffer[UploadRowDTO]): Unit = {
+    clearData()
     rows.foreach { row =>
       var tabID = addTab(row.tabName)
       var filterID = addFilter(row.filterName)

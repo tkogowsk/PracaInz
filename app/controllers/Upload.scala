@@ -6,6 +6,7 @@ import javax.inject.Inject
 import org.apache.poi.ss.usermodel.{Cell, DataFormatter}
 import play.api.mvc._
 import repository.FieldsRepository
+import utils.Relation
 import utils.dtos.UploadRowDTO
 import utils.services.AddFilterService
 
@@ -53,7 +54,7 @@ class Upload @Inject()(webJarAssets: WebJarAssets, fieldsRepository: FieldsRepos
           var relation = getCellString(row.getCell(3))
           var defaultValue = getCellString(row.getCell(4))
           var options = getCellString(row.getCell(5))
-          val field = new UploadRowDTO(tabName, filterName, variantColumnName, relation, defaultValue, options)
+          val field = new UploadRowDTO(tabName, filterName, variantColumnName, Relation.toSqlValue(relation), defaultValue, options)
           rows += field
         }
 

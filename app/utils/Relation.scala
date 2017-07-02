@@ -8,4 +8,23 @@ object Relation extends Enumeration {
   val GreaterThan = ">="
   val LessThan = "<="
   val Contains= "contains"
+
+  def toSqlValue(value: String): String = value.toUpperCase match {
+    case "EQUALS" =>
+      Equals
+    case "GREATER" =>
+      Greater
+    case "LESS" =>
+      Less
+    case "GREATER THAN" =>
+      GreaterThan
+    case "LESS THAN" =>
+      LessThan
+    case "CONTAINS" =>
+      Contains
+    case "EQUALS" =>
+      Equals
+    case _ =>
+      throw new IllegalArgumentException
+  }
 }
