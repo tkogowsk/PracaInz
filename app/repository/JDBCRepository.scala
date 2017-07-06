@@ -204,7 +204,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     var iterator: Int = 0
     val filters = setOfFilterNames.slice(0, iterator)
 
-    for (i <- 0 to setOfFilterNames.length) {
+    for (i <- 0 to setOfFilterNames.length - 1) {
       var names = setOfFilterNames.slice(0, i + 1)
       var fields: ListBuffer[FieldDTO] = new ListBuffer
       for (name <- names) {
@@ -227,7 +227,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
         }
 
       } catch {
-        case e: Exception => println(e.getMessage)
+        case e: Exception => println(e)
       } finally {
         conn.close()
       }

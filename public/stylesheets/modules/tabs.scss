@@ -46,6 +46,9 @@
       background: #3bd3aa;
       border-radius: 5px;
       padding-bottom: 20px;
+      &.inactive {
+        opacity: 0.4;
+      }
     }
 
     .filter-name{

@@ -14,7 +14,8 @@
             </div>
             <div ng-repeat="tab in groupedData" class="filter-fields">
                 <div ng-show="tab.tabName == activeTabName" style="text-align: center">
-                    <div ng-repeat="filter in tab.items track by $index" class="filter">
+                    <div ng-repeat="filter in tab.items track by $index" class="filter"
+                         ng-class="{ inactive: filter.inactive }">
                         <div class="filter-name">
                             {{filter.filterName}}
                             <label>

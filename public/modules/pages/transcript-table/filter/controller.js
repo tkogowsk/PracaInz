@@ -88,19 +88,22 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             var payload = {};
             var list = [];
             _.forEach(tab.items, function (filters) {
-                _.forEach(filters.items, function (field) {
-                    if (field.value) {
-                        list.push({
-                            filterName: field.filterName,
-                            relation: field.relation,
-                            value: field.value,
-                            variant_column_id: field.variant_column_id
-                        })
-                    }
-                })
+                if (!filters.inactive) {
+                    _.forEach(filters.items, function (field) {
+                        if (field.value) {
+                            list.push({
+                                filterName: field.filterName,
+                                relation: field.relation,
+                                value: field.value,
+                                variant_column_id: field.variant_column_id
+                            })
+                        }
+                    })
+                }
             });
 
             payload["counters"] = list;
+            console.log(list)
             payload.tabName = tab.tabName;
             payload.sampleFakeId = parseInt($stateParams.fakeId);
             Fields.count(payload, (response) => {
@@ -139,9 +142,6 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             Fields.save({
                 userName: $rootScope.userName,
             }, payload, (response) => {
-                console.log("ELLLO");
-                console.log(response);
-
                 $rootScope.changeSpinner(false);
             });
         };

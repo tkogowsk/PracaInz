@@ -152,6 +152,10 @@
       background: #3bd3aa;
       border-radius: 5px;
       padding-bottom: 20px; }
+
+.filter-section .filter-fields .filter.inactive {
+    opacity: 0.4;
+}
     .filter-section .filter-fields .filter-field p {
       font-weight: bold;
       font-size: 18px; }
