@@ -106,7 +106,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     val transcriptTableSampleIdColumnName = ConfigService.getTranscriptTableSampleIdColumnName
     val queryEnd = "from " + ConfigService.getTranscriptTableName
     val queryColumns = getColumnQueryPart(columns)
-    val queryWhere = addSampleIdCondition(getWhereQueryPart(columns, filter.filters), transcriptTableSampleIdColumnName, sampleId)
+    val queryWhere = addAndSampleIdCondition(getWhereQueryPart(columns, filter.filters), transcriptTableSampleIdColumnName, sampleId)
 
     val query = queryBeginning + queryColumns + queryEnd + queryWhere
 
@@ -166,14 +166,17 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     query
   }
 
-  def addSampleIdCondition(query: String, transcriptTableSampleIdColumnName: String, sampleId: String): String = {
+  def addAndSampleIdCondition(query: String, transcriptTableSampleIdColumnName: String, sampleId: String): String = {
     query + " AND \"" + transcriptTableSampleIdColumnName + "\" = '" + sampleId + "'"
+  }
+
+  def getSampleIdCondition(transcriptTableSampleIdColumnName: String, sampleId: String): String = {
+    " " + transcriptTableSampleIdColumnName + "\" = '" + sampleId + "'"
   }
 
   def filterColumnName(columns: List[VariantColumnModel], columnID: Int): String = {
     columns.find(elem => elem.id == columnID).get.column_name
   }
-
 
   def count(dto: FilteringCountersDTO) = {
     val columns: List[VariantColumnModel] = this.getColumns
@@ -213,7 +216,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
       val queryBeginning = "SELECT COUNT(1) AS count "
       val transcriptTableSampleIdColumnName = ConfigService.getTranscriptTableSampleIdColumnName
       val queryEnd = "from " + ConfigService.getTranscriptTableName
-      val queryWhere = addSampleIdCondition(getWhereQueryPart(columns, fields), transcriptTableSampleIdColumnName, sampleId.get)
+      val queryWhere = addAndSampleIdCondition(getWhereQueryPart(columns, fields), transcriptTableSampleIdColumnName, sampleId.get)
 
       val query = queryBeginning + queryEnd + queryWhere
       val conn = db.getConnection()
@@ -236,6 +239,44 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
 
     response
   }
+
+  def countAll(sampleFakeId: Int) = {
+    var response = None: Option[Int]
+    var sampleId = None: Option[String]
+    Await.result(
+      SampleMetadataRepository.getByFakeId(sampleFakeId).map {
+        sample =>
+          if (sample.isDefined) {
+            sampleId = Some(sample.get.sample_id)
+          } else {
+            throw new IllegalArgumentException()
+          }
+      }, Duration.Inf)
+
+    val queryBeginning = "SELECT COUNT(1) AS count "
+    val transcriptTableSampleIdColumnName = ConfigService.getTranscriptTableSampleIdColumnName
+    val queryEnd = "from " + ConfigService.getTranscriptTableName
+    val queryWhere = " WHERE " + getSampleIdCondition(transcriptTableSampleIdColumnName, sampleId.get)
+
+    val query = queryBeginning + queryEnd + queryWhere
+    val conn = db.getConnection()
+    try {
+      val stmt = conn.createStatement
+      val rs = stmt.executeQuery(query)
+
+      while (rs.next()) {
+        response = Some(rs.getInt("count"))
+      }
+
+    } catch {
+      case e: Exception => println(e)
+    } finally {
+      conn.close()
+    }
+
+    response
+  }
+
 
 }
 

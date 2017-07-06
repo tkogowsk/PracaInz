@@ -103,7 +103,6 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             });
 
             payload["counters"] = list;
-            console.log(list)
             payload.tabName = tab.tabName;
             payload.sampleFakeId = parseInt($stateParams.fakeId);
             Fields.count(payload, (response) => {
@@ -125,7 +124,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
         };
 
         $scope.saveUserFields = function (tab) {
-            //$rootScope.changeSpinner(true);
+            $rootScope.changeSpinner(true);
             var payload = [];
             _.forEach(tab.items, function (filters) {
                 _.forEach(filters.items, function (field) {
@@ -142,6 +141,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             Fields.save({
                 userName: $rootScope.userName,
             }, payload, (response) => {
+                console.log(response);
                 $rootScope.changeSpinner(false);
             });
         };

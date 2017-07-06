@@ -19,6 +19,7 @@ object JsonFormat {
   implicit lazy val FilteringCountersDTOFormat = Jsonx.formatCaseClass[FilteringCountersDTO]
   implicit lazy val filteringCountersDTOResponseFormat = Jsonx.formatCaseClass[FilteringCountersDTOResponse]
   implicit lazy val userFieldsSaveDTOFormat = Jsonx.formatCaseClass[UserSampleTabDTO]
+  implicit lazy val columnSortingDTOFormat = Jsonx.formatCaseClass[ColumnSortingDTO]
 
   implicit lazy val userSmpTabModelFormat = Jsonx.formatCaseClass[UserSmpTabModel]
   implicit lazy val tabFieldFilterDTOFormat = Jsonx.formatCaseClass[TabFieldFilterDTO]

@@ -5,6 +5,8 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         $scope.transcriptData = [];
         $scope.userColumnsList = null;
 
+        $scope.dataLength = null;
+
         $scope.tableLimit = 10;
         $scope.tableBegin = 0;
         $scope.currentPage = 1;
@@ -12,10 +14,11 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
 
         function init() {
             /*            if (!$rootScope.authenticated) {
-                $state.go('login');
+             $state.go('login');
              } else {*/
-                getAll();
-                prepareHeaderColumns();
+            countAll();
+            getAll();
+            prepareHeaderColumns();
             //          }
         }
 
@@ -64,14 +67,30 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
             $scope.tableBegin = $scope.tableLimit * ($scope.currentPage - 1);
         };
 
+        function countAll() {
+            Transcript.countAll({sampleFakeId: $stateParams.fakeId},
+                function (response) {
+                    console.log(response);
+                    $scope.dataLength = response.data;
+                },
+                function (error) {
+                    console.log("ERROR " + error);
+                    alert("ERROR " + error);
+                })
+        }
+
         function getAll() {
             Transcript.getTranscriptData({
-                userName: $rootScope.userName,
-                sample_fake_id: $stateParams.fakeId
-            }, function (response) {
-                prepareTableData(response.data);
-                $rootScope.changeSpinner(false);
-            });
+                    userName: $rootScope.userName,
+                    sampleFakeId: $stateParams.fakeId
+                }, function (response) {
+                    prepareTableData(response.data);
+                    $rootScope.changeSpinner(false);
+                },
+                function (error) {
+                    console.log("ERROR " + error);
+                    alert("ERROR " + error);
+                });
         }
 
         function prepareTableData(data) {
@@ -91,12 +110,12 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                 if (columnList) {
                     $scope.userColumnsList = _.chain(columnList)
                         .map(function (currentItem) {
-
                             return _.assign(
                                 {visible: true},
                                 {
                                     variant_column_id: currentItem.id,
                                     column_order: currentItem.id,
+                                    sorting: null,
                                     fe_name: currentItem.fe_name,
                                     column_name: currentItem.column_name,
                                     //TODO
@@ -105,6 +124,33 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                         }).value();
                 }
             }
+        }
+
+        $scope.changeSorting = function (header) {
+            if (header.sorting === "ASC") {
+                header.sorting = "DESC"
+            } else if (header.sorting === "DESC") {
+                header.sorting = null;
+            }
+            else {
+                header.sorting = "ASC"
+            }
+
+        };
+
+        $scope.getSorting = function (header) {
+            if (header.sorting === "ASC") {
+                return 'glyphicon glyphicon-chevron-up';
+            } else if (header.sorting === "DESC") {
+                return 'glyphicon glyphicon-chevron-down';
+            }
+            else {
+                return 'glyphicon glyphicon-chevron-right';
+            }
+        };
+
+        function getData() {
+
         }
 
         init();

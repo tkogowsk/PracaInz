@@ -109,12 +109,13 @@
 
     <div ng-controller="TranscriptsTableController" class="col-lg-9 transcript-table">
         <div class="table-wrapper">
-                   <table class="table table-striped">
+            <table class="table table-bordered">
                        <thead>
                        <tr>
                            <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
-                               {{header.fe_name}}
-
+                               <div class="" ng-class="getSorting(header)" ng-click="changeSorting(header)">
+                                   <span>{{header.fe_name}}</span>
+                               </div>
                            </th>
                        </tr>
                        <tr>
@@ -136,7 +137,8 @@
                    </table>
                </div>
                <div class="transcript-table-pagination">
-                   <ul uib-pagination total-items="transcriptData.length" ng-model="currentPage" max-size="10" items-per-page="tableLimit"
+                   <ul uib-pagination total-items="dataLength" ng-model="currentPage" max-size="10"
+                       items-per-page="tableLimit"
                        class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
                </div>
 
