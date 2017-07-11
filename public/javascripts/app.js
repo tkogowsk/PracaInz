@@ -17,7 +17,8 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
             templateUrl: '/assets/modules/pages/transcript-list/index.html'
         })
         .state('upload', {
-            url: '/upload'
+            url: '/upload',
+            template: ''
         });
 
     $urlRouterProvider.otherwise('/login');
