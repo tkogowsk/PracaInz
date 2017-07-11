@@ -3,6 +3,7 @@ package utils
 import ai.x.play.json.Jsonx
 import models._
 import utils.dtos._
+
 object JsonFormat {
 
   implicit lazy val transcriptModelFormat = Jsonx.formatCaseClass[TranscriptModel]
@@ -20,6 +21,8 @@ object JsonFormat {
   implicit lazy val filteringCountersDTOResponseFormat = Jsonx.formatCaseClass[FilteringCountersDTOResponse]
   implicit lazy val userFieldsSaveDTOFormat = Jsonx.formatCaseClass[UserSampleTabDTO]
   implicit lazy val columnSortingDTOFormat = Jsonx.formatCaseClass[ColumnSortingDTO]
+  implicit lazy val columnSearchDTOFormat = Jsonx.formatCaseClass[ColumnSearchDTO]
+  implicit lazy val filterWithPaginationDTOFormat = Jsonx.formatCaseClass[FilterWithPaginationDTO]
 
   implicit lazy val userSmpTabModelFormat = Jsonx.formatCaseClass[UserSmpTabModel]
   implicit lazy val tabFieldFilterDTOFormat = Jsonx.formatCaseClass[TabFieldFilterDTO]

@@ -69,7 +69,7 @@ class Upload @Inject()(webJarAssets: WebJarAssets, fieldsRepository: FieldsRepos
     catch {
       case e: Exception => {
         tmpFile.delete()
-        Ok("Something went wrong\n Error: " + e.getMessage)
+        BadRequest("Something went wrong\n Error: " + e.getMessage)
       }
     }
 

@@ -43,6 +43,9 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             if (_.isNil(currentItem.value) === true && _.isNil(currentItem.default_value) === false) {
                 currentItem.value = currentItem.default_value;
             }
+            if (_.isNil(currentItem.options) === false && currentItem.options.length > 0) {
+                currentItem.options = currentItem.options.trim().split(',');
+            }
         }
 
         function getFields() {

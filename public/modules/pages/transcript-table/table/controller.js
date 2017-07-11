@@ -24,24 +24,8 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
 
         $scope.$on(filterTabEvent + 'Broadcast', function (event, data) {
             $rootScope.changeSpinner(true);
-
             var payload = {};
-            var list = [];
-
-            _.forEach(data.items, function (filter) {
-                if (!filter.inactive) {
-                    _.forEach(filter.items, function (field) {
-                        if (field.value) {
-                            list.push({
-                                relation: field.relation,
-                                value: field.value,
-                                variant_column_id: field.variant_column_id
-                            })
-                        }
-                    })
-                }
-            });
-
+            var list = prepareFiltersList(data.items);
             payload["filters"] = list;
             payload.sampleFakeId = parseInt($stateParams.fakeId);
             payload.userName = $rootScope.userName;
@@ -54,6 +38,23 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
             })
         });
 
+        function prepareFiltersList(items) {
+            var list = [];
+            _.forEach(items, function (filter) {
+                if (!filter.inactive) {
+                    _.forEach(filter.items, function (field) {
+                        if (field.value) {
+                            list.push({
+                                relation: field.relation,
+                                value: field.value,
+                                variant_column_id: field.variant_column_id
+                            })
+                        }
+                    })
+                }
+            });
+            return list;
+        }
 
         $scope.$on(variantColumnsFetchedEvent + 'Broadcast', function (event, name) {
             prepareHeaderColumns();

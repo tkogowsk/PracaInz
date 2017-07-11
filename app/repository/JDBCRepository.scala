@@ -131,6 +131,43 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     list
   }
 
+  def getByFieldsPagination(filter: FilterDTO, sampleId: String): ListBuffer[DataRowDTO] = {
+    if (filter.filters.isEmpty) {
+      return getBySampleId(sampleId)
+    }
+    val columns: List[VariantColumnModel] = this.getColumns
+
+    val list = ListBuffer[DataRowDTO]()
+    val conn = db.getConnection()
+    val queryBeginning = "SELECT "
+    val transcriptTableSampleIdColumnName = ConfigService.getTranscriptTableSampleIdColumnName
+    val queryEnd = "from " + ConfigService.getTranscriptTableName
+    val queryColumns = getColumnQueryPart(columns)
+    val queryWhere = addAndSampleIdCondition(getWhereQueryPart(columns, filter.filters), transcriptTableSampleIdColumnName, sampleId)
+
+    val query = queryBeginning + queryColumns + queryEnd + queryWhere
+
+    try {
+      val stmt = conn.createStatement
+      val rs = stmt.executeQuery(query)
+
+      while (rs.next()) {
+        val list2 = ListBuffer[DataCellDTO]()
+        columns.foreach(elem =>
+          list2 += DataCellDTO(elem.column_name, rs.getString(elem.column_name))
+        )
+        list += DataRowDTO(list2)
+      }
+
+    } catch {
+      case e: Exception => println(e.getMessage)
+    } finally {
+      conn.close()
+    }
+
+    list
+  }
+
   def getColumnQueryPart(columns: List[VariantColumnModel]): String = {
     var queryColumns = ""
     columns.foreach(elem =>
@@ -171,7 +208,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
   }
 
   def getSampleIdCondition(transcriptTableSampleIdColumnName: String, sampleId: String): String = {
-    " " + transcriptTableSampleIdColumnName + "\" = '" + sampleId + "'"
+    " " + transcriptTableSampleIdColumnName + " = '" + sampleId + "'"
   }
 
   def filterColumnName(columns: List[VariantColumnModel], columnID: Int): String = {
