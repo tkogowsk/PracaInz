@@ -71,12 +71,10 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         function countAll() {
             Transcript.countAll({sampleFakeId: $stateParams.fakeId},
                 function (response) {
-                    console.log(response);
                     $scope.dataLength = response.data;
                 },
                 function (error) {
                     console.log("ERROR " + error);
-                    alert("ERROR " + error);
                 })
         }
 

@@ -144,7 +144,6 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             Fields.save({
                 userName: $rootScope.userName,
             }, payload, (response) => {
-                console.log(response);
                 $rootScope.changeSpinner(false);
             });
         };

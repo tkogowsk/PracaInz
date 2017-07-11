@@ -128,7 +128,7 @@
                        </tr>
                        </thead>
                        <tbody>
-                       <tr ng-repeat="transcript in transcriptData | limitTo : tableLimit : tableBegin | filter : search track by $index">
+                       <tr ng-repeat="transcript in filterData = (transcriptData | filter : search) | limitTo : tableLimit : tableBegin track by $index">
                            <td ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
                                {{transcript[header.fe_name.toString()]}}
                            </td>
@@ -136,8 +136,8 @@
                        </tbody>
                    </table>
                </div>
-               <div class="transcript-table-pagination">
-                   <ul uib-pagination total-items="dataLength" ng-model="currentPage" max-size="10"
+        <div class="transcript-table-pagination">
+            <ul uib-pagination total-items="filterData.length" ng-model="currentPage" max-size="10"
                        items-per-page="tableLimit"
                        class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
                </div>
