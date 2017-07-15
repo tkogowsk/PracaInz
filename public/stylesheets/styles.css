@@ -1,59 +1,54 @@
+body {
+  overflow: hidden; }
+
 .transcript-table {
   padding-left: 40px;
-}
-
-.transcript-table th {
-  min-width: 80px;
-}
-
-.transcript-table thead tr th {
-  width: 80px;
-  white-space: nowrap;
-  overflow: hidden !important;
-  text-overflow: ellipsis;
-}
-
-.transcript-table thead tr th span {
-  margin-left: -10px;
-}
-
-.transcript-table tbody td {
-  text-align: right;
-  white-space: nowrap;
-}
-
-.transcript-table .table-wrapper {
-    overflow-x: auto;
-  height: 90vh;
-}
-
-.transcript-table .search {
-    /*    &:hover {
-          input {
-            visibility: visible;
-            opacity: 1;
-          }
-        }*/
-}
-
-.transcript-table .search .glyphicon-search {
-  width: 10%;
-}
-
-.transcript-table .search input {
-  /* visibility: hidden;
-   opacity: 0;
-   transition: visibility 0s, opacity 0.5s linear;*/
-  width: 70%;
-  margin-left: 10%;
-}
+  height: 100vh; }
+  .transcript-table th {
+    min-width: 80px; }
+  .transcript-table thead {
+    background: #f9f9f5; }
+    .transcript-table thead tr th {
+      width: 80px;
+      vertical-align: top;
+      /* white-space: nowrap; */
+      /* overflow: hidden !important; */
+      /* text-overflow: ellipsis; */
+      min-width: 150px;
+      max-width: 300px;
+      padding: 0; }
+      .transcript-table thead tr th .glyphicon {
+        width: 10%;
+        float: left;
+        line-height: inherit; }
+      .transcript-table thead tr th .header-fe-name {
+        margin-left: -10px;
+        float: right;
+        width: 90%;
+        overflow: hidden;
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center; }
+  .transcript-table tbody td {
+    text-align: right;
+    white-space: nowrap; }
+  .transcript-table .table-wrapper {
+    height: 85vh;
+    overflow: auto; }
+  .transcript-table .search input {
+    width: 70%;
+    margin-left: 10%;
+    border: 1px #45633b solid;
+    border-radius: 2px; }
 
 .transcript-table-pagination {
   position: fixed;
-  bottom: 1vh; }
+  bottom: 0;
+  margin-bottom: 0; }
 
 .spinner-background {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -128,8 +123,7 @@
 .filter-section {
   padding: 5px;
   background: #333333;
-  position: fixed;
-  height: 100%;
+  height: 100vh;
   color: #ece8d7;
   z-index: 1; }
   .filter-section .filter-tabs {
@@ -138,7 +132,8 @@
     white-space: nowrap;
     text-align: center; }
     .filter-section .filter-tabs .filter-tab {
-      display: inline-block; }
+      display: inline-block;
+      overflow-x: auto; }
       .filter-section .filter-tabs .filter-tab .filter-tab-name {
         color: black;
         font-weight: bold;
@@ -148,10 +143,8 @@
         border-radius: 9%;
         background: #888888;
         padding: 10px; }
-
-.filter-section .filter-tabs .filter-tab .filter-tab-name.active {
-  background-color: #3bd3aa;
-}
+        .filter-section .filter-tabs .filter-tab .filter-tab-name.active {
+          background-color: #3bd3aa; }
         .filter-section .filter-tabs .filter-tab .filter-tab-name:hover {
           cursor: pointer; }
       .filter-section .filter-tabs .filter-tab .wrapper {
@@ -161,37 +154,34 @@
         opacity: 0; }
   .filter-section .filter-fields {
     margin-bottom: 10px;
-    width: 25vw;
+    width: inherit;
     overflow: auto; }
     .filter-section .filter-fields .filter {
       margin: 10px 10px 0 0;
       background: #3bd3aa;
       border-radius: 5px;
       padding-bottom: 20px; }
-
-.filter-section .filter-fields .filter.inactive {
-  opacity: 0.4;
-}
+      .filter-section .filter-fields .filter.inactive {
+        opacity: 0.4; }
     .filter-section .filter-fields .filter-field p {
       font-weight: bold;
       font-size: 18px; }
-
-.filter-section .filter-fields .filter-field select {
+    .filter-section .filter-fields .filter-field select {
       color: black;
       width: 80%; }
-
-.filter-section .filter-fields .filter-field input {
+    .filter-section .filter-fields .filter-field input {
       width: 80%; }
-
-.filter-section .filter-fields label {
-  left: 20px;
-  position: absolute;
-}
+    .filter-section .filter-fields label {
+      left: 20px;
+      position: absolute; }
 
 body {
   background: #f9f9f5;
   font-family: "Comic Sans MS", cursive, sans-serif; }
   body input {
     color: black; }
+
+.navbar {
+  min-height: 5vh; }
 
 /*# sourceMappingURL=styles.css.map */

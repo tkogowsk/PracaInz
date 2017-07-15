@@ -1,21 +1,43 @@
+body {
+  overflow: hidden;
+}
 .transcript-table {
   padding-left: 40px;
+  height: 100vh;
   th {
     min-width: 80px;
   }
   thead {
+    background: #f9f9f5;
     tr {
       th {
         width: 80px;
-        white-space: nowrap;
-        overflow: hidden !important;
-        text-overflow: ellipsis;
-        span {
+        vertical-align: top;
+        /* white-space: nowrap; */
+        /* overflow: hidden !important; */
+        /* text-overflow: ellipsis; */
+        min-width: 150px;
+        max-width: 300px;
+        padding: 0;
+        .glyphicon {
+          width: 10%;
+          float: left;
+          line-height: inherit;
+        }
+        .header-fe-name {
           margin-left: -10px;
+          float: right;
+          width: 90%;
+          overflow: hidden;
+          display: inline-block;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          text-align: center;
         }
       }
     }
   }
+
   tbody {
     td {
       text-align: right;
@@ -23,36 +45,29 @@
     }
   }
   .table-wrapper {
-    overflow-x: auto;
-    height: 90vh;
+    height: 85vh;
+    overflow: auto;
   }
   .search {
     .glyphicon-search {
-      width: 10%;
     }
     input {
-      /* visibility: hidden;
-       opacity: 0;
-       transition: visibility 0s, opacity 0.5s linear;*/
       width: 70%;
       margin-left: 10%;
+      border: 1px #45633b solid;
+      border-radius: 2px;
     }
-    /*    &:hover {
-          input {
-            visibility: visible;
-            opacity: 1;
-          }
-        }*/
   }
 }
 
 .transcript-table-pagination {
   position: fixed;
-  bottom: 1vh;
+  bottom: 0;
+  margin-bottom: 0;
 }
 
 .spinner-background {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;

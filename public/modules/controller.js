@@ -2,12 +2,6 @@ angular.module('Controllers', []);
 
 angular.module('Controllers').controller('MainPageController', ['$scope', '$rootScope', '$log', '$state', 'VariantColumn', 'LocalStorage',
     function ($scope, $rootScope, $log, $state, VariantColumn, LocalStorage) {
-        $rootScope.showSpinner = true;
-
-        $rootScope.changeSpinner = function (spinnerIndicator) {
-            $scope.showSpinner = spinnerIndicator;
-        };
-
         function init() {
             /*   if (!$rootScope.authenticated) {
                 $state.go('login');

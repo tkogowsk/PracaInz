@@ -14,20 +14,6 @@ angular.module('Repositories').factory('Transcript', function ($resource) {
                 offset: '@offset'
             }
         },
-        /* getByFilter: {
-            method: 'GET',
-            url: '/getByFilter/:formName/1',
-            isArray: false,
-            params: {
-                formName: '@formName',
-            }
-         },*/
-        getByTab: {method: 'POST', url: '/getByTab', isArray: false},
-        countAll: {
-            method: 'GET', url: '/countAll/:sampleFakeId', isArray: false,
-            params: {
-                sampleFakeId: '@sampleFakeId',
-            }
-        }
+        getByTab: {method: 'POST', url: '/getByTab', isArray: false}
     });
 });

@@ -1,5 +1,5 @@
 <div class="row">
-    <div ng-controller="FilterController" class="col-lg-3">
+    <div ng-controller="FilterController" class="col-lg-2 col-md-2">
         <div class="filter-section">
             <h3>Filters</h3>
             <div class="filter-tabs">
@@ -12,6 +12,11 @@
 
                 </div>
             </div>
+
+            <button type="button" class="btn btn-primary btn-sm"
+                    ng-click="getAll()">Get all
+            </button>
+
             <div ng-repeat="tab in groupedData" class="filter-fields">
                 <div ng-show="tab.tabName == activeTabName" style="text-align: center">
                     <div ng-repeat="filter in tab.items track by $index" class="filter"
@@ -70,7 +75,8 @@
                                     <div ng-switch-when="<">
                                         <p>{{getColumnName(field.variant_column_id)}} less</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
-                                            <select ng-model="field.value" ng-options="o  as o for o in field.options"></select>
+                                            <select ng-model="field.value"
+                                                    ng-options="o  as o for o in field.options"></select>
                                         </div>
                                         <div ng-if="!(field.options) || field.options.length === 0">
                                             <input type="text" ng-model="field.value">
@@ -80,7 +86,8 @@
                                         <p>{{getColumnName(field.variant_column_id)}} contains ( comma separated
                                             values) </p>
                                         <div ng-if="(field.options) && field.options.length > 0">
-                                            <select ng-model="field.value" ng-options="o  as o for o in field.options"></select>
+                                            <select ng-model="field.value"
+                                                    ng-options="o  as o for o in field.options"></select>
                                         </div>
                                         <div ng-if="!(field.options) || field.options.length === 0">
                                             <input type="text" ng-model="field.value">
@@ -104,56 +111,68 @@
                     </button>
                 </div>
             </div>
+            <div class="spinner-background" ng-show="showFilterSpinner">
+                <div class="sk-cube-grid">
+                    <div class="sk-cube sk-cube1"></div>
+                    <div class="sk-cube sk-cube2"></div>
+                    <div class="sk-cube sk-cube3"></div>
+                    <div class="sk-cube sk-cube4"></div>
+                    <div class="sk-cube sk-cube5"></div>
+                    <div class="sk-cube sk-cube6"></div>
+                    <div class="sk-cube sk-cube7"></div>
+                    <div class="sk-cube sk-cube8"></div>
+                    <div class="sk-cube sk-cube9"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div ng-controller="TranscriptsTableController" class="col-lg-9 transcript-table">
+    <div ng-controller="TranscriptsTableController" class="col-lg-10 col-md-10 transcript-table">
         <div class="table-wrapper">
-            <table class="table table-bordered">
-                       <thead>
-                       <tr>
-                           <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
-                               <div class="" ng-class="getSorting(header)" ng-click="changeSorting(header)">
-                                   <span>{{header.fe_name}}</span>
-                               </div>
-                           </th>
-                       </tr>
-                       <tr>
-                           <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
-                               <div class="search">
-                                   <div class="glyphicon glyphicon-search"></div>
-                                   <input ng-model="search[header.column_name]"/>
-                               </div>
-                           </th>
-                       </tr>
-                       </thead>
-                       <tbody>
-                       <tr ng-repeat="transcript in filterData = (transcriptData | filter : search) | limitTo : tableLimit : tableBegin track by $index">
-                           <td ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
-                               {{transcript[header.fe_name.toString()]}}
-                           </td>
-                       </tr>
-                       </tbody>
-                   </table>
-               </div>
+            <table class="table">
+                <thead class="thead-inverse">
+                <tr>
+                    <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order"
+                        ng-click="changeSorting(header)">
+                        <div ng-class="getSorting(header)"></div>
+                        <div class="header-fe-name" title="{{header.fe_name}}">{{header.fe_name}}</div>
+                    </th>
+                </tr>
+                <tr>
+                    <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
+                        <div class="search">
+                            <div class="glyphicon glyphicon-search"></div>
+                            <input ng-model="search[jsIDPrefix + header.variant_column_id]"/>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="transcript in filterData = (transcriptData | filter : search | orderBy: transcriptSortPropertyName: transcriptSortReverse) | limitTo : tableLimit : tableBegin track by $index">
+                    <td ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
+                        {{transcript[header.dataExtractValue]}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="spinner-background" ng-show="showTableSpinner">
+                <div class="sk-cube-grid">
+                    <div class="sk-cube sk-cube1"></div>
+                    <div class="sk-cube sk-cube2"></div>
+                    <div class="sk-cube sk-cube3"></div>
+                    <div class="sk-cube sk-cube4"></div>
+                    <div class="sk-cube sk-cube5"></div>
+                    <div class="sk-cube sk-cube6"></div>
+                    <div class="sk-cube sk-cube7"></div>
+                    <div class="sk-cube sk-cube8"></div>
+                    <div class="sk-cube sk-cube9"></div>
+                </div>
+            </div>
+        </div>
         <div class="transcript-table-pagination">
             <ul uib-pagination total-items="filterData.length" ng-model="currentPage" max-size="10"
-                       items-per-page="tableLimit"
-                       class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
-               </div>
-
-        <div class="spinner-background" ng-show="showSpinner">
-            <div class="sk-cube-grid">
-                <div class="sk-cube sk-cube1"></div>
-                <div class="sk-cube sk-cube2"></div>
-                <div class="sk-cube sk-cube3"></div>
-                <div class="sk-cube sk-cube4"></div>
-                <div class="sk-cube sk-cube5"></div>
-                <div class="sk-cube sk-cube6"></div>
-                <div class="sk-cube sk-cube7"></div>
-                <div class="sk-cube sk-cube8"></div>
-                <div class="sk-cube sk-cube9"></div>
-            </div>
+                items-per-page="tableLimit"
+                class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
         </div>
     </div>
 </div>

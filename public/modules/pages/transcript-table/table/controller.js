@@ -6,35 +6,40 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         $scope.userColumnsList = null;
 
         $scope.dataLength = null;
-
-        $scope.tableLimit = 10;
+        $scope.tableLimit = 300;
         $scope.tableBegin = 0;
         $scope.currentPage = 1;
         $scope.search = {};
+
+        $scope.showTableSpinner = true;
+        $scope.transcriptSortReverse = true;
+        $scope.transcriptSortPropertyName = null;
+        $scope.jsIDPrefix = "id_";
+
+        function changeSpinner(spinnerIndicator) {
+            $scope.showTableSpinner = spinnerIndicator;
+        }
 
         function init() {
             /*            if (!$rootScope.authenticated) {
              $state.go('login');
              } else {*/
-            countAll();
             getAll();
             prepareHeaderColumns();
             //          }
         }
 
         $scope.$on(filterTabEvent + 'Broadcast', function (event, data) {
-            $rootScope.changeSpinner(true);
+            changeSpinner(true);
             var payload = {};
             var list = prepareFiltersList(data.items);
             payload["filters"] = list;
             payload.sampleFakeId = parseInt($stateParams.fakeId);
             payload.userName = $rootScope.userName;
-            $rootScope.changeSpinner(false);
-
             Transcript.getByTab(payload, (response) => {
                 $scope.transcriptData = [];
                 prepareTableData(response.data);
-                $rootScope.changeSpinner(false);
+                changeSpinner(false);
             })
         });
 
@@ -68,27 +73,17 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
             $scope.tableBegin = $scope.tableLimit * ($scope.currentPage - 1);
         };
 
-        function countAll() {
-            Transcript.countAll({sampleFakeId: $stateParams.fakeId},
-                function (response) {
-                    $scope.dataLength = response.data;
-                },
-                function (error) {
-                    console.log("ERROR " + error);
-                })
-        }
-
         function getAll() {
+            changeSpinner(true);
             Transcript.getTranscriptData({
                     userName: $rootScope.userName,
                     sampleFakeId: $stateParams.fakeId
                 }, function (response) {
                     prepareTableData(response.data);
-                    $rootScope.changeSpinner(false);
+                    changeSpinner(false);
                 },
                 function (error) {
                     console.log("ERROR " + error);
-                    alert("ERROR " + error);
                 });
         }
 
@@ -97,7 +92,7 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                 .map(function (elem) {
                     var object = {};
                     _.forEach(elem.row, function (item) {
-                        object[item.column] = item.value;
+                        object[$scope.jsIDPrefix + item.id] = item.value;
                     });
                     return object;
                 }).value();
@@ -116,6 +111,7 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                                     column_order: currentItem.id,
                                     sorting: null,
                                     fe_name: currentItem.fe_name,
+                                    dataExtractValue: $scope.jsIDPrefix + currentItem.id,
                                     column_name: currentItem.column_name,
                                     //TODO
                                     user_id: 1
@@ -126,31 +122,25 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         }
 
         $scope.changeSorting = function (header) {
-            if (header.sorting === "ASC") {
-                header.sorting = "DESC"
-            } else if (header.sorting === "DESC") {
-                header.sorting = null;
+            if ($scope.transcriptSortPropertyName === header.dataExtractValue) {
+                $scope.transcriptSortReverse = !$scope.transcriptSortReverse;
+            } else {
+                $scope.transcriptSortPropertyName = header.dataExtractValue;
+                $scope.transcriptSortReverse = true;
             }
-            else {
-                header.sorting = "ASC"
-            }
-
         };
 
         $scope.getSorting = function (header) {
-            if (header.sorting === "ASC") {
-                return 'glyphicon glyphicon-chevron-up';
-            } else if (header.sorting === "DESC") {
-                return 'glyphicon glyphicon-chevron-down';
-            }
-            else {
+            if ($scope.transcriptSortPropertyName === header.dataExtractValue) {
+                if ($scope.transcriptSortReverse) {
+                    return 'glyphicon glyphicon-chevron-up';
+                } else {
+                    return 'glyphicon glyphicon-chevron-down';
+                }
+            } else {
                 return 'glyphicon glyphicon-chevron-right';
             }
         };
-
-        function getData() {
-
-        }
 
         init();
 

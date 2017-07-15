@@ -18,7 +18,6 @@ POST        /getByTab                                                     contro
 POST        /logIn                                                        controllers.Application.logIn
 POST        /count                                                        controllers.Application.count
 POST        /saveUserFields/:userName                                     controllers.Application.saveUserFields(userName: String)
-GET         /countAll/:sampleFakeId                                       controllers.Application.countAll(sampleFakeId: Int)
 POST        /getTranscriptDataWithPagination/:sampleFakeId/:offset        controllers.Application.getTranscriptDataWithPagination(sampleFakeId: Int, offset: Int)
 
 # Map static resources from the /public folder to the /assets URL path

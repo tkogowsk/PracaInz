@@ -5,6 +5,11 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
         $scope.groupedData = [];
         $scope.userId = 1;
         $scope.activeTabName = null;
+        $scope.showFilterSpinner = true;
+
+        function changeSpinner(spinnerIndicator) {
+            $scope.showFilterSpinner = spinnerIndicator;
+        };
 
         function init() {
             /*         if (!$rootScope.authenticated) {
@@ -77,7 +82,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
 
                     });
                     $scope.groupedData = groupedData;
-                    $rootScope.changeSpinner(false);
+                changeSpinner(false);
                 }
             );
         }
@@ -87,7 +92,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
         };
 
         $scope.count = function (tab) {
-            $rootScope.changeSpinner(true);
+            changeSpinner(true);
             var payload = {};
             var list = [];
             _.forEach(tab.items, function (filters) {
@@ -121,13 +126,12 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
                         })
                     }
                 }
-
-                $rootScope.changeSpinner(false);
+                changeSpinner(false);
             });
         };
 
         $scope.saveUserFields = function (tab) {
-            $rootScope.changeSpinner(true);
+            changeSpinner(true);
             var payload = [];
             _.forEach(tab.items, function (filters) {
                 _.forEach(filters.items, function (field) {
@@ -144,7 +148,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             Fields.save({
                 userName: $rootScope.userName,
             }, payload, (response) => {
-                $rootScope.changeSpinner(false);
+                changeSpinner(false);
             });
         };
 

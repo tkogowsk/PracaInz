@@ -167,11 +167,6 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
       }
   }
 
-  def countAll(sampleFakeId: Int) = Action {
-    val res = jdbcRepository.countAll(sampleFakeId)
-    Ok(successResponse(Json.toJson(res), ""))
-  }
-
   def saveUserFields(userName: String) = Action {
     request =>
       request.body.asJson.map {
