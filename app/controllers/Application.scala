@@ -2,6 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
+import akka.actor.ActorSystem
 import models.SampleMetadataModel
 import play.api.libs.json.Json._
 import play.api.libs.json.{JsValue, Json}
@@ -18,7 +19,7 @@ import scala.concurrent.duration.Duration
 
 class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository: VariantColumnRepository,
                             userRepository: UserRepository, privilegeRepository: PrivilegeRepository,
-                            tabFieldFilterRepository: TabFieldFilterRepository, jdbcRepository: JDBCRepository) extends Controller {
+                            tabFieldFilterRepository: TabFieldFilterRepository, jdbcRepository: JDBCRepository, system: ActorSystem) extends Controller {
 
   def index = Action {
     Ok(views.html.index(webJarAssets))
