@@ -5,7 +5,6 @@ import javax.inject.Inject
 
 import org.apache.poi.ss.usermodel.{Cell, DataFormatter}
 import play.api.mvc._
-import repository.FieldsRepository
 import utils.Relation
 import utils.dtos.UploadRowDTO
 import utils.services.AddFilterService
@@ -14,7 +13,7 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable.ArrayBuffer
 
 
-class Upload @Inject()(webJarAssets: WebJarAssets, fieldsRepository: FieldsRepository, addFilterService: AddFilterService) extends Controller {
+class Upload @Inject()(webJarAssets: WebJarAssets, addFilterService: AddFilterService) extends Controller {
 
   def index = Action {
     Ok(views.html.upload(webJarAssets))

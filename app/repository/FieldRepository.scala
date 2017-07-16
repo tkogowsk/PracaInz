@@ -56,12 +56,4 @@ object FieldRepository {
     id
   }
 
-  /*  def transformOptionsToList(options: String) : Option[List[String]] = {
-      var optionsList: Option[List[String]] = None[List[String]]
-      if(options.length > 0 ){
-        optionsList = Option(options.split(",").map(_.trim).toList)
-      }
-      println(optionsList)
-      optionsList
-    }*/
 }

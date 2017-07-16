@@ -6,8 +6,6 @@
 GET         /                                                             controllers.Application.index
 GET         /upload                                                       controllers.Upload.index
 
-# GET       /getByFilter/:filterName/:userId        controllers.Application.getByFilter(filterName: String, userId: Int)
-
 GET         /getFields/:sample_fake_id/:userName                          controllers.Application.getFields(sample_fake_id: Int, userName: String)
 GET         /getVariantColumn                                             controllers.Application.getVariantColumn
 GET         /getTranscriptData/:sampleFakeId/:userName                    controllers.Application.getTranscriptData(sampleFakeId: Int, userName: String)

@@ -4,7 +4,7 @@ import akka.actor._
 import repository.FieldRepository
 import utils.MyPostgresDriver.api._
 
-class PasswordActor extends Actor {
+class TokenActor extends Actor {
   var field = FieldRepository.field
   private val db = Database.forConfig("postgresConf")
 

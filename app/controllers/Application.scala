@@ -194,23 +194,6 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
       }
   }
 
-
-  /*
-  * : Action[AnyContent] = Action { request =>
-    Await.result(
-      SampleMetadataRepository.getByFakeId(sampleFakeId).map {
-        sample =>
-          if (sample.isDefined) {
-            val response = jdbcRepository.getBySampleId(sample.get.sample_id)
-            Ok(successResponse(Json.toJson(response), "list of  transcripts"))
-          } else {
-            BadRequest("Not found sample id")
-          }
-      }, Duration.Inf)
-  }
-
-*/
-
   def getTranscriptDataWithPagination(sampleFakeId: Int, offset: Int): Action[AnyContent] = Action { request =>
       request.body.asJson.map {
        json =>

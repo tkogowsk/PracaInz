@@ -12,7 +12,7 @@ trait MyPostgresDriver extends ExPostgresProfile
   with PgSearchSupport {
 
   val pgjson = "jsonb"
-  ///
+
   override val api = new API with ArrayImplicits
     with DateTimeImplicits
     with NetImplicits
