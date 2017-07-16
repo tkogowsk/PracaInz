@@ -4,23 +4,25 @@
 
 # Home page
 GET         /                                                             controllers.Application.index
-GET         /upload                                                       controllers.Upload.index
+GET         /upload                                           controllers.Upload.index
 
-GET         /getFields/:sample_fake_id/:userName                          controllers.Application.getFields(sample_fake_id: Int, userName: String)
-GET         /getVariantColumn                                             controllers.Application.getVariantColumn
-GET         /getTranscriptData/:sampleFakeId/:userName                    controllers.Application.getTranscriptData(sampleFakeId: Int, userName: String)
-POST        /getSamplesList                                               controllers.Application.getSamplesList
+GET         /getFields/:sample_fake_id/:userName              controllers.Application.getFields(sample_fake_id: Int, userName: String)
+GET         /getVariantColumn                                 controllers.Application.getVariantColumn
+GET         /getTranscriptData/:sampleFakeId/:userName        controllers.Application.getTranscriptData(sampleFakeId: Int, userName: String)
+GET         /getSamplesList                                   controllers.Application.getSamplesList
 
-POST        /uploadFilters                                                controllers.Upload.uploadFilters
-POST        /getByTab                                                     controllers.Application.getByTab
-POST        /logIn                                                        controllers.Application.logIn
-POST        /count                                                        controllers.Application.count
-POST        /saveUserFields/:userName                                     controllers.Application.saveUserFields(userName: String)
-POST        /getTranscriptDataWithPagination/:sampleFakeId/:offset        controllers.Application.getTranscriptDataWithPagination(sampleFakeId: Int, offset: Int)
+POST        /uploadFilters                                    controllers.Upload.uploadFilters
+POST        /getByTab                                         controllers.Application.getByTab
+POST        /logIn                                            controllers.Authorization.logIn
+GET         /logOut                                           controllers.Authorization.logOut
+GET         /addGroup                                         controllers.Application.addGroup
+
+POST        /count                                            controllers.Application.count
+POST        /saveUserFields/:userName                         controllers.Application.saveUserFields(userName: String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                                                 controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                                     controllers.Assets.versioned(path="/public", file: Asset)
 # WebJars
-GET         /webjars/*file                                                controllers.WebJarAssets.at(file)
+GET         /webjars/*file                                    controllers.WebJarAssets.at(file)
 
 GET         /*any                                                         @controllers.Application.angular(any)

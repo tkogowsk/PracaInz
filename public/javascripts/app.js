@@ -1,5 +1,5 @@
 var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'Controllers', 'filter', 'Repositories', 'Models', 'transcripts', 'Security',
-    'LocalStorageModule', 'angularUtils.directives.dirPagination']);
+    'LocalStorageModule', 'angularUtils.directives.dirPagination', 'ngCookies']);
 
 myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 
@@ -27,6 +27,7 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
         enabled: true,
         requireBase: false
     });
+
 });
 
 /*myApp.config(['$qProvider', function ($qProvider) {

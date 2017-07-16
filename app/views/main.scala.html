@@ -7,12 +7,15 @@
         <link rel='stylesheet' href='@routes.WebJarAssets.at(webJarAssets.locate("css/bootstrap.min.css"))'>
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/styles.css")">
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("jquery.min.js"))'></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/x64-core.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha512.min.js"></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("js/bootstrap.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-route.min.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-ui-router.js"))'></script>
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-resource.js"))'></script>
+        <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("angular-cookies.js"))'></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/ui-bootstrap-tpls-2.4.0.min.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/lodash.min.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/dirPagination.js")"></script>
@@ -51,7 +54,7 @@
                 </ul>
                 <div style="float: right">
                     {{userName}}
-                    <button ng-click="logout()">Logout</button>
+                    <button><a href="/logOut" target="_self">logout</a></button>
                 </div>
             </div>
         </nav>

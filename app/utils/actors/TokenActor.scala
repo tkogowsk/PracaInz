@@ -12,8 +12,5 @@ class TokenActor extends Actor {
     case "test" ⇒ {
       println("received test")
     }
-    case _ ⇒ {
-      println("received unknown message")
-    }
   }
 }

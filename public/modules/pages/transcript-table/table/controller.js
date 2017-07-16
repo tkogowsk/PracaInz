@@ -21,12 +21,12 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         }
 
         function init() {
-            /*            if (!$rootScope.authenticated) {
-             $state.go('login');
-             } else {*/
-            getAll();
-            prepareHeaderColumns();
-            //          }
+            if (!$rootScope.isAuthenticated()) {
+                $state.go('login');
+            } else {
+                getAll();
+                prepareHeaderColumns();
+            }
         }
 
         $scope.$on(filterTabEvent + 'Broadcast', function (event, data) {
@@ -112,9 +112,7 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                                     sorting: null,
                                     fe_name: currentItem.fe_name,
                                     dataExtractValue: $scope.jsIDPrefix + currentItem.id,
-                                    column_name: currentItem.column_name,
-                                    //TODO
-                                    user_id: 1
+                                    column_name: currentItem.column_name
                                 })
                         }).value();
                 }

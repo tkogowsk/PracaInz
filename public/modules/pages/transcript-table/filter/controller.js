@@ -12,12 +12,12 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
         };
 
         function init() {
-            /*         if (!$rootScope.authenticated) {
-             $state.go('login');
-             } else {*/
-            getFields();
-            setColumnList();
-            //       }
+            if (!$rootScope.isAuthenticated()) {
+                $state.go('login');
+            } else {
+                getFields();
+                setColumnList();
+            }
         }
 
         function setActiveTab(newName) {

@@ -18,8 +18,8 @@ import scala.concurrent.duration.Duration
 
 
 class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository: VariantColumnRepository,
-                            userRepository: UserRepository, privilegeRepository: PrivilegeRepository,
-                            tabFieldFilterRepository: TabFieldFilterRepository, jdbcRepository: JDBCRepository, system: ActorSystem) extends Controller {
+                            privilegeRepository: PrivilegeRepository,
+                            tabFieldFilterRepository: TabFieldFilterRepository, jdbcRepository: JDBCRepository, system: ActorSystem) extends Controller with Secured {
 
   def index = Action {
     Ok(views.html.index(webJarAssets))
@@ -31,54 +31,46 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
     obj("status" -> Constants.SUCCESS, "data" -> data, "msg" -> message)
   }
 
-  def getFields(sample_fake_id: Int, userName: String) = Action { request =>
-    var userId = None: Option[Int]
-    Await.result({
-      userRepository.getByName(userName).map {
-        user =>
-          if (user.isDefined) {
-            userId = Some(user.get.id)
-          } else {
-            BadRequest("User not found")
-          }
-      }
-    }, Duration.Inf)
-
-    Await.result(
-      SampleMetadataRepository.getByFakeId(sample_fake_id).map {
-        sample =>
-          if (sample.isDefined) {
-            Await.result(
-              tabFieldFilterRepository.getFilter(sample.get.sample_id, 1).map { res =>
-                val list = res.map(item => TabFieldFilterDTO(item._1, item._2, item._3, item._4, item._5, item._6, item._7, item._8, item._9, item._10, item._11, item._12))
-                Ok(successResponse(Json.toJson(list), "Getting Variant column list successfully"))
-              }, Duration.Inf)
-          } else {
-            BadRequest("Not found sample id")
-          }
-      }, Duration.Inf)
+  def getFields(sample_fake_id: Int, userName: String) = withUser { user =>
+    request =>
+      println(user)
+      Await.result(
+        SampleMetadataRepository.getByFakeId(sample_fake_id).map {
+          sample =>
+            if (sample.isDefined) {
+              Await.result(
+                tabFieldFilterRepository.getFilter(sample.get.sample_id, 1).map { res =>
+                  val list = res.map(item => TabFieldFilterDTO(item._1, item._2, item._3, item._4, item._5, item._6, item._7, item._8, item._9, item._10, item._11, item._12))
+                  Ok(successResponse(Json.toJson(list), "Getting Variant column list successfully"))
+                }, Duration.Inf)
+            } else {
+              BadRequest("Not found sample id")
+            }
+        }, Duration.Inf)
   }
 
-  def getVariantColumn: Action[AnyContent] = Action.async {
+  def getVariantColumn: Action[AnyContent] = Action.async { request =>
     variantColumnRepository.getAll.map { res =>
       Ok(successResponse(Json.toJson(res), "Getting Variant column list successfully"))
     }
   }
 
-  def getTranscriptData(sampleFakeId: Int, userName: String): Action[AnyContent] = Action { request =>
-    Await.result(
-      SampleMetadataRepository.getByFakeId(sampleFakeId).map {
-        sample =>
-          if (sample.isDefined) {
-            val response = jdbcRepository.getBySampleId(sample.get.sample_id)
-            Ok(successResponse(Json.toJson(response), "list of  transcripts"))
-          } else {
-            BadRequest("Not found sample id")
-          }
-      }, Duration.Inf)
+  def getTranscriptData(sampleFakeId: Int, userName: String) = withUser { user =>
+    request =>
+      Await.result(
+        SampleMetadataRepository.getByFakeId(sampleFakeId).map {
+          sample =>
+            if (sample.isDefined) {
+              val response = jdbcRepository.getBySampleId(sample.get.sample_id)
+              Ok(successResponse(Json.toJson(response), "list of  transcripts"))
+            } else {
+              BadRequest("Not found sample id")
+            }
+        }, Duration.Inf)
   }
 
-  def getByTab = Action { request =>
+  def getByTab = withUser { user =>
+    request =>
     var sampleId = None: Option[String]
     request.body.asJson.map { json =>
       json.asOpt[FilterDTO].map { elem =>
@@ -103,56 +95,18 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
 
   }
 
-  def logIn = Action {
-    request =>
-      request.body.asJson.map {
-        json =>
-          json.asOpt[AuthenticationDTO].map {
-            elem =>
-              Await.result(
-                userRepository.authenticate(elem).map {
-                  res =>
-                    Ok(successResponse(Json.toJson(res.isDefined), ""))
-                }, Duration.Inf)
-
-          }.getOrElse {
-            BadRequest("Missing parameter")
-          }
-      }.getOrElse {
-        BadRequest("Expecting Json data")
-      }
+  def getSamplesList = withUser { user =>
+    _ => {
+      Await.result(
+        privilegeRepository.getAll(user).map {
+          list =>
+            val response = list.map(item => SampleMetadataModel(item._1, item._2))
+            Ok(successResponse(Json.toJson(response), "list of available samples"))
+        }, Duration.Inf)
+    }
   }
 
-  def getSamplesList = Action {
-    request =>
-      request.body.asJson.map {
-        json =>
-          json.asOpt[AuthenticationDTO].map {
-            elem =>
-              Await.result(
-                userRepository.authenticate(elem).map {
-                  user =>
-                    if (user.isDefined) {
-                      Await.result(
-                        privilegeRepository.getAll(user.orNull).map {
-                          list =>
-                            val response = list.map(item => SampleMetadataModel(item._1, item._2))
-                            Ok(successResponse(Json.toJson(response), "list of available samples"))
-                        }, Duration.Inf)
-                    } else {
-                      Ok(successResponse(Json.toJson("null"), "no data"))
-                    }
-                }, Duration.Inf)
-
-          }.getOrElse {
-            BadRequest("Missing parameter")
-          }
-      }.getOrElse {
-        BadRequest("Expecting Json data")
-      }
-  }
-
-  def count = Action {
+  def count = withUser { user =>
     request =>
       request.body.asJson.map {
         json =>
@@ -168,51 +122,18 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
       }
   }
 
-  def saveUserFields(userName: String) = Action {
+  def saveUserFields(userName: String) = withUser { user =>
     request =>
+      println(user)
       request.body.asJson.map {
         json =>
           json.asOpt[List[UserSampleTabDTO]].map {
             elem =>
-              var userId = None: Option[Int]
-              Await.result({
-                userRepository.getByName(userName).map {
-                  user =>
-                    if (user.isDefined) {
-                      UserSmpTabRepository.save(user.get.id, elem)
-                    } else {
-                      BadRequest("User not found")
-                    }
-                }
-              }, Duration.Inf)
+              UserSmpTabRepository.save(user.id, elem)
               Ok(successResponse(Json.toJson(""), "Fields saved"))
           }.getOrElse {
             BadRequest("Missing parameter")
           }
-      }.getOrElse {
-        BadRequest("Expecting Json data")
-      }
-  }
-
-  def getTranscriptDataWithPagination(sampleFakeId: Int, offset: Int): Action[AnyContent] = Action { request =>
-      request.body.asJson.map {
-       json =>
-         json.asOpt[FilterWithPaginationDTO].map {
-            elem =>
-              Await.result(
-                SampleMetadataRepository.getByFakeId(sampleFakeId).map {
-                  sample =>
-                    if (sample.isDefined) {
-                      val response = jdbcRepository.getBySampleId(sample.get.sample_id)
-                      Ok(successResponse(Json.toJson(response), "list of  transcripts"))
-                    } else {
-                      BadRequest("Not found sample id")
-                    }
-                }, Duration.Inf)
-              Ok(successResponse(Json.toJson(""), "Fields saved"))
-          }.getOrElse {
-            BadRequest("Missing parameter")
-         }
       }.getOrElse {
         BadRequest("Expecting Json data")
       }

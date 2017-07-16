@@ -1,15 +1,14 @@
 package repository
 
-import javax.inject.Singleton
-
 import models.UserModel
 import utils.MyPostgresDriver.api._
 import utils.dtos.AuthenticationDTO
 
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
-@Singleton
-class UserRepository {
+object UserRepository {
 
   private val db = Database.forConfig("postgresConf")
   var userTable = TableQuery[UserTableRepository]
@@ -32,8 +31,18 @@ class UserRepository {
     userTable.to[List].result
   }
 
-  def getByName(name: String): Future[Option[UserModel]] = db.run {
-    userTable.filter(_.name === name).result.headOption
+  def getByName(name: String): Option[UserModel] = {
+    var user = None: Option[UserModel]
+    Await.result({
+      db.run {
+        userTable.filter(_.name === name).result.headOption
+      }.map { value =>
+        if (value.isDefined) {
+          user = Option(value.get)
+        }
+      }
+    }, Duration.Inf)
+    user
   }
 
 }

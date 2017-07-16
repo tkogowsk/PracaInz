@@ -2,10 +2,10 @@ angular.module('Controllers').controller('TranscriptListController', ['$rootScop
     function ($rootScope, $scope, $log, $state, User) {
 
         function init() {
-            if (!$rootScope.authenticated) {
+            if (!$rootScope.isAuthenticated()) {
                 $state.go('login');
             } else {
-                User.getSamplesList({name: $rootScope.userName, password: ""}, function (response) {
+                User.getSamplesList(function (response) {
                     $scope.samples = response.data;
                 })
             }

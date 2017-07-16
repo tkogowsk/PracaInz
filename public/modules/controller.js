@@ -1,13 +1,13 @@
 angular.module('Controllers', []);
 
-angular.module('Controllers').controller('MainPageController', ['$scope', '$rootScope', '$log', '$state', 'VariantColumn', 'LocalStorage',
-    function ($scope, $rootScope, $log, $state, VariantColumn, LocalStorage) {
+angular.module('Controllers').controller('MainPageController', ['$scope', '$rootScope', '$log', '$state', 'VariantColumn', 'LocalStorage', '$location', '$cookies',
+    function ($scope, $rootScope, $log, $state, VariantColumn, LocalStorage, $location, $cookies) {
         function init() {
-            /*   if (!$rootScope.authenticated) {
+            if (!$rootScope.isAuthenticated()) {
                 $state.go('login');
-             } else {*/
+            } else {
                 getColumnsList();
-            // }
+            }
         }
 
         function getColumnsList() {
@@ -24,7 +24,18 @@ angular.module('Controllers').controller('MainPageController', ['$scope', '$root
         $rootScope.logout = function () {
             $rootScope.authenticated = false;
             $rootScope.userName = "";
-            $state.go('login');
+            deleteCookie('authenticated');
+            deleteCookie('PLAY_SESSION');
+            $location.url('/logout');
+        };
+
+        function deleteCookie(name) {
+            $cookies.remove(name)
+            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+
+        $rootScope.isAuthenticated = function () {
+            return ($cookies.get('authenticated') === "true")
         };
 
         $scope.$on(filterTabEvent + 'Emit', function (event, data) {
@@ -43,8 +54,8 @@ angular.module('Controllers').controller('MainPageController', ['$scope', '$root
         });
 
         init.bind(this)();
-
     }]);
+
 angular.module('Controllers').controller('HeaderController', ['$scope', '$location',
     function ($scope, $location) {
         $scope.isActive = function (viewLocation) {

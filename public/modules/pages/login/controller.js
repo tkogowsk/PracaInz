@@ -5,16 +5,18 @@ angular.module('Security').controller('LoginController', ['$rootScope', '$scope'
 
         $scope.userName = "";
         $scope.password = "";
-
         $scope.logIn = function () {
-            Authentication.logIn({name: $scope.userName, password: $scope.password}, function (response) {
+            Authentication.logIn({
+                name: $scope.userName,
+                password: CryptoJS.SHA512($scope.password).toString(CryptoJS.enc.Base64)
+            }, function (response) {
                 if (response.data) {
-                    $rootScope.authenticated = true;
                     $rootScope.userName = $scope.userName;
                     $scope.$emit(loggedInEvent + 'Emit');
                     $state.go('transcript-list');
                 }
-                $scope.message = "Error"
+            }, function (error) {
+                $scope.message = error.data
             });
         }
 
