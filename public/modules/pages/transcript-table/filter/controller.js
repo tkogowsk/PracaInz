@@ -55,7 +55,6 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
 
         function getFields() {
             Fields.getFields({
-                    userName: $rootScope.userName,
                     sample_fake_id: $stateParams.fakeId
                 }, (response) => {
                 let data = _.chain(response.data)
@@ -145,9 +144,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
                 })
             });
 
-            Fields.save({
-                userName: $rootScope.userName,
-            }, payload, (response) => {
+            Fields.save(payload, (response) => {
                 changeSpinner(false);
             });
         };

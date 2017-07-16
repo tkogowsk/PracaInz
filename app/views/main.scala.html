@@ -37,6 +37,9 @@
         <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/transcript-list/controller.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/transcript-table/table/controller.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/transcript-table/filter/controller.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/admin/controller.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/admin/privileges/controller.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/admin/users-list/controller.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/app.js")"></script>
 
     </head>
@@ -50,7 +53,7 @@
                     <li ng-class="{ active: isActive('/index')}"><a href="/index">Home</a></li>
                     <li ng-class="{ active: isActive('/list')}"><a href="/list">Transcript list</a></li>
                     <li ng-class="{ active: isActive('/login')}"><a href="/login">Login</a></li>
-                    <li><a href="/upload" target="_self">Upload</a></li>
+                    <li ng-class="{ active: isActive('/admin')}"><a href="/admin">Admin</a></li>
                 </ul>
                 <div style="float: right">
                     {{userName}}

@@ -1,4 +1,4 @@
-var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'Controllers', 'filter', 'Repositories', 'Models', 'transcripts', 'Security',
+var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'Controllers', 'filter', 'Repositories', 'Models', 'transcripts', 'Security', 'Admin',
     'LocalStorageModule', 'angularUtils.directives.dirPagination', 'ngCookies']);
 
 myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
@@ -15,6 +15,10 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
         .state('transcript-list', {
             url: '/list',
             templateUrl: '/assets/modules/pages/transcript-list/index.html'
+        })
+        .state('admin', {
+            url: '/admin',
+            templateUrl: '/assets/modules/pages/admin/index.html'
         })
         .state('upload', {
             url: '/upload',

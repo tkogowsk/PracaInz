@@ -16,7 +16,7 @@ import scala.collection.mutable.ArrayBuffer
 class Upload @Inject()(webJarAssets: WebJarAssets, addFilterService: AddFilterService) extends Controller {
 
   def index = Action {
-    Ok(views.html.upload(webJarAssets))
+    Results.Redirect(routes.Application.index())
   }
 
   def uploadFilters = Action(parse.multipartFormData) { request =>

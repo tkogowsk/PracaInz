@@ -11,6 +11,7 @@ import repository._
 import utils.JsonFormat._
 import utils._
 import utils.dtos._
+import utils.security.Secured
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -18,7 +19,6 @@ import scala.concurrent.duration.Duration
 
 
 class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository: VariantColumnRepository,
-                            privilegeRepository: PrivilegeRepository,
                             tabFieldFilterRepository: TabFieldFilterRepository, jdbcRepository: JDBCRepository, system: ActorSystem) extends Controller with Secured {
 
   def index = Action {
@@ -31,9 +31,8 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
     obj("status" -> Constants.SUCCESS, "data" -> data, "msg" -> message)
   }
 
-  def getFields(sample_fake_id: Int, userName: String) = withUser { user =>
+  def getFields(sample_fake_id: Int) = withUser { user =>
     request =>
-      println(user)
       Await.result(
         SampleMetadataRepository.getByFakeId(sample_fake_id).map {
           sample =>
@@ -55,7 +54,7 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
     }
   }
 
-  def getTranscriptData(sampleFakeId: Int, userName: String) = withUser { user =>
+  def getTranscriptData(sampleFakeId: Int) = withUser { user =>
     request =>
       Await.result(
         SampleMetadataRepository.getByFakeId(sampleFakeId).map {
@@ -98,7 +97,7 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
   def getSamplesList = withUser { user =>
     _ => {
       Await.result(
-        privilegeRepository.getAll(user).map {
+        PrivilegeRepository.getAll(user).map {
           list =>
             val response = list.map(item => SampleMetadataModel(item._1, item._2))
             Ok(successResponse(Json.toJson(response), "list of available samples"))
@@ -122,9 +121,8 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
       }
   }
 
-  def saveUserFields(userName: String) = withUser { user =>
+  def saveUserFields() = withUser { user =>
     request =>
-      println(user)
       request.body.asJson.map {
         json =>
           json.asOpt[List[UserSampleTabDTO]].map {
@@ -139,4 +137,12 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
       }
   }
 
+  def getUsersList = withAdmin { user =>
+    request =>
+      Await.result(
+        UserRepository.getAll.map {
+          list =>
+            Ok(successResponse(Json.toJson(list), "list of users"))
+        }, Duration.Inf)
+  }
 }

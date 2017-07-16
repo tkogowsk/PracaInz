@@ -1,10 +1,9 @@
 angular.module('Repositories').factory('Transcript', function ($resource) {
     return $resource('', null, {
         getTranscriptData: {
-            method: 'GET', url: '/getTranscriptData/:sampleFakeId/:userName', isArray: false,
+            method: 'GET', url: '/getTranscriptData/:sampleFakeId', isArray: false,
             params: {
-                sampleFakeId: '@sampleFakeId',
-                userName: '@userName'
+                sampleFakeId: '@sampleFakeId'
             }
         },
         getTranscriptDataWithPagination: {

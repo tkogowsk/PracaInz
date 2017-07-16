@@ -19,7 +19,9 @@ object UserRepository {
 
     def name = column[String]("name")
 
-    def * = (id, name) <> (UserModel.tupled, UserModel.unapply)
+    def role = column[String]("role")
+
+    def * = (id, name, role) <> (UserModel.tupled, UserModel.unapply)
 
   }
 
@@ -45,4 +47,17 @@ object UserRepository {
     user
   }
 
+  def getIfAdmin(name: String): Option[UserModel] = {
+    var user = None: Option[UserModel]
+    Await.result({
+      db.run {
+        userTable.filter(_.name === name).result.headOption
+      }.map { value =>
+        if (value.isDefined && value.get.role == "admin") {
+          user = value
+        }
+      }
+    }, Duration.Inf)
+    user
+  }
 }

@@ -1,14 +1,11 @@
 package repository
 
-import javax.inject.Singleton
-
 import models.{PrivilegeModel, UserModel}
 import utils.MyPostgresDriver.api._
 
 import scala.concurrent.Future
 
-@Singleton
-class PrivilegeRepository {
+object PrivilegeRepository {
   private val db = Database.forConfig("postgresConf")
 
   var privilege = TableQuery[PrivilegeTableRepository]
@@ -39,4 +36,5 @@ class PrivilegeRepository {
     val a = query1.result
     db.run(a)
   }
+
 }

@@ -35,7 +35,6 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
             var list = prepareFiltersList(data.items);
             payload["filters"] = list;
             payload.sampleFakeId = parseInt($stateParams.fakeId);
-            payload.userName = $rootScope.userName;
             Transcript.getByTab(payload, (response) => {
                 $scope.transcriptData = [];
                 prepareTableData(response.data);
@@ -76,7 +75,6 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         function getAll() {
             changeSpinner(true);
             Transcript.getTranscriptData({
-                    userName: $rootScope.userName,
                     sampleFakeId: $stateParams.fakeId
                 }, function (response) {
                     prepareTableData(response.data);

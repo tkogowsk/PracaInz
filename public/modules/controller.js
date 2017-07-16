@@ -38,6 +38,10 @@ angular.module('Controllers').controller('MainPageController', ['$scope', '$root
             return ($cookies.get('authenticated') === "true")
         };
 
+        $rootScope.isAdmin = function () {
+            return ($cookies.get('role') === "admin")
+        };
+
         $scope.$on(filterTabEvent + 'Emit', function (event, data) {
             event.stopPropagation();
             $scope.$broadcast(filterTabEvent + 'Broadcast', data)

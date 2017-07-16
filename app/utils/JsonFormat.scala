@@ -23,13 +23,13 @@ object JsonFormat {
   implicit lazy val columnSortingDTOFormat = Jsonx.formatCaseClass[ColumnSortingDTO]
   implicit lazy val columnSearchDTOFormat = Jsonx.formatCaseClass[ColumnSearchDTO]
   implicit lazy val filterWithPaginationDTOFormat = Jsonx.formatCaseClass[FilterWithPaginationDTO]
-
   implicit lazy val userSmpTabModelFormat = Jsonx.formatCaseClass[UserSmpTabModel]
   implicit lazy val tabFieldFilterDTOFormat = Jsonx.formatCaseClass[TabFieldFilterDTO]
   implicit lazy val tabFieldFilterModelFormat = Jsonx.formatCaseClassUseDefaults[TabFieldFilterModel]
   implicit lazy val tabModelFormat = Jsonx.formatCaseClassUseDefaults[TabModel]
   implicit lazy val dataCellDTOFormat = Jsonx.formatCaseClassUseDefaults[DataCellDTO]
   implicit lazy val dataRowDTOFormat = Jsonx.formatCaseClassUseDefaults[DataRowDTO]
+  implicit lazy val UserModelFormat = Jsonx.formatCaseClass[UserModel]
 
 }
 

@@ -47,7 +47,7 @@ class Authorization @Inject()() extends Controller {
   }
 
   def logOut = Action {
-    Redirect(routes.Application.index()).withNewSession.discardingCookies(DiscardingCookie("authenticated")).flashing(
+    Redirect(routes.Application.index()).withNewSession.discardingCookies(DiscardingCookie("authenticated"), DiscardingCookie("role")).flashing(
       "success" -> "You've been logged out"
     )
   }
