@@ -3,7 +3,7 @@ package repository
 import javax.inject.Singleton
 
 import models.VariantColumnModel
-import slick.driver.PostgresDriver.api._
+import slick.jdbc.PostgresProfile.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
