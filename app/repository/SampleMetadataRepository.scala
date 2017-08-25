@@ -14,11 +14,11 @@ object SampleMetadataRepository {
 
   class SampleMetadataTableRepository(tag: Tag) extends Table[SampleMetadataModel](tag, "sample_metadata") {
 
-    def sample_id = column[String]("sample_id", O.PrimaryKey)
+    def sampleId = column[String]("sample_id", O.PrimaryKey)
 
-    def fake_id = column[Int]("fake_id")
+    def fakeId = column[Int]("fake_id")
 
-    def * = (sample_id, fake_id) <> (SampleMetadataModel.tupled, SampleMetadataModel.unapply)
+    def * = (sampleId, fakeId) <> (SampleMetadataModel.tupled, SampleMetadataModel.unapply)
 
   }
 
@@ -26,8 +26,8 @@ object SampleMetadataRepository {
     sampleMetadata.to[List].result
   }
 
-  def getByFakeId(fake_id: Int): Future[Option[SampleMetadataModel]] = db.run {
-    sampleMetadata.filter(_.fake_id === fake_id).result.headOption
+  def getByFakeId(fakeId: Int): Future[Option[SampleMetadataModel]] = db.run {
+    sampleMetadata.filter(_.fakeId === fakeId).result.headOption
   }
 
 }

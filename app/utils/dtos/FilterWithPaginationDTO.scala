@@ -2,13 +2,13 @@ package utils.dtos
 
 case class ColumnSortingDTO
 (
-  column_name: String,
+  columnName: String,
   sorting: String
 )
 
 case class ColumnSearchDTO
 (
-  column_name: String,
+  columnName: String,
   searchValue: String
 )
 

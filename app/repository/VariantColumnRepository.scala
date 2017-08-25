@@ -20,13 +20,13 @@ private val db = Database.forConfig("postgresConf")
 
     def id: Rep[Int] = column[Int]("id", O.PrimaryKey)
 
-    def column_name: Rep[String] = column[String]("column_name")
+    def columnName: Rep[String] = column[String]("column_name")
 
-    def fe_name: Rep[String] = column[String]("fe_name")
+    def feName: Rep[String] = column[String]("fe_name")
 
-    def column_type: Rep[String] = column[String]("type")
+    def columnType: Rep[String] = column[String]("type")
 
-    def * = (id, column_name, fe_name, column_type) <> (VariantColumnModel.tupled, VariantColumnModel.unapply)
+    def * = (id, columnName, feName, columnType) <> (VariantColumnModel.tupled, VariantColumnModel.unapply)
 
   }
 
@@ -38,7 +38,7 @@ private val db = Database.forConfig("postgresConf")
     var id = None: Option[Int]
     Await.result({
       db.run {
-        variant_columns.filter(_.fe_name === feName).result.headOption
+        variant_columns.filter(_.feName === feName).result.headOption
       }
         .map { value =>
           if (value.isDefined) {

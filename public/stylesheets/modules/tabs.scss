@@ -51,10 +51,6 @@
       }
     }
 
-    .filter-name{
-
-    }
-
     .filter-field{
       p{
         font-weight:bold;
@@ -71,6 +67,9 @@
     label {
       left: 20px;
       position: absolute;
+    }
+    .filter-buttons{
+      margin-top: 10px;
     }
   }
 }

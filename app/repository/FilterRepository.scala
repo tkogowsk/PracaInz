@@ -19,9 +19,7 @@ object FilterRepository {
 
     def name = column[Option[String]]("name")
 
-    def is_global = column[Option[Boolean]]("is_global")
-
-    def * = (id, name, is_global) <> (FilterModel.tupled, FilterModel.unapply)
+    def * = (id, name) <> (FilterModel.tupled, FilterModel.unapply)
 
   }
 
@@ -44,11 +42,11 @@ object FilterRepository {
     id
   }
 
-  def save(filterName: String, is_global: Boolean) = {
+  def save(filterName: String) = {
     Await.result({
       db.run(
-        sqlu"""INSERT INTO "filter"("name", "is_global")
-              VALUES (${filterName}, ${is_global})""")
+        sqlu"""INSERT INTO "filter"("name")
+              VALUES (${filterName})""")
     }, Duration.Inf)
   }
 

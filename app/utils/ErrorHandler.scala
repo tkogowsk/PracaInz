@@ -22,4 +22,5 @@ class ErrorHandler extends HttpErrorHandler {
       InternalServerError("A server error occurred: " + exception.getMessage)
     )
   }
+
 }

@@ -3,13 +3,20 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
     function ($scope, $rootScope, $state, $log, Fields, $stateParams, LocalStorage) {
 
         $scope.groupedData = [];
-        $scope.userId = 1;
         $scope.activeTabName = null;
         $scope.showFilterSpinner = true;
 
+        $scope.modernBrowsers = [
+            {name: "Opera", selected: true},
+            {name: "Internet Explorer", selected: false},
+            {name: "Firefox", selected: true},
+            {name: "Safari", selected: false},
+            {name: "Chrome", selected: true}
+        ];
+
         function changeSpinner(spinnerIndicator) {
             $scope.showFilterSpinner = spinnerIndicator;
-        };
+        }
 
         function init() {
             if (!$rootScope.isAuthenticated()) {
@@ -45,8 +52,8 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
         };
 
         function setFieldValue(currentItem) {
-            if (_.isNil(currentItem.value) === true && _.isNil(currentItem.default_value) === false) {
-                currentItem.value = currentItem.default_value;
+            if (_.isNil(currentItem.value) === true && _.isNil(currentItem.defaultValue) === false) {
+                currentItem.value = currentItem.defaultValue;
             }
             if (_.isNil(currentItem.options) === false && currentItem.options.length > 0) {
                 currentItem.options = currentItem.options.trim().split(',');
@@ -55,16 +62,16 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
 
         function getFields() {
             Fields.getFields({
-                    sample_fake_id: $stateParams.fakeId
+                    sampleFakeId: $stateParams.fakeId
                 }, (response) => {
-                let data = _.chain(response.data)
-                    .map(function (currentItem) {
-                        setFieldValue(currentItem);
-                        return currentItem;
-                    }).value();
+                    let data = _.chain(response.data)
+                        .map(function (currentItem) {
+                            setFieldValue(currentItem);
+                            return currentItem;
+                        }).value();
 
-                let groupedData = _.chain(data)
-                        .groupBy('tab_name')
+                    let groupedData = _.chain(data)
+                        .groupBy('tabName')
                         .toPairs()
                         .map(function (currentItem) {
                             return _.zipObject(['tabName', 'items'], currentItem)
@@ -81,7 +88,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
 
                     });
                     $scope.groupedData = groupedData;
-                changeSpinner(false);
+                    changeSpinner(false);
                 }
             );
         }
@@ -102,7 +109,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
                                 filterName: field.filterName,
                                 relation: field.relation,
                                 value: field.value,
-                                variant_column_id: field.variant_column_id
+                                variantColumnId: field.variantColumnId
                             })
                         }
                     })
@@ -135,11 +142,11 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
             _.forEach(tab.items, function (filters) {
                 _.forEach(filters.items, function (field) {
                     payload.push({
-                        tab_id: field.tab_id,
-                        field_id: field.field_id,
-                        filter_id: field.filter_id,
+                        tabId: field.tabId,
+                        fieldId: field.fieldId,
+                        filterId: field.filterId,
                         value: field.value || '',
-                        sample_fake_id: parseInt($stateParams.fakeId)
+                        sampleFakeId: parseInt($stateParams.fakeId)
                     })
                 })
             });
@@ -154,7 +161,7 @@ angular.module('filter').controller('FilterController', ['$scope', '$rootScope',
                 var elem = _.find($scope.columnsList, function (elem) {
                     return elem.id === columnId;
                 });
-                return elem.fe_name;
+                return elem.feName;
             }
             return "";
         };

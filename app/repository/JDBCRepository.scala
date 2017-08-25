@@ -13,8 +13,32 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
+import java.sql.PreparedStatement
 
 class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantColumnRepository: VariantColumnRepository) {
+
+  def getAllIds: ListBuffer[String] = {
+    val result = ListBuffer[String]()
+    val conn = db.getConnection()
+    val queryBeginning = "select distinct sample_id "
+    val queryEnd = "from " + ConfigService.getTranscriptTableName
+
+    val query = queryBeginning +  queryEnd
+
+    try {
+      val stmt = conn.createStatement
+      val rs = stmt.executeQuery(query)
+
+      while (rs.next()) {
+        result += rs.getString("sample_id")
+      }
+
+    } finally {
+      conn.close()
+    }
+
+    result
+  }
 
   def getAll(columns: List[VariantColumnModel]): ListBuffer[DataRowDTO] = {
     val result = ListBuffer[DataRowDTO]()
@@ -24,7 +48,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     var queryColumns = ""
 
     columns.foreach(elem =>
-      queryColumns += ",\"" + elem.column_name + "\" "
+      queryColumns += ",\"" + elem.columnName + "\" "
     )
     queryColumns = queryColumns.substring(1)
 
@@ -37,7 +61,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
       while (rs.next()) {
         val item = ListBuffer[DataCellDTO]()
         columns.foreach(elem =>
-          item += DataCellDTO(elem.id, elem.column_name, rs.getString(elem.column_name))
+          item += DataCellDTO(elem.id, elem.columnName, rs.getString(elem.columnName))
         )
         result += DataRowDTO(item)
       }
@@ -59,7 +83,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     var queryColumns = ""
 
     columns.foreach(elem =>
-      queryColumns += ",\"" + elem.column_name + "\" "
+      queryColumns += ",\"" + elem.columnName + "\" "
     )
     queryColumns = queryColumns.substring(1)
 
@@ -72,7 +96,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
       while (rs.next()) {
         val item = ListBuffer[DataCellDTO]()
         columns.foreach(elem =>
-          item += DataCellDTO(elem.id, elem.column_name, rs.getString(elem.column_name))
+          item += DataCellDTO(elem.id, elem.columnName, rs.getString(elem.columnName))
         )
         result += DataRowDTO(item)
       }
@@ -94,14 +118,29 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     return columns
   }
 
+  def setPreparedStatementValues(preparedStatement: PreparedStatement, fields: ListBuffer[FieldDTO], columns: List[VariantColumnModel]) = {
+    for( i <- 1 to fields.size) {
+      val field = fields(i - 1)
+      val columnType = filterColumn(columns, field.variantColumnId).columnType
+      columnType match {
+        case "text" => preparedStatement.setString(i, field.value)
+        case "string" => preparedStatement.setString(i, field.value)
+        case "int" => preparedStatement.setInt(i, field.value.toInt)
+        case "double" => preparedStatement.setDouble(i, field.value.toDouble)
+      }
+    }
+  }
+
+
   def getByFields(filter: FilterDTO, sampleId: String): ListBuffer[DataRowDTO] = {
     if (filter.filters.isEmpty) {
       return getBySampleId(sampleId)
     }
     val columns: List[VariantColumnModel] = this.getColumns
 
+    var preparedStatement: PreparedStatement = null
     val result = ListBuffer[DataRowDTO]()
-    val conn = db.getConnection()
+    val dbConnection = db.getConnection()
     val queryBeginning = "SELECT "
     val transcriptTableSampleIdColumnName = ConfigService.getTranscriptTableSampleIdColumnName
     val queryEnd = "from " + ConfigService.getTranscriptTableName
@@ -111,58 +150,23 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     val query = queryBeginning + queryColumns + queryEnd + queryWhere
 
     try {
-      val stmt = conn.createStatement
-      val rs = stmt.executeQuery(query)
+      preparedStatement = dbConnection.prepareStatement(query)
+      setPreparedStatementValues(preparedStatement, filter.filters, columns)
+
+      val rs = preparedStatement.executeQuery()
 
       while (rs.next()) {
         val item = ListBuffer[DataCellDTO]()
         columns.foreach(elem =>
-          item += DataCellDTO(elem.id, elem.column_name, rs.getString(elem.column_name))
+          item += DataCellDTO(elem.id, elem.columnName, rs.getString(elem.columnName))
         )
         result += DataRowDTO(item)
       }
 
     } catch {
-      case e: Exception => println(e.getMessage)
+      case e: Exception => println(e)
     } finally {
-      conn.close()
-    }
-
-    result
-  }
-
-  def getByFieldsPagination(filter: FilterDTO, sampleId: String): ListBuffer[DataRowDTO] = {
-    if (filter.filters.isEmpty) {
-      return getBySampleId(sampleId)
-    }
-    val columns: List[VariantColumnModel] = this.getColumns
-
-    val result = ListBuffer[DataRowDTO]()
-    val conn = db.getConnection()
-    val queryBeginning = "SELECT "
-    val transcriptTableSampleIdColumnName = ConfigService.getTranscriptTableSampleIdColumnName
-    val queryEnd = "from " + ConfigService.getTranscriptTableName
-    val queryColumns = getColumnQueryPart(columns)
-    val queryWhere = addAndSampleIdCondition(getWhereQueryPart(columns, filter.filters), transcriptTableSampleIdColumnName, sampleId)
-
-    val query = queryBeginning + queryColumns + queryEnd + queryWhere
-
-    try {
-      val stmt = conn.createStatement
-      val rs = stmt.executeQuery(query)
-
-      while (rs.next()) {
-        val item = ListBuffer[DataCellDTO]()
-        columns.foreach(elem =>
-          item += DataCellDTO(elem.id, elem.column_name, rs.getString(elem.column_name))
-        )
-        result += DataRowDTO(item)
-      }
-
-    } catch {
-      case e: Exception => println(e.getMessage)
-    } finally {
-      conn.close()
+      dbConnection.close()
     }
 
     result
@@ -171,7 +175,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
   def getColumnQueryPart(columns: List[VariantColumnModel]): String = {
     var queryColumns = ""
     columns.foreach(elem =>
-      queryColumns += ",\"" + elem.column_name + "\" "
+      queryColumns += ",\"" + elem.columnName + "\" "
     )
     queryColumns = queryColumns.substring(1)
     queryColumns
@@ -181,24 +185,17 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     var query = " WHERE "
 
     fields.foreach(field => {
-      val columnName = filterColumnName(columns, field.variant_column_id)
-
+      val columnName = filterColumn(columns, field.variantColumnId).columnName
 
       field.relation.toString match {
-        /* case Relation.Contains => {
-           var values = userField.value.split(",", -1)
-           var array = ArrayBuffer[String]()
-           values.foreach(elem => array += ("'" + elem + "'"))
-           query = query.concat("\"" + field.columnName.toString + "\"" + " IN(" + array.mkString(",") + ") AND ")
-         }*/
-
-        case Relation.Greater => query = query.concat("\"" + columnName + "\"" + " > \'" + field.value + "\' AND ")
-        case Relation.GreaterThan => query = query.concat("\"" + columnName + "\"" + " >= \'" + field.value + "\' AND ")
-        case Relation.Equals => query = query.concat("\"" + columnName + "\"" + " = \'" + field.value + "\' AND ")
-        case Relation.Less => query = query.concat("\"" + columnName + "\"" + " < \'" + field.value + "\' AND ")
-        case Relation.LessThan => query = query.concat("\"" + columnName + "\"" + " <= \'" + field.value + "\' AND ")
+        case Relation.Greater => query = query.concat("\"" + columnName + "\"" + " > ? AND ")
+        case Relation.GreaterThan => query = query.concat("\"" + columnName + "\"" + " >= ? AND ")
+        case Relation.Equals => query = query.concat("\"" + columnName + "\"" + " = ? AND ")
+        case Relation.Less => query = query.concat("\"" + columnName + "\"" + " < ? AND ")
+        case Relation.LessThan => query = query.concat("\"" + columnName + "\"" + " <= ? AND ")
       }
     })
+    // remove last " AND " string
     query = query.slice(0, query.length - 5)
     query
   }
@@ -211,8 +208,8 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
     " " + transcriptTableSampleIdColumnName + " = '" + sampleId + "'"
   }
 
-  def filterColumnName(columns: List[VariantColumnModel], columnID: Int): String = {
-    columns.find(elem => elem.id == columnID).get.column_name
+  def filterColumn(columns: List[VariantColumnModel], columnID: Int): VariantColumnModel = {
+    columns.find(elem => elem.id == columnID).get
   }
 
   def count(dto: FilteringCountersDTO) = {
@@ -224,7 +221,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
       SampleMetadataRepository.getByFakeId(dto.sampleFakeId).map {
         sample =>
           if (sample.isDefined) {
-            sampleId = Some(sample.get.sample_id)
+            sampleId = Some(sample.get.sampleId)
           } else {
             throw new IllegalArgumentException()
           }
@@ -237,29 +234,31 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
           list = Option(new ListBuffer[FieldDTO])
           mapOfFilters.put(elem.filterName, list.get)
         }
-        list.get += FieldDTO(elem.relation, elem.value, elem.variant_column_id)
+        list.get += FieldDTO(elem.relation, elem.value, elem.variantColumnId)
       }
     }
     val setOfFilterNames = mapOfFilters.keys.toArray
     var iterator: Int = 0
     val filters = setOfFilterNames.slice(0, iterator)
 
-    for (i <- 0 to setOfFilterNames.length - 1) {
+    for (i <- 0 until setOfFilterNames.length) {
       var names = setOfFilterNames.slice(0, i + 1)
       var fields: ListBuffer[FieldDTO] = new ListBuffer
       for (name <- names) {
         fields ++= mapOfFilters(name)
       }
+      var preparedStatement: PreparedStatement = null
       val queryBeginning = "SELECT COUNT(1) AS count "
       val transcriptTableSampleIdColumnName = ConfigService.getTranscriptTableSampleIdColumnName
       val queryEnd = "from " + ConfigService.getTranscriptTableName
       val queryWhere = addAndSampleIdCondition(getWhereQueryPart(columns, fields), transcriptTableSampleIdColumnName, sampleId.get)
 
       val query = queryBeginning + queryEnd + queryWhere
-      val conn = db.getConnection()
+      val dbConnection = db.getConnection()
       try {
-        val stmt = conn.createStatement
-        val rs = stmt.executeQuery(query)
+        preparedStatement = dbConnection.prepareStatement(query)
+        setPreparedStatementValues(preparedStatement, fields, columns)
+        val rs = preparedStatement.executeQuery()
 
         while (rs.next()) {
           var count = rs.getInt("count")
@@ -269,7 +268,7 @@ class JDBCRepository @Inject()(@NamedDatabase("jdbcConf") db: Database, variantC
       } catch {
         case e: Exception => println(e)
       } finally {
-        conn.close()
+        dbConnection.close()
       }
 
     }

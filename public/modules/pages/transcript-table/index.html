@@ -1,5 +1,16 @@
 <div class="row">
     <div ng-controller="FilterController" class="col-lg-2 col-md-2">
+        <div
+                isteven-multi-select
+                input-model="modernBrowsers"
+                output-model="outputBrowsers"
+                button-label="name"
+                item-label="name"
+                tick-property="selected"
+                helper-elements="all none"
+        >
+        </div>
+        {{outputBrowsers}}
         <div class="filter-section">
             <h3>Filters</h3>
             <div class="filter-tabs">
@@ -12,10 +23,6 @@
 
                 </div>
             </div>
-
-            <button type="button" class="btn btn-primary btn-sm"
-                    ng-click="getAll()">Get all
-            </button>
 
             <div ng-repeat="tab in groupedData" class="filter-fields">
                 <div ng-show="tab.tabName == activeTabName" style="text-align: center">
@@ -32,7 +39,7 @@
                             <div class="filter-field">
                                 <div ng-switch="field.relation">
                                     <div ng-switch-when="=">
-                                        <p>{{getColumnName(field.variant_column_id)}} equals</p>
+                                        <p>{{getColumnName(field.variantColumnId)}} equals</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select data-ng-model="field.value"
                                                     ng-options="o as o for o in field.options"></select>
@@ -43,7 +50,7 @@
                                         </div>
                                     </div>
                                     <div ng-switch-when=">=">
-                                        <p>{{getColumnName(field.variant_column_id)}} greater than</p>
+                                        <p>{{getColumnName(field.variantColumnId)}} greater than</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select data-ng-model="field.value"
                                                     ng-options="o  as o for o in field.options"></select>
@@ -53,7 +60,7 @@
                                         </div>
                                     </div>
                                     <div ng-switch-when=">">
-                                        <p>{{getColumnName(field.variant_column_id)}} greater</p>
+                                        <p>{{getColumnName(field.variantColumnId)}} greater</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select data-ng-model="field.value"
                                                     ng-options="o  as o for o in field.options"></select>
@@ -63,7 +70,7 @@
                                         </div>
                                     </div>
                                     <div ng-switch-when="<=">
-                                        <p>{{getColumnName(field.variant_column_id)}} less than</p>
+                                        <p>{{getColumnName(field.variantColumnId)}} less than</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select data-ng-model="field.value"
                                                     ng-options="o  as o for o in field.options"></select>
@@ -73,7 +80,7 @@
                                         </div>
                                     </div>
                                     <div ng-switch-when="<">
-                                        <p>{{getColumnName(field.variant_column_id)}} less</p>
+                                        <p>{{getColumnName(field.variantColumnId)}} less</p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select ng-model="field.value"
                                                     ng-options="o  as o for o in field.options"></select>
@@ -83,7 +90,7 @@
                                         </div>
                                     </div>
                                     <div ng-switch-when="contains">
-                                        <p>{{getColumnName(field.variant_column_id)}} contains ( comma separated
+                                        <p>{{getColumnName(field.variantColumnId)}} contains ( comma separated
                                             values) </p>
                                         <div ng-if="(field.options) && field.options.length > 0">
                                             <select ng-model="field.value"
@@ -100,15 +107,20 @@
                             This selection reduce list length to {{filter.countValue}}
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm"
-                            ng-click="filter(tab)">Filter
-                    </button>
-                    <button type="button" class="btn btn-primary btn-sm"
-                            ng-click="count(tab)">Count
-                    </button>
-                    <button type="button" class="btn btn-primary btn-sm"
-                            ng-click="saveUserFields(tab)">Save
-                    </button>
+                    <div class="filter-buttons">
+                        <button type="button" class="btn btn-primary btn-sm"
+                                ng-click="filter(tab)">Filter
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm"
+                                ng-click="count(tab)">Count
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm"
+                                ng-click="saveUserFields(tab)">Save
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm"
+                                ng-click="getAll()">Get all
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="spinner-background" ng-show="showFilterSpinner">
@@ -127,29 +139,31 @@
         </div>
     </div>
 
-    <div ng-controller="TranscriptsTableController" class="col-lg-10 col-md-10 transcript-table">
-        <div class="table-wrapper">
+    <div ng-controller="TranscriptsTableController" class="col-lg-10 col-md-10">
+        <div class="transcript-table table-wrapper">
             <table class="table">
                 <thead class="thead-inverse">
                 <tr>
                     <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order"
-                        ng-click="changeSorting(header)">
+                        ng-click="changeSorting(header)" ng-show="header.visible">
                         <div ng-class="getSorting(header)"></div>
-                        <div class="header-fe-name" title="{{header.fe_name}}">{{header.fe_name}}</div>
+                        <div class="header-fe-name" title="{{header.feName}}">{{header.feName}}</div>
                     </th>
                 </tr>
                 <tr>
-                    <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
+                    <th ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order"
+                        ng-show="header.visible">
                         <div class="search">
                             <div class="glyphicon glyphicon-search"></div>
-                            <input ng-model="search[jsIDPrefix + header.variant_column_id]"/>
+                            <input ng-model="search[jsIDPrefix + header.variantColumnId]"/>
                         </div>
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="transcript in filterData = (transcriptData | filter : search | orderBy: transcriptSortPropertyName: transcriptSortReverse) | limitTo : tableLimit : tableBegin track by $index">
-                    <td ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order">
+                    <td ng-repeat="header in userColumnsList | orderBy: 'column_order' track by header.column_order"
+                        ng-show="header.visible">
                         {{transcript[header.dataExtractValue]}}
                     </td>
                 </tr>
@@ -173,7 +187,37 @@
             <ul uib-pagination total-items="filterData.length" ng-model="currentPage" max-size="10"
                 items-per-page="tableLimit"
                 class="pagination-sm" boundary-link-numbers="true" rotate="false" ng-change="pageChanged()"></ul>
+            <button type="button" class="btn btn-primary btn-sm" ng-click="openShowHideColumnsModal()">Show/hide
+                colums
+            </button>
         </div>
+        <div class="modal-root"></div>
+
+        <script type="text/ng-template" id="myModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Select visible columns</h3>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="column in $ctrl.columns | orderBy: 'column_order' track by column.column_order">
+                        <td>
+                            {{column.columnName}}
+                        </td>
+                        <td>
+                            <input type="checkbox" ng-model="column.visible">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" ng-click="$ctrl.save()">Save</button>
+                <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+            </div>
+        </script>
     </div>
 </div>
 

@@ -15,19 +15,19 @@ object UserSmpTabRepository {
 
   class UserSmpTabTableRepository(tag: Tag) extends Table[UserSmpTabModel](tag, "user_smp_tab") {
 
-    def smpl_id = column[String]("sample_metadata_id", O.PrimaryKey)
+    def smplId = column[String]("sample_metadata_id", O.PrimaryKey)
 
-    def user_id = column[Int]("user_id", O.PrimaryKey)
+    def userId = column[Int]("user_id", O.PrimaryKey)
 
-    def tab_field_filter_tab_id = column[Int]("tab_field_filter_tab_id", O.PrimaryKey)
+    def tabFieldFilterTabId = column[Int]("tab_field_filter_tab_id", O.PrimaryKey)
 
-    def tab_field_filter_field_id = column[Int]("tab_field_filter_field_id", O.PrimaryKey)
+    def tabFieldFilterFieldId = column[Int]("tab_field_filter_field_id", O.PrimaryKey)
 
-    def tab_field_filter_filter_id = column[Int]("tab_field_filter_filter_id", O.PrimaryKey)
+    def tabFieldFilterFilterId = column[Int]("tab_field_filter_filter_id", O.PrimaryKey)
 
     def value = column[String]("value")
 
-    def * = (smpl_id, user_id, tab_field_filter_tab_id, tab_field_filter_field_id, tab_field_filter_filter_id, value) <> (UserSmpTabModel.tupled, UserSmpTabModel.unapply)
+    def * = (smplId, userId, tabFieldFilterTabId, tabFieldFilterFieldId, tabFieldFilterFilterId, value) <> (UserSmpTabModel.tupled, UserSmpTabModel.unapply)
 
   }
 
@@ -39,10 +39,10 @@ object UserSmpTabRepository {
 
     dtos.foreach((dto: UserSampleTabDTO) => {
       Await.result(
-        SampleMetadataRepository.getByFakeId(dto.sample_fake_id).map {
+        SampleMetadataRepository.getByFakeId(dto.sampleFakeId).map {
           sample =>
             if (sample.isDefined) {
-              val updateAction = userSmpTab.insertOrUpdate(UserSmpTabModel(sample.get.sample_id, userId, dto.tab_id, dto.field_id, dto.filter_id, dto.value))
+              val updateAction = userSmpTab.insertOrUpdate(UserSmpTabModel(sample.get.sampleId, userId, dto.tabId, dto.fieldId, dto.filterId, dto.value))
               db.run(updateAction)
             }
         }, Duration.Inf)

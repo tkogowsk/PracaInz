@@ -10,8 +10,8 @@
         <tbody>
         <tr ng-repeat="sample in samples track by $index">
             <td>
-                <a ui-sref="transcript-table({fakeId: sample.fake_id})">
-                    {{sample.sample_id}}
+                <a ui-sref="transcript-table({fakeId: sample.fakeId})">
+                    {{sample.sampleId}}
                 </a>
             </td>
         </tr>

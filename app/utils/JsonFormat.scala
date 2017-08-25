@@ -30,6 +30,8 @@ object JsonFormat {
   implicit lazy val dataCellDTOFormat = Jsonx.formatCaseClassUseDefaults[DataCellDTO]
   implicit lazy val dataRowDTOFormat = Jsonx.formatCaseClassUseDefaults[DataRowDTO]
   implicit lazy val UserModelFormat = Jsonx.formatCaseClass[UserModel]
+  implicit lazy val UserVisibleVariantColumnFormat = Jsonx.formatCaseClass[UserVisibleVariantColumnModel]
+  implicit lazy val VisibleColumnDTOFormat = Jsonx.formatCaseClass[VisibleColumnDTO]
 
 }
 

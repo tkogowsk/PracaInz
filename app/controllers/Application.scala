@@ -31,15 +31,15 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
     obj("status" -> Constants.SUCCESS, "data" -> data, "msg" -> message)
   }
 
-  def getFields(sample_fake_id: Int) = withUser { user =>
+  def getFields(sampleFakeId: Int) = withUser { user =>
     request =>
       Await.result(
-        SampleMetadataRepository.getByFakeId(sample_fake_id).map {
+        SampleMetadataRepository.getByFakeId(sampleFakeId).map {
           sample =>
             if (sample.isDefined) {
               Await.result(
-                tabFieldFilterRepository.getFilter(sample.get.sample_id, 1).map { res =>
-                  val list = res.map(item => TabFieldFilterDTO(item._1, item._2, item._3, item._4, item._5, item._6, item._7, item._8, item._9, item._10, item._11, item._12))
+                tabFieldFilterRepository.getFilter(sample.get.sampleId, user.id).map { res =>
+                  val list = res.map(item => TabFieldFilterDTO(item._1, item._2, item._3, item._4, item._5, item._6, item._7, item._8, item._9, item._10, item._11))
                   Ok(successResponse(Json.toJson(list), "Getting Variant column list successfully"))
                 }, Duration.Inf)
             } else {
@@ -56,45 +56,50 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
 
   def getTranscriptData(sampleFakeId: Int) = withUser { user =>
     request =>
-      Await.result(
-        SampleMetadataRepository.getByFakeId(sampleFakeId).map {
-          sample =>
-            if (sample.isDefined) {
-              val response = jdbcRepository.getBySampleId(sample.get.sample_id)
-              Ok(successResponse(Json.toJson(response), "list of  transcripts"))
-            } else {
-              BadRequest("Not found sample id")
-            }
-        }, Duration.Inf)
+      val privilegeModel = PrivilegeRepository.getPrivilege(user.id, sampleFakeId)
+      if (privilegeModel.isDefined) {
+        Await.result(
+          SampleMetadataRepository.getByFakeId(sampleFakeId).map {
+            sample =>
+              if (sample.isDefined) {
+                val response = jdbcRepository.getBySampleId(sample.get.sampleId)
+                Ok(successResponse(Json.toJson(response), "list of  transcripts"))
+              } else {
+                BadRequest("Not found sample id")
+              }
+          }, Duration.Inf)
+      } else {
+        BadRequest("Not allowed")
+      }
   }
 
   def getByTab = withUser { user =>
     request =>
-    var sampleId = None: Option[String]
-    request.body.asJson.map { json =>
-      json.asOpt[FilterDTO].map { elem =>
-        Await.result(
-          SampleMetadataRepository.getByFakeId(elem.sampleFakeId).map {
-            sample =>
-              if (sample.isDefined) {
-                sampleId = Some(sample.get.sample_id)
-              } else {
-                BadRequest("Sample not found")
-              }
-          }, Duration.Inf)
+      var sampleId = None: Option[String]
+      request.body.asJson.map { json =>
+        json.asOpt[FilterDTO].map { elem =>
+          Await.result(
+            SampleMetadataRepository.getByFakeId(elem.sampleFakeId).map {
+              sample =>
+                if (sample.isDefined) {
+                  sampleId = Some(sample.get.sampleId)
+                } else {
+                  BadRequest("Sample not found")
+                }
+            }, Duration.Inf)
 
-        val res = jdbcRepository.getByFields(elem, sampleId.get)
-        Ok(successResponse(Json.toJson(res), "data from jdbc fetched"))
+          val res = jdbcRepository.getByFields(elem, sampleId.get)
+          Ok(successResponse(Json.toJson(res), "data from jdbc fetched"))
+        }.getOrElse {
+          BadRequest("Missing parameter")
+        }
       }.getOrElse {
-        BadRequest("Missing parameter")
+        BadRequest("Expecting Json data")
       }
-    }.getOrElse {
-      BadRequest("Expecting Json data")
-    }
 
   }
 
-  def getSamplesList = withUser { user =>
+  def getUserSamplesList = withUser { user =>
     _ => {
       Await.result(
         PrivilegeRepository.getAll(user).map {
@@ -137,12 +142,28 @@ class Application @Inject()(webJarAssets: WebJarAssets, variantColumnRepository:
       }
   }
 
-  def getUsersList = withAdmin { user =>
+  def getVisibleColumns = withUser { user =>
     request =>
-      Await.result(
-        UserRepository.getAll.map {
-          list =>
-            Ok(successResponse(Json.toJson(list), "list of users"))
-        }, Duration.Inf)
+      Await.result({
+        UserVisibleVariantColumnRepository.get(user.id).map { list =>
+          Ok(successResponse(Json.toJson(list), "list of visible columns"))
+        }
+      }, Duration.Inf)
   }
+
+  def saveVisibleColumns = withUser { user =>
+    request =>
+      request.body.asJson.map {
+        json =>
+          json.asOpt[List[VisibleColumnDTO]].map { list =>
+            UserVisibleVariantColumnRepository.save(user.id, list)
+            Ok(successResponse(Json.toJson(""), "Visible columns saved"))
+          }.getOrElse {
+            BadRequest("Missing parameter")
+          }
+      }.getOrElse {
+        BadRequest("Expecting Json data")
+      }
+  }
+
 }

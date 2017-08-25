@@ -5,7 +5,7 @@ case class FilteringCounter
   filterName: String,
   relation: String,
   value: String,
-  variant_column_id: Int
+  variantColumnId: Int
 )
 
 case class FilteringCountersDTO

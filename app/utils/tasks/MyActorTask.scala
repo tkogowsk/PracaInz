@@ -7,7 +7,7 @@ import utils.actors.TokenActor
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
-
+@Deprecated
 class MyActorTask @Inject()(actorSystem: ActorSystem)(implicit executionContext: ExecutionContext) {
   val tokenActor = actorSystem.actorOf(Props[TokenActor], name = "passwordtask")
 

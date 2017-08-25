@@ -2,8 +2,8 @@ package models
 
 case class PrivilegeModel
 (
-  user_id: Int,
-  smpl_id: String,
+  userId: Int,
+  smplId: String,
   access_type: Option[String],
   region_id: Option[Int]
 )

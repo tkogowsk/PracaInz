@@ -25,4 +25,5 @@ object Relation extends Enumeration {
     case _ =>
       throw new IllegalArgumentException
   }
+
 }

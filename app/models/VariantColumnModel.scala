@@ -3,9 +3,9 @@ package models
 case class VariantColumnModel
 (
   id: Int,
-  column_name: String,
-  fe_name: String,
-  column_type: String
+  columnName: String,
+  feName: String,
+  columnType: String
 )
 
 

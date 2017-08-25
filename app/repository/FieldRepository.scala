@@ -18,13 +18,13 @@ object FieldRepository {
 
     def id = column[Int]("id", O.PrimaryKey)
 
-    def variant_column_id = column[Int]("variant_column_id")
+    def variantColumnId = column[Int]("variant_column_id")
 
     def options = column[Option[String]]("options")
 
     def relation = column[String]("relation")
 
-    def * = (id, variant_column_id, options, relation) <> (FieldModel.tupled, FieldModel.unapply)
+    def * = (id, variantColumnId, options, relation) <> (FieldModel.tupled, FieldModel.unapply)
 
   }
 
@@ -45,7 +45,7 @@ object FieldRepository {
     var id = None: Option[Int]
     Await.result({
       db.run {
-        field.filter(field => field.variant_column_id === variantColumnId && field.options === options && field.relation === relation).result.headOption
+        field.filter(field => field.variantColumnId === variantColumnId && field.options === options && field.relation === relation).result.headOption
       }
         .map { value =>
           if (value.isDefined) {

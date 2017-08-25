@@ -2,8 +2,8 @@ body {
   overflow: hidden; }
 
 .transcript-table {
-  padding-left: 40px;
-  height: 100vh; }
+  height: 80vh;
+  overflow: auto; }
   .transcript-table th {
     min-width: 80px; }
   .transcript-table thead {
@@ -43,9 +43,84 @@ body {
     border-radius: 2px; }
 
 .transcript-table-pagination {
-  position: fixed;
   bottom: 0;
-  margin-bottom: 0; }
+  margin-bottom: 0;
+  position: relative;
+  margin-top: 15px; }
+  .transcript-table-pagination .pagination {
+    margin: 0 10px 0 0; }
+  .transcript-table-pagination button {
+    top: 0;
+    position: absolute; }
+
+.filter-section {
+  padding: 5px;
+  background: #333333;
+  height: 100vh;
+  color: #ece8d7;
+  z-index: 1; }
+  .filter-section .filter-tabs {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    text-align: center; }
+    .filter-section .filter-tabs .filter-tab {
+      display: inline-block;
+      overflow-x: auto; }
+      .filter-section .filter-tabs .filter-tab .filter-tab-name {
+        color: black;
+        font-weight: bold;
+        font-size: 20px;
+        text-align: center;
+        margin-right: 12px;
+        border-radius: 9%;
+        background: #888888;
+        padding: 10px; }
+        .filter-section .filter-tabs .filter-tab .filter-tab-name.active {
+          background-color: #3bd3aa; }
+        .filter-section .filter-tabs .filter-tab .filter-tab-name:hover {
+          cursor: pointer; }
+      .filter-section .filter-tabs .filter-tab .wrapper {
+        transition: all linear 0.2s;
+        opacity: 1; }
+      .filter-section .filter-tabs .filter-tab .wrapper.ng-hide {
+        opacity: 0; }
+  .filter-section .filter-fields {
+    margin-bottom: 10px;
+    width: inherit;
+    overflow: auto; }
+    .filter-section .filter-fields .filter {
+      margin: 10px 10px 0 0;
+      background: #3bd3aa;
+      border-radius: 5px;
+      padding-bottom: 20px; }
+      .filter-section .filter-fields .filter.inactive {
+        opacity: 0.4; }
+    .filter-section .filter-fields .filter-field p {
+      font-weight: bold;
+      font-size: 18px; }
+    .filter-section .filter-fields .filter-field select {
+      color: black;
+      width: 80%; }
+    .filter-section .filter-fields .filter-field input {
+      width: 80%; }
+    .filter-section .filter-fields label {
+      left: 20px;
+      position: absolute; }
+    .filter-section .filter-fields .filter-buttons {
+      margin-top: 10px; }
+
+.admin .spinner-background {
+  position: fixed !important; }
+
+body {
+  background: #f9f9f5;
+  font-family: "Comic Sans MS", cursive, sans-serif; }
+  body input {
+    color: black; }
+
+.navbar {
+  min-height: 5vh; }
 
 .spinner-background {
   position: absolute;
@@ -120,68 +195,5 @@ body {
   35% {
     -webkit-transform: scale3D(0, 0, 1);
     transform: scale3D(0, 0, 1); } }
-.filter-section {
-  padding: 5px;
-  background: #333333;
-  height: 100vh;
-  color: #ece8d7;
-  z-index: 1; }
-  .filter-section .filter-tabs {
-    width: 100%;
-    overflow-x: auto;
-    white-space: nowrap;
-    text-align: center; }
-    .filter-section .filter-tabs .filter-tab {
-      display: inline-block;
-      overflow-x: auto; }
-      .filter-section .filter-tabs .filter-tab .filter-tab-name {
-        color: black;
-        font-weight: bold;
-        font-size: 20px;
-        text-align: center;
-        margin-right: 12px;
-        border-radius: 9%;
-        background: #888888;
-        padding: 10px; }
-        .filter-section .filter-tabs .filter-tab .filter-tab-name.active {
-          background-color: #3bd3aa; }
-        .filter-section .filter-tabs .filter-tab .filter-tab-name:hover {
-          cursor: pointer; }
-      .filter-section .filter-tabs .filter-tab .wrapper {
-        transition: all linear 0.2s;
-        opacity: 1; }
-      .filter-section .filter-tabs .filter-tab .wrapper.ng-hide {
-        opacity: 0; }
-  .filter-section .filter-fields {
-    margin-bottom: 10px;
-    width: inherit;
-    overflow: auto; }
-    .filter-section .filter-fields .filter {
-      margin: 10px 10px 0 0;
-      background: #3bd3aa;
-      border-radius: 5px;
-      padding-bottom: 20px; }
-      .filter-section .filter-fields .filter.inactive {
-        opacity: 0.4; }
-    .filter-section .filter-fields .filter-field p {
-      font-weight: bold;
-      font-size: 18px; }
-    .filter-section .filter-fields .filter-field select {
-      color: black;
-      width: 80%; }
-    .filter-section .filter-fields .filter-field input {
-      width: 80%; }
-    .filter-section .filter-fields label {
-      left: 20px;
-      position: absolute; }
-
-body {
-  background: #f9f9f5;
-  font-family: "Comic Sans MS", cursive, sans-serif; }
-  body input {
-    color: black; }
-
-.navbar {
-  min-height: 5vh; }
 
 /*# sourceMappingURL=styles.css.map */

@@ -1,11 +1,11 @@
 var myApp = angular.module('app', ['ui.router', 'ui.bootstrap', 'Controllers', 'filter', 'Repositories', 'Models', 'transcripts', 'Security', 'Admin',
-    'LocalStorageModule', 'angularUtils.directives.dirPagination', 'ngCookies']);
+    'LocalStorageModule', 'angularUtils.directives.dirPagination', 'ngCookies', 'isteven-multi-select']);
 
 myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 
     $stateProvider
         .state('transcript-table', {
-            url: '/index/:fakeId',
+            url: '/list/:fakeId',
             templateUrl: '/assets/modules/pages/transcript-table/index.html'
         })
         .state('login', {
@@ -22,10 +22,14 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
         })
         .state('upload', {
             url: '/upload',
-            template: ''
+            templateUrl: '/assets/modules/pages/admin/upload/index.html'
+        })
+        .state('privileges', {
+            url: '/privileges/:userId',
+            templateUrl: '/assets/modules/pages/admin/privileges/index.html'
         });
 
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/list');
 
     $locationProvider.html5Mode({
         enabled: true,
@@ -34,8 +38,7 @@ myApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
 
 });
 
-/*myApp.config(['$qProvider', function ($qProvider) {
+myApp.config(['$qProvider', function ($qProvider) {
     $qProvider.errorOnUnhandledRejections(false);
-
- }]);*/
+}]);
 

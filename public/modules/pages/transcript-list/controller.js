@@ -5,7 +5,7 @@ angular.module('Controllers').controller('TranscriptListController', ['$rootScop
             if (!$rootScope.isAuthenticated()) {
                 $state.go('login');
             } else {
-                User.getSamplesList(function (response) {
+                User.getUserSamplesList(function (response) {
                     $scope.samples = response.data;
                 })
             }

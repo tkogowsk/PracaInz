@@ -7,19 +7,26 @@ GET         /                                       controllers.Application.inde
 GET         /index                                  controllers.Application.index
 GET         /upload                                 controllers.Upload.index
 
-GET         /getFields/:sample_fake_id              controllers.Application.getFields(sample_fake_id: Int)
+GET         /getFields/:sampleFakeId                controllers.Application.getFields(sampleFakeId: Int)
 GET         /getVariantColumn                       controllers.Application.getVariantColumn
 GET         /getTranscriptData/:sampleFakeId        controllers.Application.getTranscriptData(sampleFakeId: Int)
-GET         /getSamplesList                         controllers.Application.getSamplesList
+GET         /getUserSamplesList                     controllers.Application.getUserSamplesList
 
 POST        /uploadFilters                          controllers.Upload.uploadFilters
 POST        /getByTab                               controllers.Application.getByTab
 POST        /logIn                                  controllers.Authorization.logIn
+POST        /register                               controllers.Authorization.register
 GET         /logOut                                 controllers.Authorization.logOut
 
 POST        /count                                  controllers.Application.count
 POST        /saveUserFields                         controllers.Application.saveUserFields
-GET         /getUsersList                           controllers.Application.getUsersList
+GET         /getUsersList                           controllers.Admin.getUsersList
+
+GET         /getSamplesIdsList                      controllers.Admin.getSamplesIdsList
+POST        /userPrivilegesList/:userId             controllers.Admin.setUserPrivilegesList(userId: Int)
+GET         /userPrivilegesList/:userId             controllers.Admin.getUserPrivilegesList(userId: Int)
+GET         /getVisibleColumns                      controllers.Application.getVisibleColumns
+POST        /saveVisibleColumns                     controllers.Application.saveVisibleColumns
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                           controllers.Assets.versioned(path="/public", file: Asset)

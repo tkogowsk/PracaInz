@@ -6,6 +6,7 @@
 
         <link rel='stylesheet' href='@routes.WebJarAssets.at(webJarAssets.locate("css/bootstrap.min.css"))'>
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/styles.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/isteven-multi-select.css")">
         <script type="text/javascript" src='@routes.WebJarAssets.at(webJarAssets.locate("jquery.min.js"))'></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/x64-core.min.js"></script>
@@ -19,6 +20,7 @@
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/ui-bootstrap-tpls-2.4.0.min.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/lodash.min.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/dirPagination.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/libs/isteven-multi-select.js")"></script>
 
             <!-- Custom Javascripts -->
         <script type="text/javascript" src="@routes.Assets.versioned("modules/utils/events.js")"></script>
@@ -39,7 +41,7 @@
         <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/transcript-table/filter/controller.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/admin/controller.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/admin/privileges/controller.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/admin/users-list/controller.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("modules/pages/admin/upload/controller.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/app.js")"></script>
 
     </head>
@@ -47,16 +49,13 @@
         <nav class="navbar navbar-default" ng-controller="HeaderController">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">App name</a>
+                    <a class="navbar-brand" href="/index">Home</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li ng-class="{ active: isActive('/index')}"><a href="/index">Home</a></li>
                     <li ng-class="{ active: isActive('/list')}"><a href="/list">Transcript list</a></li>
-                    <li ng-class="{ active: isActive('/login')}"><a href="/login">Login</a></li>
                     <li ng-class="{ active: isActive('/admin')}"><a href="/admin">Admin</a></li>
                 </ul>
-                <div style="float: right">
-                    {{userName}}
+                <div style="float: right" ng-hide="isActive('/login')">
                     <button><a href="/logOut" target="_self">logout</a></button>
                 </div>
             </div>

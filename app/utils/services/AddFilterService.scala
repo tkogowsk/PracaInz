@@ -55,7 +55,7 @@ class AddFilterService @Inject()(variantColumnRepository: VariantColumnRepositor
   def addFilter(tabName: String): Int = {
     var filterID = FilterRepository.getIDByName(tabName)
     if (filterID.isEmpty) {
-      FilterRepository.save(tabName, true)
+      FilterRepository.save(tabName)
       filterID = FilterRepository.getIDByName(tabName)
     }
     filterID.get

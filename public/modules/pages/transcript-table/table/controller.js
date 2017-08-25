@@ -1,7 +1,7 @@
 angular.module('transcripts', []);
 
-angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$rootScope', '$state', '$log', 'Transcript', 'Fields', '$stateParams', 'LocalStorage',
-    function ($scope, $rootScope, $state, $log, Transcript, Fields, $stateParams, LocalStorage) {
+angular.module('transcripts').controller('TranscriptsTableController', ['$scope', '$rootScope', '$state', '$log', 'Transcript', 'Fields', '$stateParams', 'LocalStorage', 'User', '$uibModal', '$document',
+    function ($scope, $rootScope, $state, $log, Transcript, Fields, $stateParams, LocalStorage, User, $uibModal, $document) {
         $scope.transcriptData = [];
         $scope.userColumnsList = null;
 
@@ -15,6 +15,7 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
         $scope.transcriptSortReverse = true;
         $scope.transcriptSortPropertyName = null;
         $scope.jsIDPrefix = "id_";
+        $scope.showHideColumnsModal = false;
 
         function changeSpinner(spinnerIndicator) {
             $scope.showTableSpinner = spinnerIndicator;
@@ -51,7 +52,7 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                             list.push({
                                 relation: field.relation,
                                 value: field.value,
-                                variant_column_id: field.variant_column_id
+                                variantColumnId: field.variantColumnId
                             })
                         }
                     })
@@ -81,7 +82,8 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                     changeSpinner(false);
                 },
                 function (error) {
-                    console.log("ERROR " + error);
+                    changeSpinner(false);
+                    console.log("ERROR " + error.data);
                 });
         }
 
@@ -96,26 +98,52 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
                 }).value();
         }
 
+        function setVisibilityFromDatabase(data, currentItemId) {
+            return (_.find(data, (responseElem) => {
+                return responseElem.variantColumnId === currentItemId
+            }) !== undefined)
+        }
+
         function prepareHeaderColumns() {
             if (!$scope.userColumnsList) {
-                var columnList = LocalStorage.getColumnList();
-                if (columnList) {
-                    $scope.userColumnsList = _.chain(columnList)
-                        .map(function (currentItem) {
-                            return _.assign(
-                                {visible: true},
-                                {
-                                    variant_column_id: currentItem.id,
-                                    column_order: currentItem.id,
-                                    sorting: null,
-                                    fe_name: currentItem.fe_name,
-                                    dataExtractValue: $scope.jsIDPrefix + currentItem.id,
-                                    column_name: currentItem.column_name
-                                })
-                        }).value();
+                $scope.columnList = LocalStorage.getColumnList();
+                if ($scope.columnList) {
+                    User.getVisibleColumns((response => {
+                            var getVisibility = (response.data && response.data.length > 0) ? setVisibilityFromDatabase : () => {
+                                return true;
+                            };
+                            $scope.userColumnsList = _.chain($scope.columnList)
+                                .map(function (currentItem) {
+                                    return _.assign(
+                                        {visible: getVisibility(response.data, currentItem.id)},
+                                        {
+                                            variantColumnId: currentItem.id,
+                                            column_order: currentItem.id,
+                                            sorting: null,
+                                            feName: currentItem.feName,
+                                            dataExtractValue: $scope.jsIDPrefix + currentItem.id,
+                                            columnName: currentItem.columnName
+                                        })
+                                }).value();
+                        }
+                    ))
                 }
             }
         }
+
+        $scope.saveVisibleColumns = function () {
+            let payload = _.chain($scope.userColumnsList).filter((elem) => {
+                return (elem.visible === true)
+            }).map((elem) => {
+                return {id: elem.variantColumnId}
+            }).value();
+            User.saveVisibleColumns(payload,
+                (response) => {
+                },
+                (error) => {
+                    console.log(error);
+                });
+        };
 
         $scope.changeSorting = function (header) {
             if ($scope.transcriptSortPropertyName === header.dataExtractValue) {
@@ -138,6 +166,38 @@ angular.module('transcripts').controller('TranscriptsTableController', ['$scope'
             }
         };
 
+        $scope.openShowHideColumnsModal = function () {
+            var parentElem = angular.element($document[0].querySelector('.modal-root'));
+            var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                controllerAs: '$ctrl',
+                appendTo: parentElem,
+                resolve: {
+                    items: function () {
+                        return $scope.userColumnsList;
+                    },
+                    saveVisibleColumns: function () {
+                        return $scope.saveVisibleColumns
+                    }
+                }
+            });
+        };
+
         init();
 
     }]);
+
+angular.module('transcripts').controller('ModalInstanceCtrl', function ($uibModalInstance, items, saveVisibleColumns) {
+    var $ctrl = this;
+    $ctrl.columns = items;
+    $ctrl.save = function () {
+        saveVisibleColumns();
+        $uibModalInstance.close($ctrl.items);
+    };
+
+    $ctrl.cancel = function () {
+        $uibModalInstance.close(true);
+    };
+});
